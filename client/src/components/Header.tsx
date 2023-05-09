@@ -1,5 +1,3 @@
-import Profile from './Profile'
-
 function Header() {
   return (
     <div>
@@ -7,12 +5,10 @@ function Header() {
         <div className="flex flex-col">
           <h1 className="text-center text-4xl">Cast Round</h1>
         </div>
-        <div className="flex flex-col items-end">
-          <Profile />
-        </div>
+        <div className="flex flex-col items-end">{/* <Profile /> */}</div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Header
+export default Header;

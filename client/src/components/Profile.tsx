@@ -1,49 +1,60 @@
-import * as O from 'fp-ts/Option'
-import { useUserProfile } from './UserProfileContext'
+import React from "react";
+import { UserProfile } from "interfaces/user";
 
-function Profile() {
-  const { loaded, userProfile } = useUserProfile()
-
-  if (loaded) {
-    if (O.isNone(userProfile)) {
-      return (
-        <div className="flex flex-col items-end">
-          <p>Not logged in</p>
-          <form action="/api/auth/mw" method="get">
-            <button
-              className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-              type="submit"
-            >
-              Log In
-            </button>
-          </form>
-        </div>
-      )
-    } else {
-      return (
-        <div className="flex flex-col items-end">
-          <p>{userProfile.value.name}</p>
-          <p>{userProfile.value.type}</p>
-          <div>
-            <form action="/api/auth/logout" method="post">
-              <button
-                className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-                type="submit"
-              >
-                Log out
-              </button>
-            </form>
-          </div>
-        </div>
-      )
-    }
-  } else {
-    return (
-      <div>
-        <p>Loading...</p>
-      </div>
-    )
-  }
+export interface ProfileProps {
+  profile: UserProfile;
 }
 
-export default Profile
+const Profile: React.FC<ProfileProps> = ({ profile }) => {
+  // get initials for user from profile.name string with a maximum of 2 letters
+  const initials = profile.name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .substring(0, 2);
+
+  return (
+    <div>
+      <div tabIndex={0} className="dropdown-end placeholder dropdown avatar">
+        <div className="w-12 rounded-full bg-neutral-focus text-neutral-content">
+          <span className="text-xl">{initials}</span>
+        </div>
+        <div
+          tabIndex={0}
+          className="card dropdown-content card-compact mt-3 w-52 bg-base-100 shadow"
+        >
+          <div className="card-body">
+            <span className="text-lg font-bold">{profile.name}</span>
+            <span className="text-info">{profile.type}</span>
+            <div className="card-actions">
+              <form action="/api/auth/logout" method="post">
+                <button className="btn-primary btn-block btn" type="submit">
+                  Log out
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+  //     return (
+  //       <div className="flex flex-col items-end">
+  //         <p>{userProfile.value.name}</p>
+  //         <p>{userProfile.value.type}</p>
+  //         <p>{userProfile.value.permissions.join(", ")}</p>
+  //         <div>
+  //           <form action="/api/auth/logout" method="post">
+  //             <button className="btn-primary btn" type="submit">
+  //               Log out
+  //             </button>
+  //           </form>
+  //         </div>
+  //       </div>
+  //     );
+  //   }
+  // }
+};
+
+export default Profile;

@@ -1,30 +1,31 @@
-import { pipe } from 'fp-ts/lib/function'
-import * as TE from 'fp-ts/lib/TaskEither'
+import { pipe } from "fp-ts/lib/function";
+import * as TE from "fp-ts/lib/TaskEither";
 
-import axios from 'axios'
-import { UserType } from 'interfaces/user'
+import axios from "axios";
+import { UserType } from "interfaces/user";
 
 interface ProfileResponse {
   profile: {
-    id: string
-    name: string
-    type: UserType
-  }
+    id: string;
+    name: string;
+    type: UserType;
+    permissions: string[];
+  };
 }
 
 const retrieveProfile = (): TE.TaskEither<Error, ProfileResponse> =>
   pipe(
     TE.tryCatch(
-      () => axios.get<ProfileResponse>('/api/profile'),
+      () => axios.get<ProfileResponse>("/api/profile"),
       (reason) => new Error(`${reason}`)
     ),
     TE.map((response) => response.data)
-  )
+  );
 
 const getUserProfile = () =>
   pipe(
     retrieveProfile(),
     TE.map((profileResponse) => profileResponse.profile)
-  )
+  );
 
-export default getUserProfile
+export default getUserProfile;
