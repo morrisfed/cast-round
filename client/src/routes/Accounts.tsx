@@ -21,7 +21,11 @@ const Accounts: React.FC = () => {
     ReturnType<typeof accountsLoader>
   >;
 
-  return <AccountTable accounts={accounts} />;
+  return (
+    <div>
+      <AccountTable accounts={accounts} />
+    </div>
+  );
 };
 
 export default Accounts;

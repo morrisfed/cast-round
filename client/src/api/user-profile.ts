@@ -2,14 +2,14 @@ import { pipe } from "fp-ts/lib/function";
 import * as TE from "fp-ts/lib/TaskEither";
 
 import axios from "axios";
-import { UserType } from "interfaces/user";
+import { UserType, Permission } from "interfaces/user";
 
 interface ProfileResponse {
   profile: {
     id: string;
     name: string;
     type: UserType;
-    permissions: string[];
+    permissions: Permission[];
   };
 }
 

@@ -1,5 +1,5 @@
 import { Permission, UserProfile } from "interfaces/user";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 export interface SideBarProps {
   profile: UserProfile;
@@ -17,25 +17,27 @@ const showDelegates = (profile: UserProfile) =>
   hasPermission(profile, "DELEGATES_READ_ALL") ||
   hasPermission(profile, "DELEGATES_WRITE_ALL");
 
+const showAdmin = (profile: UserProfile) =>
+  hasPermission(profile, "ADMINISTRATOR");
+
 const SideBar: React.FC<SideBarProps> = ({ profile }) => {
   return (
     <ul className="menu w-80 bg-base-100 p-4 text-base-content">
+      {showAdmin(profile) ? (
+        <li>
+          <NavLink to="/admin">Admin</NavLink>
+        </li>
+      ) : null}
       {showAccounts(profile) ? (
         <li>
-          <Link to="/accounts">Accounts</Link>
+          <NavLink to="/accounts">Accounts</NavLink>
         </li>
       ) : null}
       {showDelegates(profile) ? (
         <li>
-          <Link to="/delegates">Delegates</Link>
+          <NavLink to="/delegates">Delegates</NavLink>
         </li>
       ) : null}
-      <li>
-        <a>Sidebar Item 1</a>
-      </li>
-      <li>
-        <a>Sidebar Item 2</a>
-      </li>
     </ul>
   );
 };

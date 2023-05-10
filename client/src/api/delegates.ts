@@ -29,7 +29,7 @@ const retrieveDelegates = (): TE.TaskEither<
   pipe(
     TE.tryCatch(
       () => axios.get<GetAccountsResponse>("/api/delegates"),
-      (reason) =>
+      (reason: any) =>
         reason.response.status === 403 ? "forbidden" : new Error(`${reason}`)
     ),
     TE.map((response) => response.data),

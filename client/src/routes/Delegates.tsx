@@ -1,7 +1,6 @@
 import * as E from "fp-ts/lib/Either";
 
 import { useLoaderData } from "react-router-dom";
-import AccountTable from "components/Account/AccountTable";
 import { getDelegates } from "api/delegates";
 import DelegateTable from "components/Delegate/DelegateTable";
 

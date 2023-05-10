@@ -1,5 +1,6 @@
 import { AccountUserInfo } from "api/accounts";
 import React, { useMemo } from "react";
+import { Link } from "react-router-dom";
 
 export interface AccountTableProps {
   accounts: readonly AccountUserInfo[];
@@ -59,7 +60,9 @@ const AccountTable: React.FC<AccountTableProps> = ({ accounts }) => {
             </div>
           </td>
           <td>
-            <br />
+            <Link to={"/accounts/" + account.id} className="btn">
+              View
+            </Link>
           </td>
         </tr>
       );
@@ -71,7 +74,9 @@ const AccountTable: React.FC<AccountTableProps> = ({ accounts }) => {
       <table className="table">
         <thead>
           <tr>
+            <th>Indiv/Grp</th>
             <th>Account</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>{items}</tbody>

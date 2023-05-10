@@ -2,7 +2,7 @@ import { pipe } from "fp-ts/lib/function";
 import * as TE from "fp-ts/lib/TaskEither";
 import * as ROA from "fp-ts/lib/ReadonlyArray";
 
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 export type AccountUserType =
   | "associate-membership"
@@ -44,6 +44,15 @@ export interface GetAccountsResponse {
   }[];
 }
 
+export interface GetAccountResponse {
+  account: {
+    id: string;
+    name: string;
+    contactName: string | null;
+    type: AccountUserType;
+  };
+}
+
 const retreiveAccounts = (): TE.TaskEither<
   Error | "forbidden",
   readonly AccountUserInfo[]
@@ -51,8 +60,15 @@ const retreiveAccounts = (): TE.TaskEither<
   pipe(
     TE.tryCatch(
       () => axios.get<GetAccountsResponse>("/api/accounts"),
-      (reason) =>
-        reason.response.status === 403 ? "forbidden" : new Error(`${reason}`)
+      (reason) => {
+        const error = reason as AxiosError;
+        if (error.response) {
+          if (error.response.status === 403) {
+            return "forbidden";
+          }
+        }
+        return new Error(`${reason}`);
+      }
     ),
     TE.map((response) => response.data),
     TE.map((data) => data.accounts),
@@ -67,3 +83,31 @@ const retreiveAccounts = (): TE.TaskEither<
   );
 
 export const getAccounts = () => pipe(retreiveAccounts());
+
+const retrieveAccount = (
+  id: string
+): TE.TaskEither<Error | "forbidden", AccountUserInfo> =>
+  pipe(
+    TE.tryCatch(
+      () => axios.get<GetAccountResponse>("/api/accounts/" + id),
+      (reason) => {
+        const error = reason as AxiosError;
+        if (error.response) {
+          if (error.response.status === 403) {
+            return "forbidden";
+          } else if (error.response.status === 404) {
+            return new Error("Account not found");
+          }
+        }
+        return new Error(`${reason}`);
+      }
+    ),
+    TE.map((response) => response.data),
+    TE.map((data) => ({
+      ...data.account,
+      isGroup: isGroupType(data.account.type),
+      isIndividual: !isGroupType(data.account.type),
+    }))
+  );
+
+export const getAccount = (id: string) => pipe(retrieveAccount(id));

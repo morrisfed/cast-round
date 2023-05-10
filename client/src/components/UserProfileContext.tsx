@@ -18,7 +18,7 @@ export type IUserProfileContext = {
 };
 
 const UserProfileContext = React.createContext<IUserProfileContext>({
-  loading: false,
+  loading: true,
   userProfile: O.none,
 });
 
@@ -31,6 +31,7 @@ const UserProfileContextProvider = ({
   const [loading, setLoading] = useState(false);
 
   const fetchProfile = useCallback(async () => {
+    setLoading(true);
     const getUserProfileTask = pipe(
       getUserProfile(),
 

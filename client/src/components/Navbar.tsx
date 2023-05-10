@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { UserProfile } from "interfaces/user";
 import Profile from "./Profile";
 
@@ -26,7 +26,7 @@ const Navbar: React.FC<NavbarProps> = ({ profile, menuToggleId }) => {
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="2"
-            d="M4 6h16M4 12h16M4 18h16M4"
+            d="M4 6h16M4 12h16M4 18h16"
           />
         </svg>
       </label>

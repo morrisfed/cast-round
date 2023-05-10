@@ -7,6 +7,7 @@ export type UserType =
   | "tellor-delegate";
 
 export type Permission =
+  | "ADMINISTRATOR"
   | "ACCOUNTS_READ_ALL"
   | "ACCOUNTS_WRITE_ALL"
   | "DELEGATES_READ_ALL"
