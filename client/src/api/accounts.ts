@@ -78,8 +78,7 @@ const retreiveAccounts = (): TE.TaskEither<
         isGroup: isGroupType(retAcc.type),
         isIndividual: !isGroupType(retAcc.type),
       }))
-    ),
-    TE.map(ROA.takeLeft(100))
+    )
   );
 
 export const getAccounts = () => pipe(retreiveAccounts());
