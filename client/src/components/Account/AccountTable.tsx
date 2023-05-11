@@ -10,7 +10,7 @@ const AccountTable: React.FC<AccountTableProps> = ({ accounts }) => {
   const items = useMemo(() => {
     return accounts.map((account) => {
       return (
-        <tr key={account.id}>
+        <tr key={account.userId}>
           <td>
             {account.isIndividual ? (
               <svg
@@ -60,7 +60,7 @@ const AccountTable: React.FC<AccountTableProps> = ({ accounts }) => {
             </div>
           </td>
           <td>
-            <Link to={"/accounts/" + account.id} className="btn">
+            <Link to={"/accounts/" + account.userId} className="btn">
               View
             </Link>
           </td>

@@ -14,6 +14,12 @@ import Delegates, { delegatesLoader } from "routes/Delegates";
 import Admin from "routes/Admin";
 import UploadAccounts, { uploadAccountsAction } from "routes/UploadAccounts";
 import AdminIndex from "routes/AdminIndex";
+import NewAccountDelegate, {
+  createAccountDelegateAction,
+} from "routes/NewAccountDelegate";
+import AccountDelegates, {
+  accountDelegatesLoader,
+} from "routes/AccountDelegates";
 
 export interface AuthenticatedLayoutProps {
   profile: UserProfile;
@@ -30,7 +36,18 @@ const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({
           element={<Account />}
           loader={accountLoader}
           errorElement={<ErrorPage />}
-        />
+        >
+          <Route
+            index
+            element={<AccountDelegates />}
+            loader={accountDelegatesLoader}
+          />
+          <Route
+            path="newdelegate"
+            element={<NewAccountDelegate />}
+            action={createAccountDelegateAction}
+          />
+        </Route>
         <Route
           path="accounts"
           element={<Accounts />}

@@ -3,6 +3,7 @@ import * as TE from "fp-ts/lib/TaskEither";
 import * as ROA from "fp-ts/lib/ReadonlyArray";
 
 import axios, { AxiosError } from "axios";
+import { DelegateUserType } from "./delegates";
 
 export type AccountUserType =
   | "associate-membership"
@@ -27,7 +28,7 @@ const isGroupType = (type: AccountUserType): boolean => {
 };
 
 export interface AccountUserInfo {
-  id: string;
+  userId: string;
   name: string;
   contactName: string | null;
   type: AccountUserType;
@@ -37,7 +38,7 @@ export interface AccountUserInfo {
 
 export interface GetAccountsResponse {
   accounts: readonly {
-    id: string;
+    userId: string;
     name: string;
     contactName: string | null;
     type: AccountUserType;
@@ -46,10 +47,24 @@ export interface GetAccountsResponse {
 
 export interface GetAccountResponse {
   account: {
-    id: string;
+    userId: string;
     name: string;
     contactName: string | null;
     type: AccountUserType;
+  };
+}
+
+export interface GetAccountDelegatesResponse {
+  delegates: {
+    id: string;
+    label: string;
+    type: DelegateUserType;
+  }[];
+}
+
+export interface CreateAccountDelegateResponse {
+  delegate: {
+    id: string;
   };
 }
 
@@ -110,3 +125,52 @@ const retrieveAccount = (
   );
 
 export const getAccount = (id: string) => pipe(retrieveAccount(id));
+
+export const getAccountDelegates = (accountId: string) =>
+  pipe(
+    TE.tryCatch(
+      () =>
+        axios.get<GetAccountDelegatesResponse>(
+          "/api/accounts/" + accountId + "/delegates"
+        ),
+      (reason) => {
+        const error = reason as AxiosError;
+        if (error.response) {
+          if (error.response.status === 403) {
+            return "forbidden";
+          } else if (error.response.status === 404) {
+            return new Error("Account not found");
+          }
+        }
+        return new Error(`${reason}`);
+      }
+    ),
+    TE.map((response) => response.data),
+    TE.map((data) => data.delegates)
+  );
+
+export const createAccountDelegate = (accountId: string, label: string) => {
+  return pipe(
+    TE.tryCatch(
+      () =>
+        axios.post<CreateAccountDelegateResponse>(
+          `/api/accounts/${accountId}/delegates`,
+          {
+            label,
+          }
+        ),
+      (reason) => {
+        const error = reason as AxiosError;
+        if (error.response) {
+          if (error.response.status === 403) {
+            return "forbidden";
+          } else if (error.response.status === 404) {
+            return new Error("Account not found");
+          }
+        }
+        return new Error(`${reason}`);
+      }
+    ),
+    TE.map((response) => response.data)
+  );
+};

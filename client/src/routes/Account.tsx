@@ -1,6 +1,11 @@
 import * as E from "fp-ts/lib/Either";
 
-import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+import {
+  Link,
+  LoaderFunctionArgs,
+  Outlet,
+  useLoaderData,
+} from "react-router-dom";
 import { getAccount } from "api/accounts";
 
 export async function accountLoader({ params }: LoaderFunctionArgs) {
@@ -26,9 +31,13 @@ const Account: React.FC = () => {
   return (
     <div>
       <h1>Account</h1>
-      <p>Account ID: {account.id}</p>
+      <p>Account ID: {account.userId}</p>
       <p>Account Name: {account.name}</p>
       <p>Account Contact: {account.contactName}</p>
+      <Link className="btn-outline btn-accent btn" to="newdelegate">
+        Add new delegate
+      </Link>
+      <Outlet />
     </div>
   );
 };
