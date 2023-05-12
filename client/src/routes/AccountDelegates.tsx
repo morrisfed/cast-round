@@ -4,6 +4,7 @@ import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import { getAccountDelegates } from "api/accounts";
 import { pipe } from "fp-ts/lib/function";
 import { useMemo } from "react";
+import DelegateTable from "components/Delegate/DelegateTable";
 
 export async function accountDelegatesLoader({ params }: LoaderFunctionArgs) {
   const accountId = params.accountId;
@@ -30,7 +31,7 @@ const AccountDelegates: React.FC = () => {
   const items = useMemo(() => {
     return delegates.map((delegate) => {
       return (
-        <tr key={delegate.id}>
+        <tr key={delegate.userId}>
           <td>
             <div className="flex items-center space-x-3">
               <div>
@@ -50,18 +51,7 @@ const AccountDelegates: React.FC = () => {
     });
   }, [delegates]);
 
-  return (
-    <div className="">
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Delegate</th>
-          </tr>
-        </thead>
-        <tbody>{items}</tbody>
-      </table>
-    </div>
-  );
+  return <DelegateTable delegates={delegates} />;
 };
 
 export default AccountDelegates;

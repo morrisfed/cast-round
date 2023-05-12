@@ -2,7 +2,7 @@ import * as E from "fp-ts/lib/Either";
 
 import { useLoaderData } from "react-router-dom";
 import { getDelegates } from "api/delegates";
-import DelegateTable from "components/Delegate/DelegateTable";
+import DelegateList from "components/Delegate/DelegateList";
 
 export async function delegatesLoader() {
   const getDelegatesTask = getDelegates();
@@ -21,7 +21,7 @@ const Delegates: React.FC = () => {
     ReturnType<typeof delegatesLoader>
   >;
 
-  return <DelegateTable delegates={delegates} />;
+  return <DelegateList delegates={delegates} />;
 };
 
 export default Delegates;

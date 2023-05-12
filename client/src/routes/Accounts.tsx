@@ -5,6 +5,7 @@ import * as E from "fp-ts/lib/Either";
 import { useLoaderData } from "react-router-dom";
 import AccountTable from "components/Account/AccountTable";
 import { getAccounts } from "api/accounts";
+import AccountList from "components/Account/AccountList";
 
 export async function accountsLoader() {
   const getAccountsTask = getAccounts();
@@ -76,7 +77,7 @@ const Accounts: React.FC = () => {
           ) : null}
         </label>
       </div>
-      <AccountTable accounts={filteredAccounts} />
+      <AccountList accounts={filteredAccounts} />
     </div>
   );
 };

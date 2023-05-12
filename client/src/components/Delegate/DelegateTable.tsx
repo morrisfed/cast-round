@@ -9,7 +9,7 @@ const DelegateTable: React.FC<DelegateTableProps> = ({ delegates }) => {
   const items = useMemo(() => {
     return delegates.map((delegate) => {
       return (
-        <tr key={delegate.id}>
+        <tr key={delegate.userId}>
           <td>
             <div className="flex items-center space-x-3">
               <div>

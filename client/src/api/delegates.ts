@@ -7,7 +7,7 @@ import axios from "axios";
 export type DelegateUserType = "group-delegate" | "tellor-delegate";
 
 export interface DelegateUserInfo {
-  id: string;
+  userId: string;
   label: string;
   createdBy: { id: string };
   type: DelegateUserType;
@@ -15,7 +15,7 @@ export interface DelegateUserInfo {
 
 export interface GetAccountsResponse {
   accounts: readonly {
-    id: string;
+    userId: string;
     label: string;
     createdBy: { id: string };
     type: DelegateUserType;
@@ -38,8 +38,7 @@ const retrieveDelegates = (): TE.TaskEither<
       ROA.map((retAcc) => ({
         ...retAcc,
       }))
-    ),
-    TE.map(ROA.takeLeft(100))
+    )
   );
 
 export const getDelegates = () => pipe(retrieveDelegates());

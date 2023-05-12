@@ -17,6 +17,10 @@ const showDelegates = (profile: UserProfile) =>
   hasPermission(profile, "DELEGATES_READ_ALL") ||
   hasPermission(profile, "DELEGATES_WRITE_ALL");
 
+const showEvents = (profile: UserProfile) =>
+  hasPermission(profile, "EVENTS_READ_ALL") ||
+  hasPermission(profile, "EVENTS_WRITE_ALL");
+
 const showAdmin = (profile: UserProfile) =>
   hasPermission(profile, "ADMINISTRATOR");
 
@@ -36,6 +40,11 @@ const SideBar: React.FC<SideBarProps> = ({ profile }) => {
       {showDelegates(profile) ? (
         <li>
           <NavLink to="/delegates">Delegates</NavLink>
+        </li>
+      ) : null}
+      {showEvents(profile) ? (
+        <li>
+          <NavLink to="/events">Events</NavLink>
         </li>
       ) : null}
     </ul>

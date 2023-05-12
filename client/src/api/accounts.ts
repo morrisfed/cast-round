@@ -56,9 +56,10 @@ export interface GetAccountResponse {
 
 export interface GetAccountDelegatesResponse {
   delegates: {
-    id: string;
+    userId: string;
     label: string;
     type: DelegateUserType;
+    createdBy: { id: string };
   }[];
 }
 

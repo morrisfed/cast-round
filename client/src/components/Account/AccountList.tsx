@@ -1,6 +1,6 @@
 import { AccountUserInfo } from "api/accounts";
 import React, { useMemo } from "react";
-import AccountListItem from "./AccountListItem";
+import AccountItem from "./AccountItem";
 
 export interface AccountListProps {
   accounts: readonly AccountUserInfo[];
@@ -11,13 +11,13 @@ const AccountList: React.FC<AccountListProps> = ({ accounts }) => {
     return accounts.map((account) => {
       return (
         <div key={account.userId}>
-          <AccountListItem account={account} />
+          <AccountItem account={account} />
         </div>
       );
     });
   }, [accounts]);
 
-  return <div>{items}</div>;
+  return <div className="flex flex-row flex-wrap gap-2">{items}</div>;
 };
 
 export default AccountList;
