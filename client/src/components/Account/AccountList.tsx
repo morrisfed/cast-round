@@ -10,7 +10,7 @@ const AccountList: React.FC<AccountListProps> = ({ accounts }) => {
   const items = useMemo(() => {
     return accounts.map((account) => {
       return (
-        <div key={account.userId}>
+        <div key={account.userId} className="grow sm:w-80">
           <AccountItem account={account} />
         </div>
       );

@@ -10,10 +10,10 @@ export interface AccountListItemProps {
 const AccountItem: React.FC<AccountListItemProps> = ({ account }) => {
   return (
     <Link to={`/accounts/${account.userId}`}>
-      <div className="card-bordered card w-80 bg-base-100 shadow-xl">
+      <div className="card-bordered card bg-base-100 shadow-xl">
         <div className="card-body">
           <div className="flex flex-row gap-4">
-            <div className="flex-0">
+            <div className="shrink-0">
               <MemberIcon isIndividual={account.isIndividual} />
             </div>
             <div className="truncate">

@@ -10,10 +10,10 @@ export interface DelegateListItemProps {
 const DelegateItem: React.FC<DelegateListItemProps> = ({ delegate }) => {
   return (
     <Link to={`/delegates/${delegate.userId}`}>
-      <div className="card-bordered card w-80 bg-base-100 shadow-xl">
+      <div className="card-bordered card bg-base-100 shadow-xl">
         <div className="card-body">
           <div className="flex flex-row gap-4">
-            <div className="flex-0">
+            <div className="shrink-0">
               <MemberIcon isIndividual={delegate.type === "tellor-delegate"} />
             </div>
             <div className="truncate">

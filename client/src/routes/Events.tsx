@@ -2,9 +2,9 @@ import React from "react";
 
 import * as E from "fp-ts/lib/Either";
 
-import { Link, NavLink, useLoaderData } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import { getEvents } from "api/events";
-import EventTable from "components/Event/EventTable";
+import EventList from "components/Event/EventList";
 
 export async function eventsLoader() {
   const getEventsTask = getEvents();
@@ -26,7 +26,7 @@ const Events: React.FC = () => {
       <Link to="newevent" className="btn-primary btn">
         New event
       </Link>
-      <EventTable events={events} />
+      <EventList events={events} showEventDescription={false} />
     </div>
   );
 };

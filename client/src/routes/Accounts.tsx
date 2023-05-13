@@ -43,7 +43,7 @@ const Accounts: React.FC = () => {
   }, [filterString, accounts]);
 
   return (
-    <div className="flex flex-col gap-2 p-2">
+    <div className="flex flex-col gap-2">
       <div className="form-control">
         <label className="input-group">
           <span>Filter</span>

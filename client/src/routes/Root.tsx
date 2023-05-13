@@ -16,7 +16,7 @@ const Root: React.FC<RootProps> = ({ profile }) => {
       <div className="grow">
         <div className="drawer-mobile drawer h-full ">
           <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-          <div className="drawer-content flex flex-col ">
+          <div className="drawer-content flex flex-col p-2 ">
             <Outlet />
           </div>
           <div className="drawer-side">
