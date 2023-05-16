@@ -34,26 +34,17 @@ const NewEvent: React.FC = () => {
   const [descriptionValue, setDescriptionValue] = useState<string>("");
 
   return (
-    <Form method="POST">
+    <Form method="POST" className="flex flex-col gap-2">
       <div className="form-control w-full max-w-xs">
         <label className="label">
-          <span className="label-text">Title</span>
+          <span className="label-text">Name</span>
         </label>
         <input
           name="name"
           type="text"
           placeholder="Name"
-          className="input-bordered input w-full max-w-xs"
+          className="input-bordered input"
         />
-
-        <label className="label">
-          <span className="label-text">Description</span>
-        </label>
-        <MDEditor
-          value={descriptionValue}
-          onChange={(value) => setDescriptionValue(value ?? "")}
-        />
-        <input name="description" type="hidden" value={descriptionValue} />
 
         <label className="label">
           <span className="label-text">From date</span>
@@ -64,11 +55,22 @@ const NewEvent: React.FC = () => {
           <span className="label-text">To date</span>
         </label>
         <input name="toDate" type="date" />
-
-        <button type="submit" className="btn-outline btn-accent btn">
-          Create event
-        </button>
       </div>
+
+      <div>
+        <label className="label">
+          <span className="label-text">Description</span>
+        </label>
+        <MDEditor
+          value={descriptionValue}
+          onChange={(value) => setDescriptionValue(value ?? "")}
+        />
+        <input name="description" type="hidden" value={descriptionValue} />
+      </div>
+
+      <button type="submit" className="btn-outline btn-accent btn max-w-xs">
+        Create event
+      </button>
     </Form>
   );
 };

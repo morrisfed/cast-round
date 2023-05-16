@@ -4,6 +4,7 @@ import * as TE from "fp-ts/lib/TaskEither";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
 import { Event } from "interfaces/event";
+import { BuildableVote, Vote, VoteUpdates } from "interfaces/vote";
 
 interface GetEventsResponse {
   events: Event[];
@@ -11,6 +12,14 @@ interface GetEventsResponse {
 
 interface GetEventResponse {
   event: Event;
+}
+
+interface GetEventVotesResponse {
+  votes: Vote[];
+}
+
+interface GetEventVoteResponse {
+  vote: Vote;
 }
 
 interface CreateEventRequest {
@@ -22,6 +31,22 @@ interface CreateEventRequest {
 
 interface CreateEventResponse {
   event: Event;
+}
+
+interface CreateEventVoteRequest {
+  vote: BuildableVote;
+}
+
+interface CreateEventVoteResponse {
+  vote: Vote;
+}
+
+interface UpdateEventVoteRequest {
+  voteUpdates: VoteUpdates;
+}
+
+interface UpdateEventVoteResponse {
+  vote: Vote;
 }
 
 const retrieveEvents = (): TE.TaskEither<
@@ -104,5 +129,120 @@ export const createEvent = (
     ),
     TE.map((response) => response.data),
     TE.map((data) => data.event)
+  );
+};
+
+const retrieveEventVotes = (
+  id: number | string
+): TE.TaskEither<Error | "forbidden", Vote[]> =>
+  pipe(
+    TE.tryCatch(
+      () => axios.get<GetEventVotesResponse>("/api/events/" + id + "/votes"),
+      (reason) => {
+        const error = reason as AxiosError;
+        if (error.response) {
+          if (error.response.status === 403) {
+            return "forbidden";
+          } else if (error.response.status === 404) {
+            return new Error("Event not found");
+          }
+        }
+        return new Error(`${reason}`);
+      }
+    ),
+    TE.map((response) => response.data),
+    TE.map((data) => data.votes)
+  );
+
+export const getEventVotes = (id: number | string) =>
+  pipe(retrieveEventVotes(id));
+
+const retrieveEventVote = (
+  eventId: number | string,
+  voteId: number | string
+): TE.TaskEither<Error | "forbidden", Vote> =>
+  pipe(
+    TE.tryCatch(
+      () =>
+        axios.get<GetEventVoteResponse>(
+          "/api/events/" + eventId + "/votes/" + voteId
+        ),
+      (reason) => {
+        const error = reason as AxiosError;
+        if (error.response) {
+          if (error.response.status === 403) {
+            return "forbidden";
+          } else if (error.response.status === 404) {
+            return new Error("Event not found");
+          }
+        }
+        return new Error(`${reason}`);
+      }
+    ),
+    TE.map((response) => response.data),
+    TE.map((data) => data.vote)
+  );
+
+export const getEventVote = (
+  eventId: number | string,
+  voteId: number | string
+) => pipe(retrieveEventVote(eventId, voteId));
+
+export const createEventVote = (
+  eventId: number | string,
+  buildableVote: BuildableVote
+): TE.TaskEither<Error | "forbidden", Vote> => {
+  return pipe(
+    TE.tryCatch(
+      () =>
+        axios.post<
+          CreateEventVoteResponse,
+          AxiosResponse<CreateEventVoteResponse>,
+          CreateEventVoteRequest
+        >(`/api/events/${eventId}/votes`, {
+          vote: buildableVote,
+        }),
+      (reason) => {
+        const error = reason as AxiosError;
+        if (error.response) {
+          if (error.response.status === 403) {
+            return "forbidden";
+          }
+        }
+        return new Error(`${reason}`);
+      }
+    ),
+    TE.map((response) => response.data),
+    TE.map((data) => data.vote)
+  );
+};
+
+export const updateEventVote = (
+  eventId: number | string,
+  voteId: number | string,
+  updates: VoteUpdates
+): TE.TaskEither<Error | "forbidden", Vote> => {
+  return pipe(
+    TE.tryCatch(
+      () =>
+        axios.patch<
+          UpdateEventVoteResponse,
+          AxiosResponse<UpdateEventVoteResponse>,
+          UpdateEventVoteRequest
+        >(`/api/events/${eventId}/votes/${voteId}`, {
+          voteUpdates: updates,
+        }),
+      (reason) => {
+        const error = reason as AxiosError;
+        if (error.response) {
+          if (error.response.status === 403) {
+            return "forbidden";
+          }
+        }
+        return new Error(`${reason}`);
+      }
+    ),
+    TE.map((response) => response.data),
+    TE.map((data) => data.vote)
   );
 };
