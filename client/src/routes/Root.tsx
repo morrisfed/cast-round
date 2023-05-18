@@ -2,6 +2,7 @@ import Breadcrumbs from "components/Breadcrumbs";
 import Navbar from "components/Navbar";
 import SideBar from "components/SideBar";
 import { UserProfile } from "interfaces/user";
+import { useCallback, useRef } from "react";
 import { Outlet } from "react-router-dom";
 
 export interface RootProps {
@@ -9,6 +10,12 @@ export interface RootProps {
 }
 
 const Root: React.FC<RootProps> = ({ profile }) => {
+  const checkboxRef = useRef<HTMLInputElement>(null);
+
+  const onSideBarItemSelected = useCallback(() => {
+    checkboxRef.current?.click();
+  }, [checkboxRef]);
+
   return (
     <div className="flex h-screen flex-col">
       <div className="flex-none">
@@ -16,7 +23,12 @@ const Root: React.FC<RootProps> = ({ profile }) => {
       </div>
       <div className="grow">
         <div className="drawer-mobile drawer h-full ">
-          <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
+          <input
+            ref={checkboxRef}
+            id="my-drawer-2"
+            type="checkbox"
+            className="drawer-toggle"
+          />
           <div className="drawer-content flex flex-col">
             <Breadcrumbs />
             <div className="p-2">
@@ -25,7 +37,7 @@ const Root: React.FC<RootProps> = ({ profile }) => {
           </div>
           <div className="drawer-side">
             <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
-            <SideBar profile={profile} />
+            <SideBar profile={profile} itemSelected={onSideBarItemSelected} />
           </div>
         </div>
       </div>

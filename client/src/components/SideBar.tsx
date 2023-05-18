@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 
 export interface SideBarProps {
   profile: UserProfile;
+  itemSelected: () => void;
 }
 
 const hasPermission = (profile: UserProfile, permission: Permission) => {
@@ -24,27 +25,35 @@ const showEvents = (profile: UserProfile) =>
 const showAdmin = (profile: UserProfile) =>
   hasPermission(profile, "ADMINISTRATOR");
 
-const SideBar: React.FC<SideBarProps> = ({ profile }) => {
+const SideBar: React.FC<SideBarProps> = ({ profile, itemSelected }) => {
   return (
     <ul className="menu w-80 bg-base-100 p-4 text-base-content">
       {showAdmin(profile) ? (
         <li>
-          <NavLink to="/admin">Admin</NavLink>
+          <NavLink to="/admin" onClick={itemSelected}>
+            Admin
+          </NavLink>
         </li>
       ) : null}
       {showAccounts(profile) ? (
         <li>
-          <NavLink to="/accounts">Accounts</NavLink>
+          <NavLink to="/accounts" onClick={itemSelected}>
+            Accounts
+          </NavLink>
         </li>
       ) : null}
       {showDelegates(profile) ? (
         <li>
-          <NavLink to="/delegates">Delegates</NavLink>
+          <NavLink to="/delegates" onClick={itemSelected}>
+            Delegates
+          </NavLink>
         </li>
       ) : null}
       {showEvents(profile) ? (
         <li>
-          <NavLink to="/events">Events</NavLink>
+          <NavLink to="/events" onClick={itemSelected}>
+            Events
+          </NavLink>
         </li>
       ) : null}
     </ul>
