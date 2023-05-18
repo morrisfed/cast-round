@@ -1,6 +1,7 @@
 import * as E from "fp-ts/lib/Either";
 
 import {
+  Link,
   LoaderFunctionArgs,
   NavLink,
   NavLinkProps,
@@ -8,6 +9,7 @@ import {
   useLoaderData,
 } from "react-router-dom";
 import { getAccount } from "api/accounts";
+import { Crumb, CrumbDataFn } from "components/Crumb";
 
 const tabClassName: NavLinkProps["className"] = ({ isActive, isPending }) =>
   `tab-bordered tab ${isActive ? "tab-active" : ""} ${
@@ -30,6 +32,11 @@ export async function accountLoader({ params }: LoaderFunctionArgs) {
 
   return accountEither.right;
 }
+
+export const AccountCrumb: CrumbDataFn = (match) => {
+  const data = match.data as Awaited<ReturnType<typeof accountLoader>>;
+  return { path: `/accounts/${data.userId}`, label: data.name };
+};
 
 const Account: React.FC = () => {
   const account = useLoaderData() as Awaited<ReturnType<typeof accountLoader>>;

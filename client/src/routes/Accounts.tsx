@@ -2,10 +2,10 @@ import React from "react";
 
 import * as E from "fp-ts/lib/Either";
 
-import { useLoaderData } from "react-router-dom";
-import AccountTable from "components/Account/AccountTable";
+import { Link, useLoaderData } from "react-router-dom";
 import { getAccounts } from "api/accounts";
 import AccountList from "components/Account/AccountList";
+import { Crumb, CrumbDataFn } from "components/Crumb";
 
 export async function accountsLoader() {
   const getAccountsTask = getAccounts();
@@ -18,6 +18,10 @@ export async function accountsLoader() {
 
   return accountsEither.right;
 }
+
+export const AccountsCrumb: CrumbDataFn = () => {
+  return { label: "Accounts" };
+};
 
 const Accounts: React.FC = () => {
   const accounts = useLoaderData() as Awaited<
