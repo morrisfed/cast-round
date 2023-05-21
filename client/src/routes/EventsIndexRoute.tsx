@@ -2,9 +2,9 @@ import React from "react";
 
 import * as E from "fp-ts/lib/Either";
 
-import { Link, useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { getEvents } from "api/events";
-import EventList from "components/Event/EventList";
+import EventsIndexView from "events/EventsIndexView";
 
 export async function eventsLoader() {
   const getEventsTask = getEvents();
@@ -18,17 +18,10 @@ export async function eventsLoader() {
   return eventsEither.right;
 }
 
-const Events: React.FC = () => {
+const EventsIndexRoute: React.FC = () => {
   const events = useLoaderData() as Awaited<ReturnType<typeof eventsLoader>>;
 
-  return (
-    <div className="flex flex-col gap-2 p-2">
-      <Link to="newevent" className="btn-primary btn">
-        New event
-      </Link>
-      <EventList events={events} showEventDescription={false} />
-    </div>
-  );
+  return <EventsIndexView events={events} />;
 };
 
-export default Events;
+export default EventsIndexRoute;

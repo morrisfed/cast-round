@@ -1,10 +1,9 @@
 import * as E from "fp-ts/lib/Either";
 
-import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+import { LoaderFunctionArgs } from "react-router-dom";
 import { pipe } from "fp-ts/lib/function";
 import { getEventVote } from "api/events";
-import { Vote } from "interfaces/vote";
-import VoteDetails from "components/Vote/VoteDetails";
+import { CrumbDataFn } from "components/Crumb";
 
 export async function eventVoteLoader({ params }: LoaderFunctionArgs) {
   const eventId = params.eventId;
@@ -28,12 +27,7 @@ export async function eventVoteLoader({ params }: LoaderFunctionArgs) {
   return eventEither.right;
 }
 
-const EventVote: React.FC = () => {
-  const vote: Vote = useLoaderData() as Awaited<
-    ReturnType<typeof eventVoteLoader>
-  >;
-
-  return <VoteDetails vote={vote} />;
+export const EventVoteCrumb: CrumbDataFn = (match) => {
+  const data = match.data as Awaited<ReturnType<typeof eventVoteLoader>>;
+  return { label: data.title };
 };
-
-export default EventVote;

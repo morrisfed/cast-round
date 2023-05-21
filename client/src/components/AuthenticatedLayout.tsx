@@ -22,18 +22,22 @@ import NewAccountDelegate, {
 import AccountDelegates, {
   accountDelegatesLoader,
 } from "routes/AccountDelegates";
-import Events, { eventsLoader } from "routes/Events";
+import Events, { EventsCrumb } from "routes/EventsRoute";
 import NewEvent, { createEventAction } from "routes/NewEvent";
-import Event, { eventLoader } from "routes/Event";
-import EventVotes, { eventVotesLoader } from "routes/EventVotes";
+import { EventCrumb, eventLoader } from "routes/EventRoute";
 import EditEventVote, {
   createEventVoteAction,
+  EditEventVoteCrumb,
   editEventVoteLoader,
+  NewEventVoteCrumb,
   newEventVoteLoader,
   updateEventVoteAction,
-} from "routes/EditEventVote";
-import EventVote, { eventVoteLoader } from "routes/EventVote";
+} from "routes/EditEventVoteRoute";
 import AdminRoute, { AdminCrum } from "routes/AdminRoute";
+import EventsIndexRoute, { eventsLoader } from "routes/EventsIndexRoute";
+import EventIndexRoute from "routes/EventIndexRoute";
+import { EventVoteCrumb, eventVoteLoader } from "routes/EventVoteRoute";
+import EventVoteIndexRoute from "routes/EventVoteIndexRoute";
 
 export interface AuthenticatedLayoutProps {
   profile: UserProfile;
@@ -74,10 +78,46 @@ const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({
             loader={delegatesLoader}
           />
 
-          <Route path="events">
-            <Route index element={<Events />} loader={eventsLoader} />
-            <Route path=":eventId" element={<Event />} loader={eventLoader}>
-              <Route index element={<EventVotes />} loader={eventVotesLoader} />
+          <Route
+            path="events"
+            element={<Events />}
+            handle={{ crumb: EventsCrumb }}
+          >
+            <Route index element={<EventsIndexRoute />} loader={eventsLoader} />
+            <Route
+              path=":eventId"
+              loader={eventLoader}
+              handle={{ crumb: EventCrumb }}
+            >
+              <Route index element={<EventIndexRoute />} loader={eventLoader} />
+
+              <Route path="votes">
+                <Route
+                  path="newvote"
+                  element={<EditEventVote />}
+                  loader={newEventVoteLoader}
+                  action={createEventVoteAction}
+                  handle={{ crumb: NewEventVoteCrumb }}
+                />
+                <Route
+                  path=":voteId"
+                  handle={{ crumb: EventVoteCrumb }}
+                  loader={eventVoteLoader}
+                >
+                  <Route
+                    index
+                    element={<EventVoteIndexRoute />}
+                    loader={eventVoteLoader}
+                  />
+                  <Route
+                    path="edit"
+                    element={<EditEventVote />}
+                    loader={editEventVoteLoader}
+                    action={updateEventVoteAction}
+                    handle={{ crumb: EditEventVoteCrumb }}
+                  ></Route>
+                </Route>
+              </Route>
             </Route>
           </Route>
 
@@ -86,26 +126,6 @@ const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({
             element={<NewEvent />}
             action={createEventAction}
           />
-
-          <Route
-            path="/events/:eventId/newvote"
-            element={<EditEventVote />}
-            loader={newEventVoteLoader}
-            action={createEventVoteAction}
-          />
-
-          <Route
-            path="/events/:eventId/votes/:voteId"
-            element={<EventVote />}
-            loader={eventVoteLoader}
-          ></Route>
-
-          <Route
-            path="/events/:eventId/votes/:voteId/edit"
-            element={<EditEventVote />}
-            loader={editEventVoteLoader}
-            action={updateEventVoteAction}
-          ></Route>
 
           <Route
             path="admin"

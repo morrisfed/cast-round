@@ -11,8 +11,14 @@ import {
   json,
   redirect,
   useLoaderData,
+  useNavigate,
 } from "react-router-dom";
-import { eventVoteLoader } from "./EventVote";
+import { eventVoteLoader } from "./EventVoteRoute";
+import { CrumbDataFn } from "components/Crumb";
+
+interface EditEventVoteRouteProps {
+  newVote?: boolean;
+}
 
 export async function newEventVoteLoader({ params }: LoaderFunctionArgs) {
   const eventId = params.eventId;
@@ -95,7 +101,17 @@ export async function updateEventVoteAction({
   return redirect(`/events/${eventId}/votes/${vote.id}`);
 }
 
-const EditEventVote: React.FC = () => {
+export const NewEventVoteCrumb: CrumbDataFn = () => {
+  return { label: "Add vote" };
+};
+
+export const EditEventVoteCrumb: CrumbDataFn = (match) => {
+  const data = match.data as Awaited<ReturnType<typeof editEventVoteLoader>>;
+  return { label: `Edit vote: ${data.title}` };
+};
+
+const EditEventVoteRoute: React.FC<EditEventVoteRouteProps> = ({ newVote }) => {
+  const navigate = useNavigate();
   const vote = useLoaderData() as Awaited<
     ReturnType<typeof editEventVoteLoader>
   >;
@@ -129,11 +145,23 @@ const EditEventVote: React.FC = () => {
         <input name="description" type="hidden" value={descriptionValue} />
       </div>
 
-      <button type="submit" className="btn-outline btn-accent btn max-w-xs">
-        Create vote
-      </button>
+      <div className="flex flex-row gap-4">
+        <button type="submit" className="btn-accent btn max-w-xs">
+          {newVote ? "Create vote" : "Update vote"}
+        </button>
+
+        <button
+          type="button"
+          className="btn-outline btn"
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
+          Cancel
+        </button>
+      </div>
     </Form>
   );
 };
 
-export default EditEventVote;
+export default EditEventVoteRoute;

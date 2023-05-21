@@ -3,7 +3,7 @@ import * as TE from "fp-ts/lib/TaskEither";
 
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-import { Event } from "interfaces/event";
+import { Event, EventWithVotes } from "interfaces/event";
 import { BuildableVote, Vote, VoteUpdates } from "interfaces/vote";
 
 interface GetEventsResponse {
@@ -11,7 +11,7 @@ interface GetEventsResponse {
 }
 
 interface GetEventResponse {
-  event: Event;
+  event: EventWithVotes;
 }
 
 interface GetEventVotesResponse {
@@ -74,7 +74,7 @@ export const getEvents = () => pipe(retrieveEvents());
 
 const retrieveEvent = (
   id: number | string
-): TE.TaskEither<Error | "forbidden", Event> =>
+): TE.TaskEither<Error | "forbidden", EventWithVotes> =>
   pipe(
     TE.tryCatch(
       () => axios.get<GetEventResponse>("/api/events/" + id),
