@@ -1,7 +1,6 @@
 import * as E from "fp-ts/lib/Either";
 
 import {
-  Link,
   LoaderFunctionArgs,
   NavLink,
   NavLinkProps,
@@ -9,7 +8,7 @@ import {
   useLoaderData,
 } from "react-router-dom";
 import { getAccount } from "api/accounts";
-import { Crumb, CrumbDataFn } from "components/Crumb";
+import { CrumbDataFn } from "components/Crumb";
 
 const tabClassName: NavLinkProps["className"] = ({ isActive, isPending }) =>
   `tab-bordered tab ${isActive ? "tab-active" : ""} ${

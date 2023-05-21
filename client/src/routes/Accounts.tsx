@@ -2,10 +2,10 @@ import React from "react";
 
 import * as E from "fp-ts/lib/Either";
 
-import { Link, useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { getAccounts } from "api/accounts";
 import AccountList from "components/Account/AccountList";
-import { Crumb, CrumbDataFn } from "components/Crumb";
+import { CrumbDataFn } from "components/Crumb";
 
 export async function accountsLoader() {
   const getAccountsTask = getAccounts();
