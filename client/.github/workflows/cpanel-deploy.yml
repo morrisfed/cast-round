@@ -43,4 +43,4 @@ jobs:
           HOSTING_SSH_KEY: ${{ secrets.HOSTING_SSH_KEY }}
 
       - name: Copy distribution
-        run: scp -r dist/ "hosting:$WEB_ROOT"
+        run: scp -r dist/* "hosting:$WEB_ROOT"
