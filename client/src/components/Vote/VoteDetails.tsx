@@ -9,23 +9,43 @@ export interface VoteDetailsProps {
 
 const VoteDetails: React.FC<VoteDetailsProps> = ({ vote }) => {
   const toAbandonedStatus = useMemo(
-    () => <button className="btn-primary btn">Abandon</button>,
+    () => (
+      <button key="abandoned" className="btn-primary btn">
+        Abandon
+      </button>
+    ),
     []
   );
   const toProxyStatus = useMemo(
-    () => <button className="btn-primary btn">Proxy-Open</button>,
+    () => (
+      <button key="proxy" className="btn-primary btn">
+        Proxy-Open
+      </button>
+    ),
     []
   );
   const toOpenStatus = useMemo(
-    () => <button className="btn-primary btn">Open</button>,
+    () => (
+      <button key="open" className="btn-primary btn">
+        Open
+      </button>
+    ),
     []
   );
   const toClosedStatus = useMemo(
-    () => <button className="btn-primary btn">Close</button>,
+    () => (
+      <button key="close" className="btn-primary btn">
+        Close
+      </button>
+    ),
     []
   );
   const toCancelledStatus = useMemo(
-    () => <button className="btn-primary btn">Cancel</button>,
+    () => (
+      <button key="cancel" className="btn-primary btn">
+        Cancel
+      </button>
+    ),
     []
   );
 
