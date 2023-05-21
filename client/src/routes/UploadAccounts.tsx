@@ -5,6 +5,7 @@ import * as E from "fp-ts/lib/Either";
 import { uploadAccountsCsv } from "api/admin";
 import { ActionFunctionArgs, useFetcher } from "react-router-dom";
 import Spinner from "components/Spinner";
+import { CrumbDataFn } from "components/Crumb";
 
 export async function uploadAccountsAction({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
@@ -14,6 +15,10 @@ export async function uploadAccountsAction({ request }: ActionFunctionArgs) {
 
   return await uploadTask();
 }
+
+export const UploadAccountsCrumb: CrumbDataFn = () => {
+  return { label: "Upload accounts" };
+};
 
 const UploadAccounts: React.FC = () => {
   const fetcher = useFetcher();

@@ -11,9 +11,11 @@ import Root from "routes/Root";
 import Account, { AccountCrumb, accountLoader } from "routes/Account";
 import Accounts, { AccountsCrumb, accountsLoader } from "routes/Accounts";
 import Delegates, { delegatesLoader } from "routes/Delegates";
-import Admin from "routes/Admin";
-import UploadAccounts, { uploadAccountsAction } from "routes/UploadAccounts";
-import AdminIndex from "routes/AdminIndex";
+import UploadAccounts, {
+  uploadAccountsAction,
+  UploadAccountsCrumb,
+} from "routes/UploadAccounts";
+import AdminIndexRoute from "routes/AdminIndexRoute";
 import NewAccountDelegate, {
   createAccountDelegateAction,
 } from "routes/NewAccountDelegate";
@@ -31,6 +33,7 @@ import EditEventVote, {
   updateEventVoteAction,
 } from "routes/EditEventVote";
 import EventVote, { eventVoteLoader } from "routes/EventVote";
+import AdminRoute, { AdminCrum } from "routes/AdminRoute";
 
 export interface AuthenticatedLayoutProps {
   profile: UserProfile;
@@ -104,12 +107,17 @@ const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({
             action={updateEventVoteAction}
           ></Route>
 
-          <Route path="admin" element={<Admin />}>
-            <Route index element={<AdminIndex />} />
+          <Route
+            path="admin"
+            element={<AdminRoute />}
+            handle={{ crumb: AdminCrum }}
+          >
+            <Route index element={<AdminIndexRoute profile={profile} />} />
             <Route
               path="uploadAccounts"
               element={<UploadAccounts />}
               action={uploadAccountsAction}
+              handle={{ crumb: UploadAccountsCrumb }}
             />
           </Route>
         </Route>
