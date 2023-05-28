@@ -1,23 +1,24 @@
-import { Permission, UserProfile } from "interfaces/user";
+import { profile } from "console";
+import { Permission, Role, UserProfile } from "interfaces/user";
+
+const hasRole = (profile: UserProfile, role: Role) =>
+  profile.roles.includes(role);
 
 const hasPermission = (profile: UserProfile, permission: Permission) => {
   return profile.permissions.includes(permission);
 };
 
 export const showAccounts = (profile: UserProfile) =>
-  hasPermission(profile, "ACCOUNTS_READ_ALL") ||
-  hasPermission(profile, "ACCOUNTS_WRITE_ALL");
-
-export const showDelegates = (profile: UserProfile) =>
-  hasPermission(profile, "DELEGATES_READ_ALL") ||
-  hasPermission(profile, "DELEGATES_WRITE_ALL");
+  hasRole(profile, "TELLOR_DELEGATE");
 
 export const showEvents = (profile: UserProfile) =>
-  hasPermission(profile, "EVENTS_READ_ALL") ||
-  hasPermission(profile, "EVENTS_WRITE_ALL");
+  hasRole(profile, "COMMITTEE") || hasRole(profile, "MEMBER");
 
 export const showAdmin = (profile: UserProfile) =>
-  hasPermission(profile, "ADMINISTRATOR");
+  hasRole(profile, "ADMINISTRATOR");
 
 export const showAdminUploadUsers = (profile: UserProfile) =>
   showAdmin(profile) && hasPermission(profile, "ACCOUNTS_WRITE_ALL");
+
+export const isAddEventEnabled = (profile: UserProfile) =>
+  hasRole(profile, "COMMITTEE");

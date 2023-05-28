@@ -1,11 +1,3 @@
-export type UserType =
-  | "individual-member"
-  | "group-member"
-  | "committee-member"
-  | "other-member"
-  | "group-delegate"
-  | "tellor-delegate";
-
 export type Permission =
   | "ADMINISTRATOR"
   | "ACCOUNTS_READ_ALL"
@@ -21,9 +13,22 @@ export type Permission =
   | "EVENTS_READ_UNASSIGNED"
   | "EVENTS_WRITE_ALL";
 
+export type Role =
+  | "ADMINISTRATOR"
+  | "MEMBER"
+  | "GROUP_MEMBER"
+  | "INDIVIDUAL_MEMBER"
+  | "DELEGATE"
+  | "GROUP_DELEGATE"
+  | "GROUP_VOTER"
+  | "INDIVIDUAL_VOTER"
+  | "VOTER"
+  | "TELLOR_DELEGATE"
+  | "COMMITTEE";
+
 export type UserProfile = {
   id: string;
   name: string;
-  type: UserType;
+  roles: Role[];
   permissions: Permission[];
 };

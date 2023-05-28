@@ -26,7 +26,7 @@ const Profile: React.FC<ProfileProps> = ({ profile }) => {
         >
           <div className="card-body">
             <span className="text-lg font-bold">{profile.name}</span>
-            <span className="text-info">{profile.type}</span>
+            <span className="text-info">{profile.roles.join(" ")}</span>
             <div className="card-actions">
               <form action="/api/auth/logout" method="post">
                 <button className="btn-primary btn-block btn" type="submit">
@@ -39,22 +39,6 @@ const Profile: React.FC<ProfileProps> = ({ profile }) => {
       </div>
     </div>
   );
-  //     return (
-  //       <div className="flex flex-col items-end">
-  //         <p>{userProfile.value.name}</p>
-  //         <p>{userProfile.value.type}</p>
-  //         <p>{userProfile.value.permissions.join(", ")}</p>
-  //         <div>
-  //           <form action="/api/auth/logout" method="post">
-  //             <button className="btn-primary btn" type="submit">
-  //               Log out
-  //             </button>
-  //           </form>
-  //         </div>
-  //       </div>
-  //     );
-  //   }
-  // }
 };
 
 export default Profile;

@@ -18,18 +18,18 @@ const SideBar: React.FC<SideBarProps> = ({ profile, itemSelected }) => {
         </li>
       ) : null}
 
-      {showAccounts(profile) ? (
-        <li>
-          <NavLink to="/accounts" onClick={itemSelected}>
-            Accounts
-          </NavLink>
-        </li>
-      ) : null}
-
       {showEvents(profile) ? (
         <li>
           <NavLink to="/events" onClick={itemSelected}>
             Events
+          </NavLink>
+        </li>
+      ) : null}
+
+      {showAccounts(profile) ? (
+        <li>
+          <NavLink to="/accounts" onClick={itemSelected}>
+            Accounts
           </NavLink>
         </li>
       ) : null}
