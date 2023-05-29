@@ -9,6 +9,8 @@ const hasPermission = (profile: UserProfile, permission: Permission) => {
 };
 
 export const showAccounts = (profile: UserProfile) =>
+  hasRole(profile, "COMMITTEE") ||
+  hasRole(profile, "ADMINISTRATOR") ||
   hasRole(profile, "TELLOR_DELEGATE");
 
 export const showEvents = (profile: UserProfile) =>
