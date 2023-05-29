@@ -19,8 +19,8 @@ const EventItem: React.FC<EventItemProps> = ({
           <div className="flex flex-row gap-4">
             <div className="truncate">
               <h2 className="card-title">{event.name}</h2>
-              <p>From: {event.fromDate.toString()}</p>
-              <p>To: {event.toDate.toString()}</p>
+              <p>Visible from: {event.fromDate.toString()}</p>
+              <p>Visible until: {event.toDate.toString()}</p>
               {showEventDescription ? (
                 <article className="prose">
                   <ReactMarkdown>{event.description}</ReactMarkdown>
