@@ -1,30 +1,36 @@
-import { getEvent } from "api/events";
+import React from "react";
+import { Await, LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+
 import EventView from "events/EventView";
-import * as E from "fp-ts/lib/Either";
+import { eventLoader } from "./EventRoute";
 
-import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+function LoadingError() {
+  return (
+    <div>
+      <h1>Oops!</h1>
+      <p>Sorry, an unexpected error has occurred.</p>
+      <p>Please try tapping the refresh button or reloading the page.</p>
+    </div>
+  );
+}
 
-export async function eventLoader({ params }: LoaderFunctionArgs) {
-  const eventId = params.eventId;
-  if (!eventId) {
-    throw new Error("No event ID provided");
-  }
-
-  const getEventTask = getEvent(eventId);
-
-  const eventEither = await getEventTask();
-
-  if (E.isLeft(eventEither)) {
-    throw eventEither.left;
-  }
-
-  return eventEither.right;
+export function eventIndexLoader(args: LoaderFunctionArgs) {
+  const eventPromise = eventLoader(args);
+  return { eventPromise };
 }
 
 const EventIndexRoute: React.FC = () => {
-  const event = useLoaderData() as Awaited<ReturnType<typeof eventLoader>>;
+  const { eventPromise } = useLoaderData() as ReturnType<
+    typeof eventIndexLoader
+  >;
 
-  return <EventView event={event} />;
+  return (
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <Await resolve={eventPromise} errorElement={<LoadingError />}>
+        {(event) => <EventView event={event} />}
+      </Await>
+    </React.Suspense>
+  );
 };
 
 export default EventIndexRoute;

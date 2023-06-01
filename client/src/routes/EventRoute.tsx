@@ -1,5 +1,5 @@
-import { getEvent } from "api/events";
 import { CrumbDataFn } from "components/Crumb";
+import { getEvent } from "events/event-service";
 import * as E from "fp-ts/lib/Either";
 
 import { LoaderFunctionArgs } from "react-router-dom";
@@ -23,5 +23,5 @@ export async function eventLoader({ params }: LoaderFunctionArgs) {
 
 export const EventCrumb: CrumbDataFn = (match) => {
   const data = match.data as Awaited<ReturnType<typeof eventLoader>>;
-  return { label: data.name };
+  return { label: data?.name ?? "Loading error" };
 };

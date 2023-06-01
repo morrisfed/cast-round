@@ -1,14 +1,28 @@
+import React from "react";
+import { Await, Link } from "react-router-dom";
+
 import EventList from "components/Event/EventList";
 import { Event } from "interfaces/event";
-import { Link } from "react-router-dom";
 
 interface EventsIndexViewProps {
-  events: readonly Event[];
+  eventsPromise: Promise<readonly Event[]>;
+  newEventLinkToPath: string;
   refreshHandler: () => void;
 }
 
+function LoadingError() {
+  return (
+    <div>
+      <h1>Oops!</h1>
+      <p>Sorry, an unexpected error has occurred.</p>
+      <p>Please try tapping the refresh button or reloading the page.</p>
+    </div>
+  );
+}
+
 const EventsIndexView: React.FC<EventsIndexViewProps> = ({
-  events,
+  eventsPromise,
+  newEventLinkToPath,
   refreshHandler,
 }) => {
   return (
@@ -16,7 +30,7 @@ const EventsIndexView: React.FC<EventsIndexViewProps> = ({
       <div className="flex flex-row justify-between">
         <h1 className="text-2xl font-bold">Events</h1>
         <div className="flex flex-row gap-2">
-          <Link to="newevent" className="btn-primary btn">
+          <Link to={newEventLinkToPath} className="btn-primary btn">
             New event
           </Link>
           <button className="btn" onClick={() => refreshHandler()}>
@@ -24,7 +38,13 @@ const EventsIndexView: React.FC<EventsIndexViewProps> = ({
           </button>
         </div>
       </div>
-      <EventList events={events} showEventDescription={false} />
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <Await resolve={eventsPromise} errorElement={<LoadingError />}>
+          {(events: readonly Event[]) => (
+            <EventList events={events} showEventDescription={false} />
+          )}
+        </Await>
+      </React.Suspense>
     </div>
   );
 };

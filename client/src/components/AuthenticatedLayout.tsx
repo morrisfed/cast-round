@@ -35,7 +35,7 @@ import EditEventVote, {
 } from "routes/EditEventVoteRoute";
 import AdminRoute, { AdminCrum } from "routes/AdminRoute";
 import EventsIndexRoute, { eventsLoader } from "routes/EventsIndexRoute";
-import EventIndexRoute from "routes/EventIndexRoute";
+import EventIndexRoute, { eventIndexLoader } from "routes/EventIndexRoute";
 import { EventVoteCrumb, eventVoteLoader } from "routes/EventVoteRoute";
 import EventVoteIndexRoute from "routes/EventVoteIndexRoute";
 
@@ -89,7 +89,11 @@ const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({
               loader={eventLoader}
               handle={{ crumb: EventCrumb }}
             >
-              <Route index element={<EventIndexRoute />} loader={eventLoader} />
+              <Route
+                index
+                element={<EventIndexRoute />}
+                loader={eventIndexLoader}
+              />
 
               <Route path="votes">
                 <Route

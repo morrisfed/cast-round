@@ -2,6 +2,8 @@ import { getEvents as apiGetEvents, getEvent as apiGetEvent } from "api/events";
 import * as TE from "fp-ts/lib/TaskEither";
 import * as E from "fp-ts/lib/Either";
 import { Event, EventWithVotes } from "interfaces/event";
+import { pipe } from "fp-ts/lib/function";
+import { now } from "fp-ts/lib/Date";
 
 let eventsPromise:
   | Promise<E.Either<Error | "forbidden", readonly Event[]>>
@@ -12,15 +14,30 @@ const eventDetailsPromises: Map<
   Promise<E.Either<Error | "forbidden", EventWithVotes>>
 > = new Map();
 
+const createGetEventsPromise = pipe(
+  apiGetEvents(),
+  TE.map((events) =>
+    events.map((event) => ({ ...event, name: now().toString() }))
+  )
+);
+
 export const getEvents = (): TE.TaskEither<
   Error | "forbidden",
   readonly Event[]
 > => {
-  if (eventsPromise === undefined) {
-    const getEventsTask = apiGetEvents();
-    eventsPromise = getEventsTask();
-  }
-  return () => eventsPromise!;
+  const localEventsPromise = eventsPromise ?? createGetEventsPromise();
+
+  eventsPromise = localEventsPromise;
+
+  // If there is an error getting events, clear the cached events promise so new calls to getEvents
+  // will try to retrieve events again.
+  localEventsPromise.then((result) => {
+    if (E.isLeft(result)) {
+      eventsPromise = undefined;
+    }
+  });
+
+  return () => localEventsPromise!;
 };
 
 export const refreshEvents = (): TE.TaskEither<
@@ -32,17 +49,24 @@ export const refreshEvents = (): TE.TaskEither<
   return getEvents();
 };
 
+const createGetEventPromise = (eventId: string) => apiGetEvent(eventId)();
+
 export const getEvent = (
   eventId: string
 ): TE.TaskEither<Error | "forbidden", EventWithVotes> => {
-  let eventDetailsPromise = eventDetailsPromises.get(eventId);
-  if (eventDetailsPromise === undefined) {
-    const getEventTask = apiGetEvent(eventId);
-    eventDetailsPromise = getEventTask();
-    eventDetailsPromises.set(eventId, eventDetailsPromise);
-  }
+  const localEventDetailsPromise =
+    eventDetailsPromises.get(eventId) ?? createGetEventPromise(eventId);
 
-  return () => eventDetailsPromise!;
+  eventDetailsPromises.set(eventId, localEventDetailsPromise);
+
+  // Clear the promise from the map if there is a problem retrieving the event details.
+  localEventDetailsPromise.then((result) => {
+    if (E.isLeft(result)) {
+      eventDetailsPromises.delete(eventId);
+    }
+  });
+
+  return () => localEventDetailsPromise!;
 };
 
 export const refreshEvent = (

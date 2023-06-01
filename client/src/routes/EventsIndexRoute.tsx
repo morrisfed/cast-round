@@ -2,29 +2,26 @@ import React, { useCallback } from "react";
 
 import * as E from "fp-ts/lib/Either";
 
-import {
-  useLoaderData,
-  useLocation,
-  useNavigate,
-  useNavigation,
-} from "react-router-dom";
+import { useLoaderData, useLocation, useNavigate } from "react-router-dom";
 import EventsIndexView from "events/EventsIndexView";
 import { getEvents, refreshEvents } from "events/event-service";
 
-export async function eventsLoader() {
+export function eventsLoader() {
   const getEventsTask = getEvents();
 
-  const eventsEither = await getEventsTask();
+  const eventsPromise = getEventsTask().then((eventsEither) => {
+    if (E.isLeft(eventsEither)) {
+      throw eventsEither.left;
+    }
 
-  if (E.isLeft(eventsEither)) {
-    throw eventsEither.left;
-  }
+    return eventsEither.right;
+  });
 
-  return eventsEither.right;
+  return { eventsPromise };
 }
 
 const EventsIndexRoute: React.FC = () => {
-  const events = useLoaderData() as Awaited<ReturnType<typeof eventsLoader>>;
+  const data = useLoaderData() as ReturnType<typeof eventsLoader>;
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -35,7 +32,11 @@ const EventsIndexRoute: React.FC = () => {
 
   return (
     <div>
-      <EventsIndexView events={events} refreshHandler={refreshHandler} />
+      <EventsIndexView
+        eventsPromise={data.eventsPromise}
+        newEventLinkToPath="newevent"
+        refreshHandler={refreshHandler}
+      />
     </div>
   );
 };
