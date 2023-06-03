@@ -3,7 +3,6 @@ import * as TE from "fp-ts/lib/TaskEither";
 import * as E from "fp-ts/lib/Either";
 import { Event, EventWithVotes } from "interfaces/event";
 import { pipe } from "fp-ts/lib/function";
-import { now } from "fp-ts/lib/Date";
 
 let eventsPromise:
   | Promise<E.Either<Error | "forbidden", readonly Event[]>>
@@ -14,12 +13,7 @@ const eventDetailsPromises: Map<
   Promise<E.Either<Error | "forbidden", EventWithVotes>>
 > = new Map();
 
-const createGetEventsPromise = pipe(
-  apiGetEvents(),
-  TE.map((events) =>
-    events.map((event) => ({ ...event, name: now().toString() }))
-  )
-);
+const createGetEventsPromise = pipe(apiGetEvents());
 
 export const getEvents = (): TE.TaskEither<
   Error | "forbidden",
