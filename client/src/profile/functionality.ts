@@ -19,3 +19,12 @@ export const showAdminUploadUsers = (profile: UserProfile) =>
 
 export const isAddEventEnabled = (profile: UserProfile) =>
   hasRole(profile, "COMMITTEE");
+
+export const showNewEventButton = (profile: UserProfile) =>
+  hasRole(profile, "COMMITTEE");
+
+export const showNewVoteButton = (profile: UserProfile) =>
+  hasRole(profile, "COMMITTEE");
+
+export const showVoteActionButtons = (profile: UserProfile) =>
+  hasRole(profile, "COMMITTEE");

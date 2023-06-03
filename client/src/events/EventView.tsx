@@ -1,6 +1,8 @@
 import EventItem from "components/Event/EventItem";
+import { useUserProfile } from "components/UserProfileContext";
 import VoteList from "components/Vote/VoteList";
 import { EventWithVotes } from "interfaces/event";
+import { showNewVoteButton } from "profile/functionality";
 import { Link } from "react-router-dom";
 
 interface EventViewProps {
@@ -8,6 +10,8 @@ interface EventViewProps {
 }
 
 const EventView: React.FC<EventViewProps> = ({ event }) => {
+  const profile = useUserProfile();
+
   return (
     <div className="flex flex-col gap-2">
       <EventItem event={event} showEventDescription={true} />
@@ -17,12 +21,14 @@ const EventView: React.FC<EventViewProps> = ({ event }) => {
       <div className="flex flex-col gap-2 p-2">
         <div className="flex flex-row justify-between">
           <h2 className="text-xl font-semibold">Votes</h2>
-          <Link
-            to={`/events/${event.id}/votes/newvote`}
-            className="btn-primary btn"
-          >
-            Add vote
-          </Link>
+          {showNewVoteButton(profile) ? (
+            <Link
+              to={`/events/${event.id}/votes/newvote`}
+              className="btn-primary btn"
+            >
+              Add vote
+            </Link>
+          ) : null}
         </div>
 
         <VoteList

@@ -3,6 +3,8 @@ import { Await, Link } from "react-router-dom";
 
 import EventList from "components/Event/EventList";
 import { Event } from "interfaces/event";
+import { useUserProfile } from "components/UserProfileContext";
+import { showNewEventButton } from "profile/functionality";
 
 interface EventsIndexViewProps {
   eventsPromise: Promise<readonly Event[]>;
@@ -25,14 +27,19 @@ const EventsIndexView: React.FC<EventsIndexViewProps> = ({
   newEventLinkToPath,
   refreshHandler,
 }) => {
+  const profile = useUserProfile();
+
   return (
     <div className="flex flex-col gap-2 p-2">
       <div className="flex flex-row justify-between">
         <h1 className="text-2xl font-bold">Events</h1>
         <div className="flex flex-row gap-2">
-          <Link to={newEventLinkToPath} className="btn-primary btn">
-            New event
-          </Link>
+          {showNewEventButton(profile) ? (
+            <Link to={newEventLinkToPath} className="btn-primary btn">
+              New event
+            </Link>
+          ) : null}
+
           <button className="btn" onClick={() => refreshHandler()}>
             Refresh
           </button>

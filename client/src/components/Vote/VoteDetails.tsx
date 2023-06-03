@@ -2,12 +2,16 @@ import React, { useMemo } from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { Vote } from "interfaces/vote";
 import { Link } from "react-router-dom";
+import { useUserProfile } from "components/UserProfileContext";
+import { showVoteActionButtons } from "profile/functionality";
 
 export interface VoteDetailsProps {
   vote: Vote;
 }
 
 const VoteDetails: React.FC<VoteDetailsProps> = ({ vote }) => {
+  const profile = useUserProfile();
+
   const toAbandonedStatus = useMemo(
     () => (
       <button key="abandoned" className="btn-primary btn">
@@ -81,12 +85,14 @@ const VoteDetails: React.FC<VoteDetailsProps> = ({ vote }) => {
           </div>
         </div>
       </div>
-      <div className="card-actions p-4">
-        <Link className="btn-primary btn" to={"edit"}>
-          Edit
-        </Link>
-        {statusActions}
-      </div>
+      {showVoteActionButtons(profile) ? (
+        <div className="card-actions p-4">
+          <Link className="btn-primary btn" to={"edit"}>
+            Edit
+          </Link>
+          {statusActions}
+        </div>
+      ) : null}
     </div>
   );
 };
