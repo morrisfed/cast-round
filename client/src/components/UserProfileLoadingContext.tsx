@@ -12,17 +12,18 @@ import { pipe } from "fp-ts/lib/function";
  * information according to the currently authenticated user.
  */
 
-export type IUserProfileContext = {
+export type IUserProfileLoadingContext = {
   loading: boolean;
   userProfile: O.Option<UserProfile>;
 };
 
-const UserProfileContext = React.createContext<IUserProfileContext>({
-  loading: true,
-  userProfile: O.none,
-});
+const UserProfileLoadingContext =
+  React.createContext<IUserProfileLoadingContext>({
+    loading: true,
+    userProfile: O.none,
+  });
 
-const UserProfileContextProvider = ({
+const UserProfileLoadingContextProvider = ({
   children,
 }: {
   children: JSX.Element;
@@ -55,17 +56,17 @@ const UserProfileContextProvider = ({
   }, [fetchProfile]);
 
   return (
-    <UserProfileContext.Provider
+    <UserProfileLoadingContext.Provider
       value={{
         loading: loading,
         userProfile,
       }}
     >
       {children}
-    </UserProfileContext.Provider>
+    </UserProfileLoadingContext.Provider>
   );
 };
 
-const useUserProfile = () => useContext(UserProfileContext);
+const useUserProfileLoading = () => useContext(UserProfileLoadingContext);
 
-export { UserProfileContextProvider, useUserProfile };
+export { UserProfileLoadingContextProvider, useUserProfileLoading };
