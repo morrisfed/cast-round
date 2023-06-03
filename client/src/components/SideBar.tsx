@@ -1,13 +1,14 @@
-import { UserProfile } from "interfaces/user";
 import { showAccounts, showAdmin, showEvents } from "profile/functionality";
 import { NavLink } from "react-router-dom";
+import { useUserProfile } from "./UserProfileContext";
 
 export interface SideBarProps {
-  profile: UserProfile;
   itemSelected: () => void;
 }
 
-const SideBar: React.FC<SideBarProps> = ({ profile, itemSelected }) => {
+const SideBar: React.FC<SideBarProps> = ({ itemSelected }) => {
+  const profile = useUserProfile();
+
   return (
     <ul className="menu w-80 bg-base-100 p-4 text-base-content">
       {showAdmin(profile) ? (

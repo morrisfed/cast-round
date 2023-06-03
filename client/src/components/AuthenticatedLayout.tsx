@@ -39,16 +39,10 @@ import EventIndexRoute, { eventIndexLoader } from "routes/EventIndexRoute";
 import { EventVoteCrumb, eventVoteLoader } from "routes/EventVoteRoute";
 import EventVoteIndexRoute from "routes/EventVoteIndexRoute";
 
-export interface AuthenticatedLayoutProps {
-  profile: UserProfile;
-}
-
-const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({
-  profile,
-}) => {
+const AuthenticatedLayout: React.FC = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" element={<Root profile={profile} />}>
+      <Route path="/" element={<Root />}>
         <Route errorElement={<ErrorPage />}>
           <Route path="accounts" handle={{ crumb: AccountsCrumb }}>
             <Route index element={<Accounts />} loader={accountsLoader} />
@@ -136,7 +130,7 @@ const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({
             element={<AdminRoute />}
             handle={{ crumb: AdminCrum }}
           >
-            <Route index element={<AdminIndexRoute profile={profile} />} />
+            <Route index element={<AdminIndexRoute />} />
             <Route
               path="uploadAccounts"
               element={<UploadAccounts />}

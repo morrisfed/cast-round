@@ -1,14 +1,9 @@
 import AdminIndex from "admin/AdminIndex";
-import { UserProfile } from "interfaces/user";
 
-interface AdminIndexRouteProps {
-  profile: UserProfile;
-}
-
-const AdminIndexRoute: React.FC<AdminIndexRouteProps> = ({ profile }) => {
+const AdminIndexRoute: React.FC = () => {
   return (
     <div>
-      <AdminIndex profile={profile} />
+      <AdminIndex />
     </div>
   );
 };

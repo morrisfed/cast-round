@@ -1,12 +1,10 @@
-import { UserProfile } from "interfaces/user";
+import { useUserProfile } from "components/UserProfileContext";
 import { showAdminUploadUsers } from "profile/functionality";
 import { Link } from "react-router-dom";
 
-interface AdminIndexProps {
-  profile: UserProfile;
-}
+const AdminIndex: React.FC = () => {
+  const profile = useUserProfile();
 
-const AdminIndex: React.FC<AdminIndexProps> = ({ profile }) => {
   return (
     <div>
       {showAdminUploadUsers(profile) ? (

@@ -1,13 +1,14 @@
 import React from "react";
-import { UserProfile } from "interfaces/user";
 import Profile from "./Profile";
+import { useUserProfile } from "./UserProfileContext";
 
 export interface NavbarProps {
-  profile: UserProfile;
   menuToggleId?: string;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ profile, menuToggleId }) => {
+const Navbar: React.FC<NavbarProps> = ({ menuToggleId }) => {
+  const profile = useUserProfile();
+
   return (
     <div className="navbar bg-black/20">
       <label

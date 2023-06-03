@@ -4,6 +4,7 @@ import { useUserProfileLoading } from "./UserProfileLoadingContext";
 import Welcome from "./Welcome";
 import Spinner from "./Spinner";
 import AuthenticatedLayout from "./AuthenticatedLayout";
+import { UserProfileContextProvider } from "./UserProfileContext";
 
 function Layout() {
   const { loading: loadingProfile, userProfile } = useUserProfileLoading();
@@ -20,7 +21,11 @@ function Layout() {
     return <Welcome />;
   }
 
-  return <AuthenticatedLayout profile={userProfile.value} />;
+  return (
+    <UserProfileContextProvider userProfile={userProfile.value}>
+      <AuthenticatedLayout />
+    </UserProfileContextProvider>
+  );
 }
 
 export default Layout;
