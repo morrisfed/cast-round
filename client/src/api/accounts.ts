@@ -28,7 +28,7 @@ const isGroupType = (type: AccountUserType): boolean => {
 };
 
 export interface AccountUserInfo {
-  userId: string;
+  id: string;
   name: string;
   contactName: string | null;
   type: AccountUserType;
@@ -38,7 +38,7 @@ export interface AccountUserInfo {
 
 export interface GetAccountsResponse {
   accounts: readonly {
-    userId: string;
+    id: string;
     name: string;
     contactName: string | null;
     type: AccountUserType;
@@ -47,7 +47,7 @@ export interface GetAccountsResponse {
 
 export interface GetAccountResponse {
   account: {
-    userId: string;
+    id: string;
     name: string;
     contactName: string | null;
     type: AccountUserType;
@@ -56,7 +56,7 @@ export interface GetAccountResponse {
 
 export interface GetAccountDelegatesResponse {
   delegates: {
-    userId: string;
+    id: string;
     label: string;
     type: DelegateUserType;
     createdBy: { id: string };

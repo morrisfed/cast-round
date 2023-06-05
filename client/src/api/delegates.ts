@@ -7,15 +7,15 @@ import axios from "axios";
 export type DelegateUserType = "group-delegate" | "tellor-delegate";
 
 export interface DelegateUserInfo {
-  userId: string;
+  id: string;
   label: string;
   createdBy: { id: string };
   type: DelegateUserType;
 }
 
-export interface GetAccountsResponse {
+export interface GetDelegatesResponse {
   accounts: readonly {
-    userId: string;
+    id: string;
     label: string;
     createdBy: { id: string };
     type: DelegateUserType;
@@ -28,7 +28,7 @@ const retrieveDelegates = (): TE.TaskEither<
 > =>
   pipe(
     TE.tryCatch(
-      () => axios.get<GetAccountsResponse>("/api/delegates"),
+      () => axios.get<GetDelegatesResponse>("/api/delegates"),
       (reason: any) =>
         reason.response.status === 403 ? "forbidden" : new Error(`${reason}`)
     ),

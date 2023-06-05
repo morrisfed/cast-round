@@ -10,7 +10,7 @@ const DelegateList: React.FC<DelegateListProps> = ({ delegates }) => {
   const items = useMemo(() => {
     return delegates.map((delegate) => {
       return (
-        <div key={delegate.userId} className="grow sm:w-80">
+        <div key={delegate.id} className="grow sm:w-80">
           <DelegateItem delegate={delegate} />
         </div>
       );

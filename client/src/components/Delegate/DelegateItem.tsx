@@ -9,7 +9,7 @@ export interface DelegateListItemProps {
 
 const DelegateItem: React.FC<DelegateListItemProps> = ({ delegate }) => {
   return (
-    <Link to={`/delegates/${delegate.userId}`}>
+    <Link to={`/delegates/${delegate.id}`}>
       <div className="card-bordered card bg-base-100 shadow-xl">
         <div className="card-body">
           <div className="flex flex-row gap-4">

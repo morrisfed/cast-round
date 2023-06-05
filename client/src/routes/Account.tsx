@@ -34,7 +34,7 @@ export async function accountLoader({ params }: LoaderFunctionArgs) {
 
 export const AccountCrumb: CrumbDataFn = (match) => {
   const data = match.data as Awaited<ReturnType<typeof accountLoader>>;
-  return { path: `/accounts/${data.userId}`, label: data.name };
+  return { path: `/accounts/${data.id}`, label: data.name };
 };
 
 const Account: React.FC = () => {
@@ -46,7 +46,7 @@ const Account: React.FC = () => {
         <div className="card-body">
           <h2 className="card-title">{account.name}</h2>
           <p>{account.contactName}</p>
-          <p>{account.userId}</p>
+          <p>{account.id}</p>
         </div>
       </div>
       <div className="tabs">

@@ -9,7 +9,7 @@ export interface AccountListItemProps {
 
 const AccountItem: React.FC<AccountListItemProps> = ({ account }) => {
   return (
-    <Link to={`/accounts/${account.userId}`}>
+    <Link to={`/accounts/${account.id}`}>
       <div className="card-bordered card bg-base-100 shadow-xl">
         <div className="card-body">
           <div className="flex flex-row gap-4">

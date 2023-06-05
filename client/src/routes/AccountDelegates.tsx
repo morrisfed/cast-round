@@ -31,7 +31,7 @@ const AccountDelegates: React.FC = () => {
   const items = useMemo(() => {
     return delegates.map((delegate) => {
       return (
-        <tr key={delegate.userId}>
+        <tr key={delegate.id}>
           <td>
             <div className="flex items-center space-x-3">
               <div>
