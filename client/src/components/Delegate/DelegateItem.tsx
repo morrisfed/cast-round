@@ -14,7 +14,7 @@ const DelegateItem: React.FC<DelegateListItemProps> = ({ delegate }) => {
         <div className="card-body">
           <div className="flex flex-row gap-4">
             <div className="shrink-0">
-              <MemberIcon isIndividual={delegate.type === "tellor-delegate"} />
+              <MemberIcon isIndividual={delegate.type === "tellor"} />
             </div>
             <div className="truncate">
               <h2 className="card-title">{delegate.label}</h2>

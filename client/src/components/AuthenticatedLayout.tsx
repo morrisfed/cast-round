@@ -35,11 +35,17 @@ import EditEventVote, {
 } from "routes/EditEventVoteRoute";
 import AdminRoute, { AdminCrum } from "routes/AdminRoute";
 import EventsIndexRoute, { eventsLoader } from "routes/EventsIndexRoute";
-import EventIndexRoute, { eventIndexLoader } from "routes/EventIndexRoute";
+import EventIndexRoute, {
+  createEventGroupDelegateAction,
+  eventIndexLoader,
+} from "routes/EventIndexRoute";
 import { EventVoteCrumb, eventVoteLoader } from "routes/EventVoteRoute";
 import EventVoteIndexRoute from "routes/EventVoteIndexRoute";
+import { useUserProfile } from "./UserProfileContext";
 
 const AuthenticatedLayout: React.FC = () => {
+  const profile = useUserProfile();
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<Root />}>
@@ -86,7 +92,8 @@ const AuthenticatedLayout: React.FC = () => {
               <Route
                 index
                 element={<EventIndexRoute />}
-                loader={eventIndexLoader}
+                loader={(args) => eventIndexLoader(profile, args)}
+                action={(args) => createEventGroupDelegateAction(profile, args)}
               />
 
               <Route path="votes">

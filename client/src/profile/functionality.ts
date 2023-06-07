@@ -28,3 +28,6 @@ export const showNewVoteButton = (profile: UserProfile) =>
 
 export const showVoteActionButtons = (profile: UserProfile) =>
   hasRole(profile, "COMMITTEE");
+
+export const showEventGroupDelegate = (profile: UserProfile) =>
+  hasRole(profile, "GROUP_MEMBER");

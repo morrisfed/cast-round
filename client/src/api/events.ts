@@ -30,7 +30,7 @@ interface CreateEventRequest {
 }
 
 interface CreateEventResponse {
-  event: Event;
+  event: EventWithVotes;
 }
 
 interface CreateEventVoteRequest {
@@ -101,7 +101,7 @@ export const createEvent = (
   description: string,
   fromDateString: string,
   toDateString: string
-): TE.TaskEither<Error | "forbidden", Event> => {
+): TE.TaskEither<Error | "forbidden", EventWithVotes> => {
   return pipe(
     TE.tryCatch(
       () =>

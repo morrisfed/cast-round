@@ -1,8 +1,14 @@
-import { getEvents as apiGetEvents, getEvent as apiGetEvent } from "api/events";
+import { pipe } from "fp-ts/lib/function";
 import * as TE from "fp-ts/lib/TaskEither";
 import * as E from "fp-ts/lib/Either";
+import * as IO from "fp-ts/lib/IO";
+
+import {
+  getEvents as apiGetEvents,
+  getEvent as apiGetEvent,
+  createEvent as apiCreateEvent,
+} from "api/events";
 import { Event, EventWithVotes } from "interfaces/event";
-import { pipe } from "fp-ts/lib/function";
 
 let eventsPromise:
   | Promise<E.Either<Error | "forbidden", readonly Event[]>>
@@ -68,4 +74,24 @@ export const refreshEvent = (
 ): TE.TaskEither<Error | "forbidden", EventWithVotes> => {
   eventDetailsPromises.delete(eventId);
   return getEvent(eventId);
+};
+
+export const createEvent = (
+  name: string,
+  description: string,
+  fromDateString: string,
+  toDateString: string
+): TE.TaskEither<Error | "forbidden", Event> => {
+  return pipe(
+    apiCreateEvent(name, description, fromDateString, toDateString),
+    TE.tapIO((event: EventWithVotes) =>
+      IO.of(
+        eventDetailsPromises.set(
+          event.id.toString(),
+          Promise.resolve(E.right(event))
+        )
+      )
+    ),
+    TE.tap(() => refreshEvents())
+  );
 };
