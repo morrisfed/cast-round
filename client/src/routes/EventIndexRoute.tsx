@@ -75,9 +75,14 @@ export async function createEventGroupDelegateAction(
   profile: UserProfile,
   { request, params }: ActionFunctionArgs
 ) {
-  const eventId = params.eventId;
-  if (!eventId) {
+  const eventIdStr = params.eventId;
+  if (!eventIdStr) {
     throw new Error("No event ID provided");
+  }
+
+  const eventId = parseInt(eventIdStr, 10);
+  if (isNaN(eventId)) {
+    throw new Error("Invalid event ID");
   }
 
   const formData = await request.formData();
@@ -90,8 +95,6 @@ export async function createEventGroupDelegateAction(
   );
 
   return createDelegateTask();
-
-  // return redirect(`/accounts/${accountId}`);
 }
 
 const EventIndexRoute: React.FC = () => {

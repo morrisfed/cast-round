@@ -87,7 +87,7 @@ export const getEventGroupDelegate = (eventId: string) =>
   );
 
 export const createEventGroupDelegate = (
-  eventId: string,
+  eventId: number,
   label: string,
   delegateForAccountUserId: string
 ): TE.TaskEither<Error | "forbidden", EventGroupDelegate> => {
