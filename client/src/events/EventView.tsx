@@ -23,13 +23,36 @@ const EventView: React.FC<EventViewProps> = ({
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex flex-row">
+      <div className="grid grid-cols-2 gap-2">
         <EventItem event={event} showEventDescription={true} />
         {showDelegate ? (
           <div>
             {O.isSome(delegateO) ? (
-              <div>
-                <h1>Delegate exists: {delegateO.value.label}</h1>
+              <div className="card-bordered card bg-base-100 shadow-xl">
+                <div className="card-body">
+                  <div className="truncate">
+                    <h2 className="card-title">Delegate assigned</h2>
+                    <div className="grid grid-cols-4">
+                      <span className="col-span-1">Name:</span>
+                      <span className="col-span-3">
+                        {delegateO.value.label}
+                      </span>
+                      <span className="col-span-1">Link:</span>
+                      <span className="col-span-3">
+                        {delegateO.value.delegateUserLoginUrl}
+                      </span>
+                    </div>
+                    <div className="card-actions mt-4">
+                      <button className="btn-primary btn">Copy link</button>
+                      <Link
+                        to="confirmRemoveDelegate"
+                        className="btn-secondary btn"
+                      >
+                        Remove delegate
+                      </Link>
+                    </div>
+                  </div>
+                </div>
               </div>
             ) : (
               <div>

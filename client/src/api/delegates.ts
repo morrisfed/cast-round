@@ -27,7 +27,7 @@ export interface GetDelegatesResponse {
 
 export interface GetEventGroupDelegateResponse {
   delegateUserId: string;
-  delegateUserLoginUrl: string;
+  delegateUserLoginPath: string;
   eventId: number;
   label: string;
   delegateForAccountUserId: string;
@@ -66,7 +66,9 @@ const retrieveDelegates = (): TE.TaskEither<
     )
   );
 
-export const getEventGroupDelegate = (eventId: string) =>
+export const getEventGroupDelegate = (
+  eventId: string
+): TE.TaskEither<Error | "not-found", EventGroupDelegate> =>
   pipe(
     TE.tryCatch(
       () =>
@@ -83,7 +85,14 @@ export const getEventGroupDelegate = (eventId: string) =>
         }
       }
     ),
-    TE.map((response) => response.data)
+    TE.map((response) => response.data),
+    TE.map((data) => ({
+      delegateUserId: data.delegateUserId,
+      eventId: data.eventId,
+      label: data.label,
+      delegateForAccountUserId: data.delegateForAccountUserId,
+      delegateUserLoginUrl: `${window.location.origin}${data.delegateUserLoginPath}`,
+    }))
   );
 
 export const createEventGroupDelegate = (
