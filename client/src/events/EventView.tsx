@@ -43,7 +43,16 @@ const EventView: React.FC<EventViewProps> = ({
                       </span>
                     </div>
                     <div className="card-actions mt-4">
-                      <button className="btn-primary btn">Copy link</button>
+                      <button
+                        className="btn-primary btn"
+                        onClick={() =>
+                          navigator.clipboard.writeText(
+                            delegateO.value.delegateUserLoginUrl
+                          )
+                        }
+                      >
+                        Copy link
+                      </button>
                       <Link
                         to="confirmRemoveDelegate"
                         className="btn-secondary btn"
