@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Event } from "interfaces/event";
-import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+
+const ReactMarkdown = React.lazy(() => import("../lazy/LazyLoadableReactMarkdown"));
 
 export interface EventItemProps {
   event: Event;
@@ -23,7 +24,9 @@ const EventItem: React.FC<EventItemProps> = ({
               <p>Visible until: {event.toDate.toString()}</p>
               {showEventDescription ? (
                 <article className="prose">
-                  <ReactMarkdown>{event.description}</ReactMarkdown>
+                  <React.Suspense fallback={<div>Loading...</div>} >
+                    <ReactMarkdown>{event.description}</ReactMarkdown>
+                  </React.Suspense>
                 </article>
               ) : null}
             </div>

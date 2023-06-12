@@ -1,9 +1,10 @@
+import React, { useState } from "react";
 import * as E from "fp-ts/lib/Either";
 
-import MDEditor from "@uiw/react-md-editor";
+const MDEditor = React.lazy(() => import("@uiw/react-md-editor"));
+
 import { createEventVote, updateEventVote } from "api/events";
 import { BuildableVote, VoteUpdates } from "interfaces/vote";
-import { useState } from "react";
 import {
   ActionFunctionArgs,
   Form,
@@ -138,10 +139,12 @@ const EditEventVoteRoute: React.FC<EditEventVoteRouteProps> = ({ newVote }) => {
         <label className="label">
           <span className="label-text">Description</span>
         </label>
-        <MDEditor
-          value={descriptionValue}
-          onChange={(value) => setDescriptionValue(value ?? "")}
-        />
+        <React.Suspense fallback={<div>Loading...</div>} >
+          <MDEditor
+            value={descriptionValue}
+            onChange={(value) => setDescriptionValue(value ?? "")}
+          />
+        </React.Suspense>
         <input name="description" type="hidden" value={descriptionValue} />
       </div>
 

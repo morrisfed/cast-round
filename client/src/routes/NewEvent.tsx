@@ -1,7 +1,8 @@
+import React, { useState } from "react";
 import * as E from "fp-ts/lib/Either";
 
-import { useState } from "react";
-import MDEditor from "@uiw/react-md-editor";
+const MDEditor = React.lazy(() => import("@uiw/react-md-editor"));
+
 
 import { ActionFunctionArgs, Form, redirect } from "react-router-dom";
 import { createEvent } from "api/events";
@@ -61,10 +62,12 @@ const NewEvent: React.FC = () => {
         <label className="label">
           <span className="label-text">Description</span>
         </label>
-        <MDEditor
-          value={descriptionValue}
-          onChange={(value) => setDescriptionValue(value ?? "")}
-        />
+        <React.Suspense fallback={<div>Loading...</div>} >
+          <MDEditor
+            value={descriptionValue}
+            onChange={(value) => setDescriptionValue(value ?? "")}
+          />
+        </React.Suspense>
         <input name="description" type="hidden" value={descriptionValue} />
       </div>
 
