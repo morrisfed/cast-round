@@ -10,6 +10,10 @@ import {
 } from "api/events";
 import { Event, EventWithVotes } from "interfaces/event";
 
+export type EventsChangedListener = (events: readonly Event[]) => void;
+
+let events: readonly Event[] = [];
+
 let eventsPromise:
   | Promise<E.Either<Error | "forbidden", readonly Event[]>>
   | undefined = undefined;
@@ -18,6 +22,8 @@ const eventDetailsPromises: Map<
   string,
   Promise<E.Either<Error | "forbidden", EventWithVotes>>
 > = new Map();
+
+const eventsChangedListeners: EventsChangedListener[] = [];
 
 const createGetEventsPromise = pipe(apiGetEvents());
 
@@ -31,9 +37,13 @@ export const getEvents = (): TE.TaskEither<
 
   // If there is an error getting events, clear the cached events promise so new calls to getEvents
   // will try to retrieve events again.
+  // If no errors occured, notifiy listeners that the events have changed.
   localEventsPromise.then((result) => {
     if (E.isLeft(result)) {
       eventsPromise = undefined;
+    } else {
+      events = result.right;
+      notifyEventsChangedListeners(events);
     }
   });
 
@@ -46,6 +56,7 @@ export const refreshEvents = (): TE.TaskEither<
 > => {
   eventsPromise = undefined;
   eventDetailsPromises.clear();
+  notifyEventsChangedListeners([]);
   return getEvents();
 };
 
@@ -94,4 +105,16 @@ export const createEvent = (
     ),
     TE.tap(() => refreshEvents())
   );
+};
+
+export const registerEventsChangedListener = (
+  listener: EventsChangedListener
+): readonly Event[] => {
+  eventsChangedListeners.push(listener);
+
+  return events;
+};
+
+const notifyEventsChangedListeners = (events: readonly Event[]) => {
+  eventsChangedListeners.forEach((listener) => listener(events));
 };

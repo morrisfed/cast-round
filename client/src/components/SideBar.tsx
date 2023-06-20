@@ -1,6 +1,7 @@
 import { showAccounts, showAdmin, showEvents } from "profile/functionality";
 import { NavLink } from "react-router-dom";
 import { useUserProfile } from "./UserProfileContext";
+import { useEvents } from "events/EventsContext";
 
 export interface SideBarProps {
   itemSelected: () => void;
@@ -8,11 +9,12 @@ export interface SideBarProps {
 
 const SideBar: React.FC<SideBarProps> = ({ itemSelected }) => {
   const profile = useUserProfile();
+  const events = useEvents();
 
   return (
     <ul className="menu w-80 bg-base-100 p-4 text-base-content">
       {showAdmin(profile) ? (
-        <li>
+        <li className="my-1">
           <NavLink to="/admin" onClick={itemSelected}>
             Admin
           </NavLink>
@@ -20,15 +22,31 @@ const SideBar: React.FC<SideBarProps> = ({ itemSelected }) => {
       ) : null}
 
       {showEvents(profile) ? (
-        <li>
-          <NavLink to="/events" onClick={itemSelected}>
-            Events
-          </NavLink>
-        </li>
+        <>
+          <li className="my-1">
+            <NavLink to="/events" onClick={itemSelected}>
+              Events
+            </NavLink>
+          </li>
+          {events.length > 0 ? (
+            <li className="my-1 ml-8">
+              <NavLink to={`/events/${events[0].id}`} onClick={itemSelected}>
+                Ev 1
+              </NavLink>
+            </li>
+          ) : null}
+          {events.length > 1 ? (
+            <li className="my-1 ml-8">
+              <NavLink to={`/events/${events[1].id}`} onClick={itemSelected}>
+                Ev 2
+              </NavLink>
+            </li>
+          ) : null}
+        </>
       ) : null}
 
       {showAccounts(profile) ? (
-        <li>
+        <li className="my-1">
           <NavLink to="/accounts" onClick={itemSelected}>
             Accounts
           </NavLink>

@@ -5,7 +5,6 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-import { UserProfile } from "interfaces/user";
 import ErrorPage from "./Error";
 import Root from "routes/Root";
 import Account, { AccountCrumb, accountLoader } from "routes/Account";
