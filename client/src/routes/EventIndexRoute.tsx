@@ -11,11 +11,15 @@ import * as O from "fp-ts/lib/Option";
 import EventView from "events/EventView";
 import { eventLoader } from "./EventRoute";
 import { UserProfile } from "interfaces/user";
-import { showEventGroupDelegate } from "profile/functionality";
+import {
+  showEventGroupDelegate,
+  showEventTellors,
+} from "profile/functionality";
 import {
   createEventGroupDelegate,
   getEventGroupDelegate,
 } from "delegates/delegates-service";
+import { createEventTellor, getEventTellors } from "tellors/tellor-services";
 
 function LoadingError() {
   return (
@@ -53,25 +57,58 @@ export function eventIndexLoader(
     );
 
     const combinedPromise = Promise.all([eventPromise, delegatePromise]).then(
-      ([event, delegate]) => ({
+      ([event, eventGroupDelegate]) => ({
         event,
-        delegate,
-        showDelegate: true,
+        eventGroupDelegate: eventGroupDelegate,
+        showEventGroupDelegate: true,
+        eventTellors: [],
+        showEventTellors: false,
       })
     );
 
-    return { eventAndDelegatePromise: combinedPromise };
+    return { eventDetailsPromise: combinedPromise };
+  }
+  if (showEventTellors(profile)) {
+    const eventId = args.params.eventId;
+    if (!eventId) {
+      throw new Error("No event ID provided");
+    }
+
+    const tellorsPromise = getEventTellors(eventId)().then((tellorsEither) => {
+      if (E.isLeft(tellorsEither)) {
+        if (tellorsEither.left === "not-found") {
+          return [];
+        } else {
+          throw tellorsEither.left;
+        }
+      }
+      return tellorsEither.right;
+    });
+
+    const combinedPromise = Promise.all([eventPromise, tellorsPromise]).then(
+      ([event, tellors]) => ({
+        event,
+        eventTellors: tellors,
+        showEventTellors: true,
+        eventGroupDelegate: O.none,
+        showEventGroupDelegate: false,
+      })
+    );
+
+    return { eventDetailsPromise: combinedPromise };
   } else {
     const combinedPromise = eventPromise.then((event) => ({
       event,
-      delegate: O.none,
-      showDelegate: false,
+      eventGroupDelegate: O.none,
+      showEventGroupDelegate: false,
+      eventTellors: [],
+      showEventTellors: false,
     }));
-    return { eventAndDelegatePromise: combinedPromise };
+    return { eventDetailsPromise: combinedPromise };
   }
 }
 
-export async function createEventGroupDelegateAction(
+export async function createEventUserAction(
   profile: UserProfile,
   { request, params }: ActionFunctionArgs
 ) {
@@ -86,30 +123,43 @@ export async function createEventGroupDelegateAction(
   }
 
   const formData = await request.formData();
+  const intent = formData.get("intent");
   const label = formData.get("label") as string;
 
-  const createDelegateTask = createEventGroupDelegate(
-    eventId,
-    label,
-    profile.id
-  );
+  let createEventUserTask;
 
-  return createDelegateTask();
+  if (intent === "create-event-group-delegate") {
+    createEventUserTask = createEventGroupDelegate(eventId, label, profile.id);
+  } else if (intent === "create-event-tellor") {
+    createEventUserTask = createEventTellor(eventId, label);
+  } else {
+    throw new Error("Invalid intent");
+  }
+
+  return createEventUserTask();
 }
 
 const EventIndexRoute: React.FC = () => {
-  const { eventAndDelegatePromise } = useLoaderData() as ReturnType<
+  const { eventDetailsPromise } = useLoaderData() as ReturnType<
     typeof eventIndexLoader
   >;
 
   return (
     <React.Suspense fallback={<div>Loading...</div>}>
-      <Await resolve={eventAndDelegatePromise} errorElement={<LoadingError />}>
-        {({ event, delegate, showDelegate }) => (
+      <Await resolve={eventDetailsPromise} errorElement={<LoadingError />}>
+        {({
+          event,
+          eventGroupDelegate,
+          showEventGroupDelegate,
+          eventTellors,
+          showEventTellors,
+        }) => (
           <EventView
             event={event}
-            showDelegate={showDelegate}
-            delegateO={delegate}
+            showEventGroupDelegate={showEventGroupDelegate}
+            eventGroupDelegateO={eventGroupDelegate}
+            showEventTellors={showEventTellors}
+            eventTellors={eventTellors}
           />
         )}
       </Await>

@@ -35,7 +35,7 @@ import EditEventVote, {
 import AdminRoute, { AdminCrum } from "routes/AdminRoute";
 import EventsIndexRoute, { eventsLoader } from "routes/EventsIndexRoute";
 import EventIndexRoute, {
-  createEventGroupDelegateAction,
+  createEventUserAction,
   eventIndexLoader,
 } from "routes/EventIndexRoute";
 import { EventVoteCrumb, eventVoteLoader } from "routes/EventVoteRoute";
@@ -92,7 +92,7 @@ const AuthenticatedLayout: React.FC = () => {
                 index
                 element={<EventIndexRoute />}
                 loader={(args) => eventIndexLoader(profile, args)}
-                action={(args) => createEventGroupDelegateAction(profile, args)}
+                action={(args) => createEventUserAction(profile, args)}
               />
 
               <Route path="votes">
