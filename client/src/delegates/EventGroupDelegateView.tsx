@@ -1,6 +1,8 @@
 import * as O from "fp-ts/lib/Option";
-import { EventGroupDelegate } from "interfaces/delegates";
 import { Form, Link } from "react-router-dom";
+
+import { EventGroupDelegate } from "interfaces/delegates";
+import { withAppFeatureFlag } from "components/AppFeatureFlagsContext";
 
 interface EventGroupDelegateViewProps {
   eventGroupDelegateO: O.Option<EventGroupDelegate>;
@@ -74,4 +76,6 @@ const EventGroupDelegateView: React.FC<EventGroupDelegateViewProps> = ({
   );
 };
 
-export default EventGroupDelegateView;
+export default withAppFeatureFlag("feature.ui.eventgroupdelegates")(
+  EventGroupDelegateView
+);
