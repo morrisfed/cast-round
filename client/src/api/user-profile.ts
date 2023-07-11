@@ -3,6 +3,7 @@ import * as TE from "fp-ts/lib/TaskEither";
 
 import axios from "axios";
 import { Role, UserProfile } from "interfaces/user";
+import { FrontEndFeatureFlags } from "interfaces/features";
 
 interface ProfileResponse {
   profile: {
@@ -10,6 +11,10 @@ interface ProfileResponse {
     name: string;
     roles: Role[];
   };
+  frontEndFeatureFlags: Record<
+    "feature.ui.eventgroupdelegates" | "feature.ui.eventtellors",
+    boolean
+  >;
 }
 
 const retrieveProfile = (): TE.TaskEither<Error, ProfileResponse> =>
@@ -21,10 +26,16 @@ const retrieveProfile = (): TE.TaskEither<Error, ProfileResponse> =>
     TE.map((response) => response.data)
   );
 
-const getUserProfile = (): TE.TaskEither<Error, UserProfile> =>
+const getUserProfile = (): TE.TaskEither<
+  Error,
+  [UserProfile, FrontEndFeatureFlags]
+> =>
   pipe(
     retrieveProfile(),
-    TE.map((profileResponse) => profileResponse.profile)
+    TE.map((profileResponse) => [
+      profileResponse.profile,
+      profileResponse.frontEndFeatureFlags,
+    ])
   );
 
 export default getUserProfile;

@@ -1,11 +1,11 @@
-import { UserProfileLoadingContextProvider } from "./UserProfileLoadingContext";
+import { UserProfileAndFeatureFlagLoadingContextProvider } from "./UserProfileAndFeatureFlagLoadingContext";
 import Layout from "./Layout";
 
 function App() {
   return (
-    <UserProfileLoadingContextProvider>
+    <UserProfileAndFeatureFlagLoadingContextProvider>
       <Layout />
-    </UserProfileLoadingContextProvider>
+    </UserProfileAndFeatureFlagLoadingContextProvider>
   );
 }
 
