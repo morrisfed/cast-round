@@ -19,7 +19,11 @@ import {
   createEventGroupDelegate,
   getEventGroupDelegate,
 } from "delegates/delegates-service";
-import { createEventTellor, getEventTellors } from "tellors/tellor-services";
+import {
+  createEventTellor,
+  deleteEventTellor,
+  getEventTellors,
+} from "tellors/tellor-services";
 
 function LoadingError() {
   return (
@@ -126,17 +130,20 @@ export async function createEventUserAction(
   const intent = formData.get("intent");
   const label = formData.get("label") as string;
 
-  let createEventUserTask;
+  let eventTask;
 
   if (intent === "create-event-group-delegate") {
-    createEventUserTask = createEventGroupDelegate(eventId, label, profile.id);
+    eventTask = createEventGroupDelegate(eventId, label, profile.id);
   } else if (intent === "create-event-tellor") {
-    createEventUserTask = createEventTellor(eventId, label);
+    eventTask = createEventTellor(eventId, label);
+  } else if (intent === "delete-event-tellor") {
+    const tellorUserIdStr = formData.get("tellorUserId") as string;
+    eventTask = deleteEventTellor(eventId, tellorUserIdStr);
   } else {
     throw new Error("Invalid intent");
   }
 
-  return createEventUserTask();
+  return eventTask();
 }
 
 const EventIndexRoute: React.FC = () => {
