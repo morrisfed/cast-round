@@ -1,6 +1,5 @@
 import { pipe } from "fp-ts/lib/function";
 import * as TE from "fp-ts/lib/TaskEither";
-import * as ROA from "fp-ts/lib/ReadonlyArray";
 
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { EventGroupDelegate } from "interfaces/delegates";
@@ -46,25 +45,6 @@ export interface CreateEventGroupDelegateResponse {
   label: string;
   delegateForAccountUserId: string;
 }
-
-const retrieveDelegates = (): TE.TaskEither<
-  Error | "forbidden",
-  readonly DelegateUserInfo[]
-> =>
-  pipe(
-    TE.tryCatch(
-      () => axios.get<GetDelegatesResponse>("/api/delegates"),
-      (reason: any) =>
-        reason.response.status === 403 ? "forbidden" : new Error(`${reason}`)
-    ),
-    TE.map((response) => response.data),
-    TE.map((data) => data.accounts),
-    TE.map(
-      ROA.map((retAcc) => ({
-        ...retAcc,
-      }))
-    )
-  );
 
 export const getEventGroupDelegate = (
   eventId: string
@@ -125,5 +105,3 @@ export const createEventGroupDelegate = (
     TE.map((response) => response.data)
   );
 };
-
-export const getDelegates = () => pipe(retrieveDelegates());

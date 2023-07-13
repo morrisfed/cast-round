@@ -9,7 +9,6 @@ import ErrorPage from "./Error";
 import Root from "routes/Root";
 import Account, { AccountCrumb, accountLoader } from "routes/Account";
 import Accounts, { AccountsCrumb, accountsLoader } from "routes/Accounts";
-import Delegates, { delegatesLoader } from "routes/Delegates";
 import UploadAccounts, {
   uploadAccountsAction,
   UploadAccountsCrumb,
@@ -52,12 +51,6 @@ const AuthenticatedLayout: React.FC = () => {
               handle={{ crumb: AccountCrumb }}
             />
           </Route>
-
-          <Route
-            path="delegates"
-            element={<Delegates />}
-            loader={delegatesLoader}
-          />
 
           <Route
             path="events"
