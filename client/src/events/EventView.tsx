@@ -4,7 +4,7 @@ import EventItem from "components/Event/EventItem";
 import { useUserProfile } from "components/UserProfileContext";
 import MotionList from "components/Motion/MotionList";
 import { EventWithMotions } from "interfaces/event";
-import { showNewVoteButton } from "profile/functionality";
+import { showNewMotionButton } from "profile/functionality";
 import { Link } from "react-router-dom";
 import { EventGroupDelegate } from "interfaces/delegates";
 import EventGroupDelegateView from "delegates/EventGroupDelegateView";
@@ -44,13 +44,13 @@ const EventView: React.FC<EventViewProps> = ({
 
       <div className="flex flex-col gap-2 p-2">
         <div className="flex flex-row justify-between">
-          <h2 className="text-xl font-semibold">Votes</h2>
-          {showNewVoteButton(profile) ? (
+          <h2 className="text-xl font-semibold">Motions</h2>
+          {showNewMotionButton(profile) ? (
             <Link
-              to={`/events/${event.id}/votes/newvote`}
+              to={`/events/${event.id}/motions/newmotion`}
               className="btn-primary btn"
             >
-              Add vote
+              Add motion
             </Link>
           ) : null}
         </div>

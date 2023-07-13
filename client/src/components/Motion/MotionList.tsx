@@ -14,12 +14,12 @@ const MotionList: React.FC<MotionListProps> = ({
   showMotionDescription,
 }) => {
   const items = useMemo(() => {
-    return motions.map((vote) => {
+    return motions.map((motion) => {
       return (
-        <div key={vote.id} className="grow sm:w-80">
+        <div key={motion.id} className="grow sm:w-80">
           <MotionItem
             eventId={eventId}
-            motion={vote}
+            motion={motion}
             showMotionDescription={showMotionDescription}
           />
         </div>
