@@ -5,7 +5,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-import ErrorPage from "./Error";
+import ErrorPage from "../components/Error";
 import Root from "routes/Root";
 import Account, { AccountCrumb, accountLoader } from "routes/Account";
 import Accounts, { AccountsCrumb, accountsLoader } from "routes/Accounts";
@@ -33,9 +33,9 @@ import EventIndexRoute, {
 } from "routes/EventIndexRoute";
 import { EventVoteCrumb, eventVoteLoader } from "routes/EventVoteRoute";
 import EventVoteIndexRoute from "routes/EventVoteIndexRoute";
-import { useUserProfile } from "./UserProfileContext";
+import { useUserProfile } from "../components/UserProfileContext";
 
-const AuthenticatedLayout: React.FC = () => {
+const AuthenticatedRouter: React.FC = () => {
   const profile = useUserProfile();
 
   const router = createBrowserRouter(
@@ -127,4 +127,4 @@ const AuthenticatedLayout: React.FC = () => {
   return <RouterProvider router={router} />;
 };
 
-export default AuthenticatedLayout;
+export default AuthenticatedRouter;

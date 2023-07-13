@@ -3,7 +3,7 @@ import * as O from "fp-ts/lib/Option";
 import { useUserProfileAndFeatureFlagsLoading } from "./UserProfileAndFeatureFlagLoadingContext";
 import Welcome from "./Welcome";
 import Spinner from "./Spinner";
-import AuthenticatedLayout from "./AuthenticatedLayout";
+import AuthenticatedRouter from "../routes/AuthenticatedRouter";
 import { UserProfileContextProvider } from "./UserProfileContext";
 import { EventsContextProvider } from "events/EventsContext";
 import { AppFeatureFlagsProvider } from "./AppFeatureFlagsContext";
@@ -31,7 +31,7 @@ function Layout() {
     <AppFeatureFlagsProvider frontEndFeatureFlags={featureFlags.value}>
       <UserProfileContextProvider userProfile={userProfile.value}>
         <EventsContextProvider>
-          <AuthenticatedLayout />
+          <AuthenticatedRouter />
         </EventsContextProvider>
       </UserProfileContextProvider>
     </AppFeatureFlagsProvider>
