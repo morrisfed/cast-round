@@ -15,12 +15,6 @@ import UploadAccounts, {
   UploadAccountsCrumb,
 } from "routes/UploadAccounts";
 import AdminIndexRoute from "routes/AdminIndexRoute";
-import NewAccountDelegate, {
-  createAccountDelegateAction,
-} from "routes/NewAccountDelegate";
-import AccountDelegates, {
-  accountDelegatesLoader,
-} from "routes/AccountDelegates";
 import Events, { EventsCrumb } from "routes/EventsRoute";
 import NewEvent, { createEventAction } from "routes/NewEvent";
 import { EventCrumb, eventLoader } from "routes/EventRoute";
@@ -56,20 +50,8 @@ const AuthenticatedLayout: React.FC = () => {
               element={<Account />}
               loader={accountLoader}
               handle={{ crumb: AccountCrumb }}
-            >
-              <Route
-                index
-                element={<AccountDelegates />}
-                loader={accountDelegatesLoader}
-              />
-            </Route>
+            />
           </Route>
-
-          <Route
-            path="accounts/:accountId/newdelegate"
-            element={<NewAccountDelegate />}
-            action={createAccountDelegateAction}
-          />
 
           <Route
             path="delegates"

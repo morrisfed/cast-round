@@ -1,19 +1,8 @@
 import * as E from "fp-ts/lib/Either";
 
-import {
-  LoaderFunctionArgs,
-  NavLink,
-  NavLinkProps,
-  Outlet,
-  useLoaderData,
-} from "react-router-dom";
+import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import { getAccount } from "api/accounts";
 import { CrumbDataFn } from "components/Crumb";
-
-const tabClassName: NavLinkProps["className"] = ({ isActive, isPending }) =>
-  `tab-bordered tab ${isActive ? "tab-active" : ""} ${
-    isPending ? "tab-active" : ""
-  }`;
 
 export async function accountLoader({ params }: LoaderFunctionArgs) {
   const accountId = params.accountId;
@@ -49,15 +38,6 @@ const Account: React.FC = () => {
           <p>{account.id}</p>
         </div>
       </div>
-      <div className="tabs">
-        <NavLink to="" className={tabClassName} end>
-          Delegates
-        </NavLink>
-        <NavLink to="newdelegate" className={tabClassName} end>
-          Add new delegate
-        </NavLink>
-      </div>
-      <Outlet />
     </div>
   );
 };
