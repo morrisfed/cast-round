@@ -3,17 +3,17 @@ import * as E from "fp-ts/lib/Either";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 import { pipe } from "fp-ts/lib/function";
 import { getEventMotions } from "api/events";
-import VoteList from "components/Vote/VoteList";
+import MotionList from "components/Motion/MotionList";
 
-export async function eventVotesLoader({ params }: LoaderFunctionArgs) {
+export async function eventMotionsLoader({ params }: LoaderFunctionArgs) {
   const eventId = params.eventId;
   if (!eventId) {
     throw new Error("No event ID provided");
   }
 
-  const getEventVotesTask = pipe(getEventMotions(eventId));
+  const getEventMotionsTask = pipe(getEventMotions(eventId));
 
-  const eventEither = await getEventVotesTask();
+  const eventEither = await getEventMotionsTask();
 
   if (E.isLeft(eventEither)) {
     throw eventEither.left;
@@ -22,8 +22,10 @@ export async function eventVotesLoader({ params }: LoaderFunctionArgs) {
   return eventEither.right;
 }
 
-const EventVotes: React.FC = () => {
-  const votes = useLoaderData() as Awaited<ReturnType<typeof eventVotesLoader>>;
+const EventMotions: React.FC = () => {
+  const motions = useLoaderData() as Awaited<
+    ReturnType<typeof eventMotionsLoader>
+  >;
   const params = useParams<Record<"eventId", string>>();
 
   const eventId = params.eventId;
@@ -32,8 +34,12 @@ const EventVotes: React.FC = () => {
   }
 
   return (
-    <VoteList eventId={eventId} votes={votes} showVoteDescription={false} />
+    <MotionList
+      eventId={eventId}
+      motions={motions}
+      showMotionDescription={false}
+    />
   );
 };
 
-export default EventVotes;
+export default EventMotions;

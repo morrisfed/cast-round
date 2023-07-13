@@ -14,32 +14,32 @@ import {
   useLoaderData,
   useNavigate,
 } from "react-router-dom";
-import { eventVoteLoader } from "./EventVoteRoute";
+import { eventMotionLoader } from "./EventMotionRoute";
 import { CrumbDataFn } from "components/Crumb";
 
-interface EditEventVoteRouteProps {
-  newVote?: boolean;
+interface EditEventMotionRouteProps {
+  newMotion?: boolean;
 }
 
-export async function newEventVoteLoader({ params }: LoaderFunctionArgs) {
+export async function newEventMotionLoader({ params }: LoaderFunctionArgs) {
   const eventId = params.eventId;
   if (!eventId) {
     throw new Error("No event ID provided");
   }
 
-  const newVote: BuildableMotion = {
+  const newMotion: BuildableMotion = {
     title: "",
     description: "",
   };
 
-  return json(newVote);
+  return json(newMotion);
 }
 
-export async function editEventVoteLoader(args: LoaderFunctionArgs) {
-  return eventVoteLoader(args);
+export async function editEventMotionLoader(args: LoaderFunctionArgs) {
+  return eventMotionLoader(args);
 }
 
-export async function createEventVoteAction({
+export async function createEventMotionAction({
   params,
   request,
 }: ActionFunctionArgs) {
@@ -50,25 +50,25 @@ export async function createEventVoteAction({
 
   const formData = await request.formData();
 
-  const buildableVote: BuildableMotion = {
+  const buildableMotion: BuildableMotion = {
     title: formData.get("title") as string,
     description: formData.get("description") as string,
   };
 
-  const createEventVoteTask = createEventMotion(eventId, buildableVote);
+  const createEventMotionTask = createEventMotion(eventId, buildableMotion);
 
-  const voteEither = await createEventVoteTask();
+  const motionEither = await createEventMotionTask();
 
-  if (E.isLeft(voteEither)) {
-    throw voteEither.left;
+  if (E.isLeft(motionEither)) {
+    throw motionEither.left;
   }
 
-  const vote = voteEither.right;
+  const motion = motionEither.right;
 
-  return redirect(`/events/${eventId}/votes/${vote.id}`);
+  return redirect(`/events/${eventId}/motions/${motion.id}`);
 }
 
-export async function updateEventVoteAction({
+export async function updateEventMotionAction({
   params,
   request,
 }: ActionFunctionArgs) {
@@ -77,47 +77,53 @@ export async function updateEventVoteAction({
     throw new Error("No event ID provided");
   }
 
-  const voteId = params.voteId;
-  if (!voteId) {
-    throw new Error("No vote ID provided");
+  const motionId = params.motionId;
+  if (!motionId) {
+    throw new Error("No motion ID provided");
   }
 
   const formData = await request.formData();
 
-  const voteUpdates: MotionUpdates = {
+  const motionUpdates: MotionUpdates = {
     title: formData.get("title") as string,
     description: formData.get("description") as string,
   };
 
-  const updateEventVoteTask = updateEventMotion(eventId, voteId, voteUpdates);
+  const updateEventMotionTask = updateEventMotion(
+    eventId,
+    motionId,
+    motionUpdates
+  );
 
-  const voteEither = await updateEventVoteTask();
+  const motionEither = await updateEventMotionTask();
 
-  if (E.isLeft(voteEither)) {
-    throw voteEither.left;
+  if (E.isLeft(motionEither)) {
+    throw motionEither.left;
   }
 
-  const vote = voteEither.right;
+  const motion = motionEither.right;
 
-  return redirect(`/events/${eventId}/votes/${vote.id}`);
+  return redirect(`/events/${eventId}/motions/${motion.id}`);
 }
 
-export const NewEventVoteCrumb: CrumbDataFn = () => {
-  return { label: "Add vote" };
+export const NewEventMotionCrumb: CrumbDataFn = () => {
+  return { label: "Add motion" };
 };
 
-export const EditEventVoteCrumb: CrumbDataFn = (match) => {
-  const data = match.data as Awaited<ReturnType<typeof editEventVoteLoader>>;
-  return { label: `Edit vote: ${data.title}` };
+export const EditEventMotionCrumb: CrumbDataFn = (match) => {
+  const data = match.data as Awaited<ReturnType<typeof editEventMotionLoader>>;
+  return { label: `Edit motion: ${data.title}` };
 };
 
-const EditEventVoteRoute: React.FC<EditEventVoteRouteProps> = ({ newVote }) => {
+const EditEventMotionRoute: React.FC<EditEventMotionRouteProps> = ({
+  newMotion,
+}) => {
   const navigate = useNavigate();
-  const vote = useLoaderData() as Awaited<
-    ReturnType<typeof editEventVoteLoader>
+  const motion = useLoaderData() as Awaited<
+    ReturnType<typeof editEventMotionLoader>
   >;
   const [descriptionValue, setDescriptionValue] = useState<string>(
-    vote.description
+    motion.description
   );
 
   return (
@@ -131,7 +137,7 @@ const EditEventVoteRoute: React.FC<EditEventVoteRouteProps> = ({ newVote }) => {
           type="text"
           placeholder="Title"
           className="input-bordered input"
-          defaultValue={vote.title}
+          defaultValue={motion.title}
         />
       </div>
 
@@ -150,7 +156,7 @@ const EditEventVoteRoute: React.FC<EditEventVoteRouteProps> = ({ newVote }) => {
 
       <div className="flex flex-row gap-4">
         <button type="submit" className="btn-accent btn max-w-xs">
-          {newVote ? "Create vote" : "Update vote"}
+          {newMotion ? "Create motion" : "Update motion"}
         </button>
 
         <button
@@ -167,4 +173,4 @@ const EditEventVoteRoute: React.FC<EditEventVoteRouteProps> = ({ newVote }) => {
   );
 };
 
-export default EditEventVoteRoute;
+export default EditEventMotionRoute;

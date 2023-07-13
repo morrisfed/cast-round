@@ -5,20 +5,20 @@ import { pipe } from "fp-ts/lib/function";
 import { getEventMotion } from "api/events";
 import { CrumbDataFn } from "components/Crumb";
 
-export async function eventVoteLoader({ params }: LoaderFunctionArgs) {
+export async function eventMotionLoader({ params }: LoaderFunctionArgs) {
   const eventId = params.eventId;
   if (!eventId) {
     throw new Error("No event ID provided");
   }
 
-  const voteId = params.voteId;
-  if (!voteId) {
-    throw new Error("No vote ID provided");
+  const motionId = params.motionId;
+  if (!motionId) {
+    throw new Error("No motion ID provided");
   }
 
-  const getEventVoteTask = pipe(getEventMotion(eventId, voteId));
+  const getEventMotionTask = pipe(getEventMotion(eventId, motionId));
 
-  const eventEither = await getEventVoteTask();
+  const eventEither = await getEventMotionTask();
 
   if (E.isLeft(eventEither)) {
     throw eventEither.left;
@@ -27,7 +27,7 @@ export async function eventVoteLoader({ params }: LoaderFunctionArgs) {
   return eventEither.right;
 }
 
-export const EventVoteCrumb: CrumbDataFn = (match) => {
-  const data = match.data as Awaited<ReturnType<typeof eventVoteLoader>>;
+export const EventMotionCrumb: CrumbDataFn = (match) => {
+  const data = match.data as Awaited<ReturnType<typeof eventMotionLoader>>;
   return { label: data.title };
 };

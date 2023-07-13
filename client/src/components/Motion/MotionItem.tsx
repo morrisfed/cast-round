@@ -3,27 +3,27 @@ import { Link } from "react-router-dom";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { Motion } from "interfaces/motion";
 
-export interface VoteItemProps {
+export interface MotionItemProps {
   eventId: string | number;
-  vote: Motion;
-  showVoteDescription: boolean;
+  motion: Motion;
+  showMotionDescription: boolean;
 }
 
-const VoteItem: React.FC<VoteItemProps> = ({
+const MotionItem: React.FC<MotionItemProps> = ({
   eventId,
-  vote,
-  showVoteDescription,
+  motion,
+  showMotionDescription,
 }) => {
   return (
-    <Link to={`/events/${eventId}/votes/${vote.id}`}>
+    <Link to={`/events/${eventId}/motions/${motion.id}`}>
       <div className="card-bordered card bg-base-100 shadow-xl">
         <div className="card-body">
           <div className="flex flex-row gap-4">
             <div className="truncate">
-              <h2 className="card-title">{vote.title}</h2>
-              {showVoteDescription ? (
+              <h2 className="card-title">{motion.title}</h2>
+              {showMotionDescription ? (
                 <article className="prose">
-                  <ReactMarkdown>{vote.description}</ReactMarkdown>
+                  <ReactMarkdown>{motion.description}</ReactMarkdown>
                 </article>
               ) : null}
             </div>
@@ -34,4 +34,4 @@ const VoteItem: React.FC<VoteItemProps> = ({
   );
 };
 
-export default VoteItem;
+export default MotionItem;

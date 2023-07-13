@@ -17,22 +17,22 @@ import AdminIndexRoute from "routes/AdminIndexRoute";
 import Events, { EventsCrumb } from "routes/EventsRoute";
 import NewEvent, { createEventAction } from "routes/NewEvent";
 import { EventCrumb, eventLoader } from "routes/EventRoute";
-import EditEventVote, {
-  createEventVoteAction,
-  EditEventVoteCrumb,
-  editEventVoteLoader,
-  NewEventVoteCrumb,
-  newEventVoteLoader,
-  updateEventVoteAction,
-} from "routes/EditEventVoteRoute";
+import EditEventMotion, {
+  createEventMotionAction,
+  EditEventMotionCrumb,
+  editEventMotionLoader,
+  NewEventMotionCrumb,
+  newEventMotionLoader,
+  updateEventMotionAction,
+} from "routes/EditEventMotionRoute";
 import AdminRoute, { AdminCrum } from "routes/AdminRoute";
 import EventsIndexRoute, { eventsLoader } from "routes/EventsIndexRoute";
 import EventIndexRoute, {
   createEventUserAction,
   eventIndexLoader,
 } from "routes/EventIndexRoute";
-import { EventVoteCrumb, eventVoteLoader } from "routes/EventVoteRoute";
-import EventVoteIndexRoute from "routes/EventVoteIndexRoute";
+import { EventMotionCrumb, eventMotionLoader } from "routes/EventMotionRoute";
+import EventMotionIndexRoute from "routes/EventMotionIndexRoute";
 import { useUserProfile } from "../components/UserProfileContext";
 
 const AuthenticatedRouter: React.FC = () => {
@@ -70,30 +70,30 @@ const AuthenticatedRouter: React.FC = () => {
                 action={(args) => createEventUserAction(profile, args)}
               />
 
-              <Route path="votes">
+              <Route path="motions">
                 <Route
-                  path="newvote"
-                  element={<EditEventVote />}
-                  loader={newEventVoteLoader}
-                  action={createEventVoteAction}
-                  handle={{ crumb: NewEventVoteCrumb }}
+                  path="newmotion"
+                  element={<EditEventMotion />}
+                  loader={newEventMotionLoader}
+                  action={createEventMotionAction}
+                  handle={{ crumb: NewEventMotionCrumb }}
                 />
                 <Route
-                  path=":voteId"
-                  handle={{ crumb: EventVoteCrumb }}
-                  loader={eventVoteLoader}
+                  path=":motionId"
+                  handle={{ crumb: EventMotionCrumb }}
+                  loader={eventMotionLoader}
                 >
                   <Route
                     index
-                    element={<EventVoteIndexRoute />}
-                    loader={eventVoteLoader}
+                    element={<EventMotionIndexRoute />}
+                    loader={eventMotionLoader}
                   />
                   <Route
                     path="edit"
-                    element={<EditEventVote />}
-                    loader={editEventVoteLoader}
-                    action={updateEventVoteAction}
-                    handle={{ crumb: EditEventVoteCrumb }}
+                    element={<EditEventMotion />}
+                    loader={editEventMotionLoader}
+                    action={updateEventMotionAction}
+                    handle={{ crumb: EditEventMotionCrumb }}
                   ></Route>
                 </Route>
               </Route>

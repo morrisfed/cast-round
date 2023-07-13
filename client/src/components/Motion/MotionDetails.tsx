@@ -3,13 +3,13 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { Motion } from "interfaces/motion";
 import { Link } from "react-router-dom";
 import { useUserProfile } from "components/UserProfileContext";
-import { showVoteActionButtons } from "profile/functionality";
+import { showMotionActionButtons } from "profile/functionality";
 
-export interface VoteDetailsProps {
-  vote: Motion;
+export interface MotionDetailsProps {
+  motion: Motion;
 }
 
-const VoteDetails: React.FC<VoteDetailsProps> = ({ vote }) => {
+const MotionDetails: React.FC<MotionDetailsProps> = ({ motion }) => {
   const profile = useUserProfile();
 
   const toAbandonedStatus = useMemo(
@@ -54,7 +54,7 @@ const VoteDetails: React.FC<VoteDetailsProps> = ({ vote }) => {
   );
 
   const statusActions = useMemo(() => {
-    switch (vote.status) {
+    switch (motion.status) {
       case "draft":
         return [toOpenStatus, toProxyStatus, toAbandonedStatus];
       case "proxy":
@@ -70,7 +70,7 @@ const VoteDetails: React.FC<VoteDetailsProps> = ({ vote }) => {
     toClosedStatus,
     toOpenStatus,
     toProxyStatus,
-    vote.status,
+    motion.status,
   ]);
 
   return (
@@ -78,14 +78,14 @@ const VoteDetails: React.FC<VoteDetailsProps> = ({ vote }) => {
       <div className="card-body">
         <div className="flex flex-row gap-4">
           <div className="truncate">
-            <h2 className="card-title">{vote.title}</h2>
+            <h2 className="card-title">{motion.title}</h2>
             <article className="prose">
-              <ReactMarkdown>{vote.description}</ReactMarkdown>
+              <ReactMarkdown>{motion.description}</ReactMarkdown>
             </article>
           </div>
         </div>
       </div>
-      {showVoteActionButtons(profile) ? (
+      {showMotionActionButtons(profile) ? (
         <div className="card-actions p-4">
           <Link className="btn-primary btn" to={"edit"}>
             Edit
@@ -97,4 +97,4 @@ const VoteDetails: React.FC<VoteDetailsProps> = ({ vote }) => {
   );
 };
 
-export default VoteDetails;
+export default MotionDetails;

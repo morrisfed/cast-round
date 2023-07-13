@@ -2,7 +2,7 @@ import * as O from "fp-ts/lib/Option";
 
 import EventItem from "components/Event/EventItem";
 import { useUserProfile } from "components/UserProfileContext";
-import VoteList from "components/Vote/VoteList";
+import MotionList from "components/Motion/MotionList";
 import { EventWithMotions } from "interfaces/event";
 import { showNewVoteButton } from "profile/functionality";
 import { Link } from "react-router-dom";
@@ -55,10 +55,10 @@ const EventView: React.FC<EventViewProps> = ({
           ) : null}
         </div>
 
-        <VoteList
+        <MotionList
           eventId={event.id}
-          votes={event.motions}
-          showVoteDescription={false}
+          motions={event.motions}
+          showMotionDescription={false}
         />
       </div>
     </div>
