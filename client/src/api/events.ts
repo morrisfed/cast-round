@@ -3,23 +3,23 @@ import * as TE from "fp-ts/lib/TaskEither";
 
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-import { Event, EventWithVotes } from "interfaces/event";
-import { BuildableVote, Vote, VoteUpdates } from "interfaces/vote";
+import { Event, EventWithMotions } from "interfaces/event";
+import { BuildableMotion, Motion, MotionUpdates } from "interfaces/motion";
 
 interface GetEventsResponse {
   events: Event[];
 }
 
 interface GetEventResponse {
-  event: EventWithVotes;
+  event: EventWithMotions;
 }
 
-interface GetEventVotesResponse {
-  votes: Vote[];
+interface GetEventMotionsResponse {
+  motions: Motion[];
 }
 
-interface GetEventVoteResponse {
-  vote: Vote;
+interface GetEventMotionResponse {
+  motion: Motion;
 }
 
 interface CreateEventRequest {
@@ -30,23 +30,23 @@ interface CreateEventRequest {
 }
 
 interface CreateEventResponse {
-  event: EventWithVotes;
+  event: EventWithMotions;
 }
 
-interface CreateEventVoteRequest {
-  vote: BuildableVote;
+interface CreateEventMotionRequest {
+  motion: BuildableMotion;
 }
 
-interface CreateEventVoteResponse {
-  vote: Vote;
+interface CreateEventMotionResponse {
+  motion: Motion;
 }
 
-interface UpdateEventVoteRequest {
-  voteUpdates: VoteUpdates;
+interface UpdateEventMotionRequest {
+  motionUpdates: MotionUpdates;
 }
 
-interface UpdateEventVoteResponse {
-  vote: Vote;
+interface UpdateEventMotionResponse {
+  motion: Motion;
 }
 
 const retrieveEvents = (): TE.TaskEither<
@@ -74,7 +74,7 @@ export const getEvents = () => pipe(retrieveEvents());
 
 const retrieveEvent = (
   id: number | string
-): TE.TaskEither<Error | "forbidden", EventWithVotes> =>
+): TE.TaskEither<Error | "forbidden", EventWithMotions> =>
   pipe(
     TE.tryCatch(
       () => axios.get<GetEventResponse>("/api/events/" + id),
@@ -101,7 +101,7 @@ export const createEvent = (
   description: string,
   fromDateString: string,
   toDateString: string
-): TE.TaskEither<Error | "forbidden", EventWithVotes> => {
+): TE.TaskEither<Error | "forbidden", EventWithMotions> => {
   return pipe(
     TE.tryCatch(
       () =>
@@ -132,12 +132,13 @@ export const createEvent = (
   );
 };
 
-const retrieveEventVotes = (
+const retrieveEventMotions = (
   id: number | string
-): TE.TaskEither<Error | "forbidden", Vote[]> =>
+): TE.TaskEither<Error | "forbidden", Motion[]> =>
   pipe(
     TE.tryCatch(
-      () => axios.get<GetEventVotesResponse>("/api/events/" + id + "/votes"),
+      () =>
+        axios.get<GetEventMotionsResponse>("/api/events/" + id + "/motions"),
       (reason) => {
         const error = reason as AxiosError;
         if (error.response) {
@@ -151,21 +152,21 @@ const retrieveEventVotes = (
       }
     ),
     TE.map((response) => response.data),
-    TE.map((data) => data.votes)
+    TE.map((data) => data.motions)
   );
 
-export const getEventVotes = (id: number | string) =>
-  pipe(retrieveEventVotes(id));
+export const getEventMotions = (id: number | string) =>
+  pipe(retrieveEventMotions(id));
 
-const retrieveEventVote = (
+const retrieveEventMotion = (
   eventId: number | string,
-  voteId: number | string
-): TE.TaskEither<Error | "forbidden", Vote> =>
+  motionId: number | string
+): TE.TaskEither<Error | "forbidden", Motion> =>
   pipe(
     TE.tryCatch(
       () =>
-        axios.get<GetEventVoteResponse>(
-          "/api/events/" + eventId + "/votes/" + voteId
+        axios.get<GetEventMotionResponse>(
+          "/api/events/" + eventId + "/motions/" + motionId
         ),
       (reason) => {
         const error = reason as AxiosError;
@@ -180,27 +181,27 @@ const retrieveEventVote = (
       }
     ),
     TE.map((response) => response.data),
-    TE.map((data) => data.vote)
+    TE.map((data) => data.motion)
   );
 
-export const getEventVote = (
+export const getEventMotion = (
   eventId: number | string,
-  voteId: number | string
-) => pipe(retrieveEventVote(eventId, voteId));
+  motionId: number | string
+) => pipe(retrieveEventMotion(eventId, motionId));
 
-export const createEventVote = (
+export const createEventMotion = (
   eventId: number | string,
-  buildableVote: BuildableVote
-): TE.TaskEither<Error | "forbidden", Vote> => {
+  buildableMotion: BuildableMotion
+): TE.TaskEither<Error | "forbidden", Motion> => {
   return pipe(
     TE.tryCatch(
       () =>
         axios.post<
-          CreateEventVoteResponse,
-          AxiosResponse<CreateEventVoteResponse>,
-          CreateEventVoteRequest
-        >(`/api/events/${eventId}/votes`, {
-          vote: buildableVote,
+          CreateEventMotionResponse,
+          AxiosResponse<CreateEventMotionResponse>,
+          CreateEventMotionRequest
+        >(`/api/events/${eventId}/motions`, {
+          motion: buildableMotion,
         }),
       (reason) => {
         const error = reason as AxiosError;
@@ -213,24 +214,24 @@ export const createEventVote = (
       }
     ),
     TE.map((response) => response.data),
-    TE.map((data) => data.vote)
+    TE.map((data) => data.motion)
   );
 };
 
-export const updateEventVote = (
+export const updateEventMotion = (
   eventId: number | string,
-  voteId: number | string,
-  updates: VoteUpdates
-): TE.TaskEither<Error | "forbidden", Vote> => {
+  motionId: number | string,
+  updates: MotionUpdates
+): TE.TaskEither<Error | "forbidden", Motion> => {
   return pipe(
     TE.tryCatch(
       () =>
         axios.patch<
-          UpdateEventVoteResponse,
-          AxiosResponse<UpdateEventVoteResponse>,
-          UpdateEventVoteRequest
-        >(`/api/events/${eventId}/votes/${voteId}`, {
-          voteUpdates: updates,
+          UpdateEventMotionResponse,
+          AxiosResponse<UpdateEventMotionResponse>,
+          UpdateEventMotionRequest
+        >(`/api/events/${eventId}/motions/${motionId}`, {
+          motionUpdates: updates,
         }),
       (reason) => {
         const error = reason as AxiosError;
@@ -243,6 +244,6 @@ export const updateEventVote = (
       }
     ),
     TE.map((response) => response.data),
-    TE.map((data) => data.vote)
+    TE.map((data) => data.motion)
   );
 };

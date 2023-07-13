@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import { Vote } from "interfaces/vote";
+import { Motion } from "interfaces/motion";
 
 export interface VoteItemProps {
   eventId: string | number;
-  vote: Vote;
+  vote: Motion;
   showVoteDescription: boolean;
 }
 

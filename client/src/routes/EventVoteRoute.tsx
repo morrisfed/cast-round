@@ -2,7 +2,7 @@ import * as E from "fp-ts/lib/Either";
 
 import { LoaderFunctionArgs } from "react-router-dom";
 import { pipe } from "fp-ts/lib/function";
-import { getEventVote } from "api/events";
+import { getEventMotion } from "api/events";
 import { CrumbDataFn } from "components/Crumb";
 
 export async function eventVoteLoader({ params }: LoaderFunctionArgs) {
@@ -16,7 +16,7 @@ export async function eventVoteLoader({ params }: LoaderFunctionArgs) {
     throw new Error("No vote ID provided");
   }
 
-  const getEventVoteTask = pipe(getEventVote(eventId, voteId));
+  const getEventVoteTask = pipe(getEventMotion(eventId, voteId));
 
   const eventEither = await getEventVoteTask();
 

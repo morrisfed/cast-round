@@ -1,10 +1,10 @@
 import React, { useMemo } from "react";
-import { Vote } from "interfaces/vote";
+import { Motion } from "interfaces/motion";
 import VoteItem from "./VoteItem";
 
 export interface VoteListProps {
   eventId: string | number;
-  votes: readonly Vote[];
+  votes: readonly Motion[];
   showVoteDescription: boolean;
 }
 

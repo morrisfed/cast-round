@@ -3,8 +3,8 @@ import * as E from "fp-ts/lib/Either";
 
 const MDEditor = React.lazy(() => import("@uiw/react-md-editor"));
 
-import { createEventVote, updateEventVote } from "api/events";
-import { BuildableVote, VoteUpdates } from "interfaces/vote";
+import { createEventMotion, updateEventMotion } from "api/events";
+import { BuildableMotion, MotionUpdates } from "interfaces/motion";
 import {
   ActionFunctionArgs,
   Form,
@@ -27,7 +27,7 @@ export async function newEventVoteLoader({ params }: LoaderFunctionArgs) {
     throw new Error("No event ID provided");
   }
 
-  const newVote: BuildableVote = {
+  const newVote: BuildableMotion = {
     title: "",
     description: "",
   };
@@ -50,12 +50,12 @@ export async function createEventVoteAction({
 
   const formData = await request.formData();
 
-  const buildableVote: BuildableVote = {
+  const buildableVote: BuildableMotion = {
     title: formData.get("title") as string,
     description: formData.get("description") as string,
   };
 
-  const createEventVoteTask = createEventVote(eventId, buildableVote);
+  const createEventVoteTask = createEventMotion(eventId, buildableVote);
 
   const voteEither = await createEventVoteTask();
 
@@ -84,12 +84,12 @@ export async function updateEventVoteAction({
 
   const formData = await request.formData();
 
-  const voteUpdates: VoteUpdates = {
+  const voteUpdates: MotionUpdates = {
     title: formData.get("title") as string,
     description: formData.get("description") as string,
   };
 
-  const updateEventVoteTask = updateEventVote(eventId, voteId, voteUpdates);
+  const updateEventVoteTask = updateEventMotion(eventId, voteId, voteUpdates);
 
   const voteEither = await updateEventVoteTask();
 
@@ -139,7 +139,7 @@ const EditEventVoteRoute: React.FC<EditEventVoteRouteProps> = ({ newVote }) => {
         <label className="label">
           <span className="label-text">Description</span>
         </label>
-        <React.Suspense fallback={<div>Loading...</div>} >
+        <React.Suspense fallback={<div>Loading...</div>}>
           <MDEditor
             value={descriptionValue}
             onChange={(value) => setDescriptionValue(value ?? "")}

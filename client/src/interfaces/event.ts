@@ -1,4 +1,4 @@
-import { Vote } from "./vote";
+import { Motion } from "./motion";
 
 export interface Event {
   id: number;
@@ -8,6 +8,6 @@ export interface Event {
   toDate: Date;
 }
 
-export interface EventWithVotes extends Event {
-  votes: Vote[];
+export interface EventWithMotions extends Event {
+  motions: Motion[];
 }

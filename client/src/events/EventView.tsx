@@ -3,7 +3,7 @@ import * as O from "fp-ts/lib/Option";
 import EventItem from "components/Event/EventItem";
 import { useUserProfile } from "components/UserProfileContext";
 import VoteList from "components/Vote/VoteList";
-import { EventWithVotes } from "interfaces/event";
+import { EventWithMotions } from "interfaces/event";
 import { showNewVoteButton } from "profile/functionality";
 import { Link } from "react-router-dom";
 import { EventGroupDelegate } from "interfaces/delegates";
@@ -12,7 +12,7 @@ import { EventTellor } from "interfaces/tellors";
 import EventTellorsView from "tellors/TellorView";
 
 interface EventViewProps {
-  event: EventWithVotes;
+  event: EventWithMotions;
   eventGroupDelegateO: O.Option<EventGroupDelegate>;
   showEventGroupDelegate: boolean;
   eventTellors: readonly EventTellor[];
@@ -57,7 +57,7 @@ const EventView: React.FC<EventViewProps> = ({
 
         <VoteList
           eventId={event.id}
-          votes={event.votes}
+          votes={event.motions}
           showVoteDescription={false}
         />
       </div>

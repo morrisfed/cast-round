@@ -8,7 +8,7 @@ import {
   getEvent as apiGetEvent,
   createEvent as apiCreateEvent,
 } from "api/events";
-import { Event, EventWithVotes } from "interfaces/event";
+import { Event, EventWithMotions } from "interfaces/event";
 
 export type EventsChangedListener = (events: readonly Event[]) => void;
 
@@ -20,7 +20,7 @@ let eventsPromise:
 
 const eventDetailsPromises: Map<
   string,
-  Promise<E.Either<Error | "forbidden", EventWithVotes>>
+  Promise<E.Either<Error | "forbidden", EventWithMotions>>
 > = new Map();
 
 const eventsChangedListeners: EventsChangedListener[] = [];
@@ -64,7 +64,7 @@ const createGetEventPromise = (eventId: string) => apiGetEvent(eventId)();
 
 export const getEvent = (
   eventId: string
-): TE.TaskEither<Error | "forbidden", EventWithVotes> => {
+): TE.TaskEither<Error | "forbidden", EventWithMotions> => {
   const localEventDetailsPromise =
     eventDetailsPromises.get(eventId) ?? createGetEventPromise(eventId);
 
@@ -82,7 +82,7 @@ export const getEvent = (
 
 export const refreshEvent = (
   eventId: string
-): TE.TaskEither<Error | "forbidden", EventWithVotes> => {
+): TE.TaskEither<Error | "forbidden", EventWithMotions> => {
   eventDetailsPromises.delete(eventId);
   return getEvent(eventId);
 };
@@ -95,7 +95,7 @@ export const createEvent = (
 ): TE.TaskEither<Error | "forbidden", Event> => {
   return pipe(
     apiCreateEvent(name, description, fromDateString, toDateString),
-    TE.tapIO((event: EventWithVotes) =>
+    TE.tapIO((event: EventWithMotions) =>
       IO.of(
         eventDetailsPromises.set(
           event.id.toString(),

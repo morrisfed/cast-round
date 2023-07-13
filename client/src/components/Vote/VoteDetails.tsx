@@ -1,12 +1,12 @@
 import React, { useMemo } from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import { Vote } from "interfaces/vote";
+import { Motion } from "interfaces/motion";
 import { Link } from "react-router-dom";
 import { useUserProfile } from "components/UserProfileContext";
 import { showVoteActionButtons } from "profile/functionality";
 
 export interface VoteDetailsProps {
-  vote: Vote;
+  vote: Motion;
 }
 
 const VoteDetails: React.FC<VoteDetailsProps> = ({ vote }) => {

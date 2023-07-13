@@ -2,7 +2,7 @@ import * as E from "fp-ts/lib/Either";
 
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 import { pipe } from "fp-ts/lib/function";
-import { getEventVotes } from "api/events";
+import { getEventMotions } from "api/events";
 import VoteList from "components/Vote/VoteList";
 
 export async function eventVotesLoader({ params }: LoaderFunctionArgs) {
@@ -11,7 +11,7 @@ export async function eventVotesLoader({ params }: LoaderFunctionArgs) {
     throw new Error("No event ID provided");
   }
 
-  const getEventVotesTask = pipe(getEventVotes(eventId));
+  const getEventVotesTask = pipe(getEventMotions(eventId));
 
   const eventEither = await getEventVotesTask();
 
