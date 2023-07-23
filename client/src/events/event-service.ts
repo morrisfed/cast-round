@@ -8,8 +8,11 @@ import {
   getEvent as apiGetEvent,
   createEvent as apiCreateEvent,
   updateEvent as apiUpdateEvent,
+  createEventMotion as apiCreateEventMotion,
+  updateEventMotion as apiUpdateEventMotion,
 } from "api/events";
 import { Event, EventUpdates, EventWithMotions } from "interfaces/event";
+import { BuildableMotion, Motion, MotionUpdates } from "interfaces/motion";
 
 export type EventsChangedListener = (events: readonly Event[]) => void;
 
@@ -115,6 +118,27 @@ export const updateEvent = (
   return pipe(
     apiUpdateEvent(eventId, eventUpdates),
     TE.chain(() => refreshEvent(eventId.toString()))
+  );
+};
+
+export const createEventMotion = (
+  eventId: number | string,
+  buildableMotion: BuildableMotion
+): TE.TaskEither<Error | "forbidden", Motion> => {
+  return pipe(
+    apiCreateEventMotion(eventId, buildableMotion),
+    TE.tap(() => refreshEvent(eventId.toString()))
+  );
+};
+
+export const updateEventMotion = (
+  eventId: number | string,
+  motionId: number | string,
+  updates: MotionUpdates
+): TE.TaskEither<Error | "forbidden", Motion> => {
+  return pipe(
+    apiUpdateEventMotion(eventId, motionId, updates),
+    TE.tap(() => refreshEvent(eventId.toString()))
   );
 };
 

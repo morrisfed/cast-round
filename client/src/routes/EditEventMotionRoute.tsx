@@ -3,7 +3,6 @@ import * as E from "fp-ts/lib/Either";
 
 const MDEditor = React.lazy(() => import("@uiw/react-md-editor"));
 
-import { createEventMotion, updateEventMotion } from "api/events";
 import { BuildableMotion, MotionUpdates } from "interfaces/motion";
 import {
   ActionFunctionArgs,
@@ -16,6 +15,7 @@ import {
 } from "react-router-dom";
 import { eventMotionLoader } from "./EventMotionRoute";
 import { CrumbDataFn } from "components/Crumb";
+import { createEventMotion, updateEventMotion } from "events/event-service";
 
 export async function newEventMotionLoader({ params }: LoaderFunctionArgs) {
   const eventId = params.eventId;
@@ -59,9 +59,7 @@ export async function createEventMotionAction({
     throw motionEither.left;
   }
 
-  const motion = motionEither.right;
-
-  return redirect(`/events/${eventId}/motions/${motion.id}`);
+  return redirect(`..`);
 }
 
 export async function updateEventMotionAction({
@@ -97,9 +95,7 @@ export async function updateEventMotionAction({
     throw motionEither.left;
   }
 
-  const motion = motionEither.right;
-
-  return redirect(`/events/${eventId}/motions/${motion.id}`);
+  return redirect("..");
 }
 
 export const NewEventMotionCrumb: CrumbDataFn = () => {

@@ -23,6 +23,9 @@ export const isAddEventEnabled = (profile: UserProfile) =>
 export const showNewEventButton = (profile: UserProfile) =>
   hasRole(profile, "COMMITTEE");
 
+export const showEditEventButton = (profile: UserProfile) =>
+  hasRole(profile, "COMMITTEE");
+
 export const showNewMotionButton = (profile: UserProfile) =>
   hasRole(profile, "COMMITTEE");
 

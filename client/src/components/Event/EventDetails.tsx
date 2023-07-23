@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Event } from "interfaces/event";
+import { useUserProfile } from "components/UserProfileContext";
+import { showEditEventButton } from "profile/functionality";
 
 const ReactMarkdown = React.lazy(
   () => import("../lazy/LazyLoadableReactMarkdown")
@@ -24,6 +26,8 @@ const EventDetails: React.FC<EventItemProps> = ({
   event,
   showEventDescription,
 }) => {
+  const profile = useUserProfile();
+
   return (
     <Link to={`${event.id}`}>
       <div className="card-bordered card bg-base-100 shadow-xl">
@@ -44,9 +48,11 @@ const EventDetails: React.FC<EventItemProps> = ({
           </div>
         </div>
         <div className="card-actions p-4">
-          <Link className="btn-primary btn" to={"edit"}>
-            Edit
-          </Link>
+          {showEditEventButton(profile) ? (
+            <Link className="btn-primary btn" to={"edit"}>
+              Edit
+            </Link>
+          ) : null}
         </div>
       </div>
     </Link>

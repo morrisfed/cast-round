@@ -1,6 +1,6 @@
 import * as O from "fp-ts/lib/Option";
 
-import EventDetails from "components/Event/EventItem";
+import EventDetails from "components/Event/EventDetails";
 import { useUserProfile } from "components/UserProfileContext";
 import MotionList from "components/Motion/MotionList";
 import { EventWithMotions } from "interfaces/event";
