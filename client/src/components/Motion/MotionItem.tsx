@@ -15,7 +15,7 @@ const MotionItem: React.FC<MotionItemProps> = ({
   showMotionDescription,
 }) => {
   return (
-    <Link to={`/events/${eventId}/motions/${motion.id}`}>
+    <Link to={`${motion.id}`}>
       <div className="card-bordered card bg-base-100 shadow-xl">
         <div className="card-body">
           <div className="flex flex-row gap-4">

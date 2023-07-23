@@ -94,32 +94,31 @@ const AuthenticatedRouter: React.FC = () => {
                 handle={{ crumb: EditEventCrumb }}
               ></Route>
 
-              <Route path="motions">
+              <Route
+                path="new"
+                element={<EditEventMotion />}
+                loader={newEventMotionLoader}
+                action={createEventMotionAction}
+                handle={{ crumb: NewEventMotionCrumb }}
+              />
+
+              <Route
+                path=":motionId"
+                handle={{ crumb: EventMotionCrumb }}
+                loader={eventMotionLoader}
+              >
                 <Route
-                  path="newmotion"
-                  element={<EditEventMotion />}
-                  loader={newEventMotionLoader}
-                  action={createEventMotionAction}
-                  handle={{ crumb: NewEventMotionCrumb }}
+                  index
+                  element={<EventMotionIndexRoute />}
+                  loader={eventMotionLoader}
                 />
                 <Route
-                  path=":motionId"
-                  handle={{ crumb: EventMotionCrumb }}
-                  loader={eventMotionLoader}
-                >
-                  <Route
-                    index
-                    element={<EventMotionIndexRoute />}
-                    loader={eventMotionLoader}
-                  />
-                  <Route
-                    path="edit"
-                    element={<EditEventMotion />}
-                    loader={editEventMotionLoader}
-                    action={updateEventMotionAction}
-                    handle={{ crumb: EditEventMotionCrumb }}
-                  ></Route>
-                </Route>
+                  path="edit"
+                  element={<EditEventMotion />}
+                  loader={editEventMotionLoader}
+                  action={updateEventMotionAction}
+                  handle={{ crumb: EditEventMotionCrumb }}
+                ></Route>
               </Route>
             </Route>
           </Route>

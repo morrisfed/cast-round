@@ -8,18 +8,14 @@ import { BuildableMotion, MotionUpdates } from "interfaces/motion";
 import {
   ActionFunctionArgs,
   Form,
+  Link,
   LoaderFunctionArgs,
   json,
   redirect,
   useLoaderData,
-  useNavigate,
 } from "react-router-dom";
 import { eventMotionLoader } from "./EventMotionRoute";
 import { CrumbDataFn } from "components/Crumb";
-
-interface EditEventMotionRouteProps {
-  newMotion?: boolean;
-}
 
 export async function newEventMotionLoader({ params }: LoaderFunctionArgs) {
   const eventId = params.eventId;
@@ -115,10 +111,7 @@ export const EditEventMotionCrumb: CrumbDataFn = (match) => {
   return { label: `Edit motion: ${data.title}` };
 };
 
-const EditEventMotionRoute: React.FC<EditEventMotionRouteProps> = ({
-  newMotion,
-}) => {
-  const navigate = useNavigate();
+const EditEventMotionRoute: React.FC = () => {
   const motion = useLoaderData() as Awaited<
     ReturnType<typeof editEventMotionLoader>
   >;
@@ -156,18 +149,12 @@ const EditEventMotionRoute: React.FC<EditEventMotionRouteProps> = ({
 
       <div className="flex flex-row gap-4">
         <button type="submit" className="btn-accent btn max-w-xs">
-          {newMotion ? "Create motion" : "Update motion"}
+          Save motion
         </button>
 
-        <button
-          type="button"
-          className="btn-outline btn"
-          onClick={() => {
-            navigate(-1);
-          }}
-        >
+        <Link to=".." className="btn max-w-xs">
           Cancel
-        </button>
+        </Link>
       </div>
     </Form>
   );

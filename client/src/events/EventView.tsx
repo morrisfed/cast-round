@@ -46,10 +46,7 @@ const EventView: React.FC<EventViewProps> = ({
         <div className="flex flex-row justify-between">
           <h2 className="text-xl font-semibold">Motions</h2>
           {showNewMotionButton(profile) ? (
-            <Link
-              to={`/events/${event.id}/motions/newmotion`}
-              className="btn-primary btn"
-            >
+            <Link to={`new`} className="btn-primary btn">
               Add motion
             </Link>
           ) : null}
