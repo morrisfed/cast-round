@@ -11,3 +11,7 @@ export interface Event {
 export interface EventWithMotions extends Event {
   motions: Motion[];
 }
+
+export type BuildableEvent = Omit<Event, "id">;
+
+export type EventUpdates = BuildableEvent;

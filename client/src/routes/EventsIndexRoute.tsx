@@ -34,7 +34,7 @@ const EventsIndexRoute: React.FC = () => {
     <div>
       <EventsIndexView
         eventsPromise={data.eventsPromise}
-        newEventLinkToPath="newevent"
+        newEventLinkToPath="new"
         refreshHandler={refreshHandler}
       />
     </div>

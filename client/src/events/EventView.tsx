@@ -1,6 +1,6 @@
 import * as O from "fp-ts/lib/Option";
 
-import EventItem from "components/Event/EventItem";
+import EventDetails from "components/Event/EventItem";
 import { useUserProfile } from "components/UserProfileContext";
 import MotionList from "components/Motion/MotionList";
 import { EventWithMotions } from "interfaces/event";
@@ -31,7 +31,7 @@ const EventView: React.FC<EventViewProps> = ({
   return (
     <div className="flex flex-col gap-2">
       <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-        <EventItem event={event} showEventDescription={true} />
+        <EventDetails event={event} showEventDescription={true} />
         {showEventGroupDelegate ? (
           <EventGroupDelegateView eventGroupDelegateO={eventGroupDelegateO} />
         ) : null}

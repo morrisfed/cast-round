@@ -7,8 +7,9 @@ import {
   getEvents as apiGetEvents,
   getEvent as apiGetEvent,
   createEvent as apiCreateEvent,
+  updateEvent as apiUpdateEvent,
 } from "api/events";
-import { Event, EventWithMotions } from "interfaces/event";
+import { Event, EventUpdates, EventWithMotions } from "interfaces/event";
 
 export type EventsChangedListener = (events: readonly Event[]) => void;
 
@@ -37,7 +38,7 @@ export const getEvents = (): TE.TaskEither<
 
   // If there is an error getting events, clear the cached events promise so new calls to getEvents
   // will try to retrieve events again.
-  // If no errors occured, notifiy listeners that the events have changed.
+  // If no errors occured, notify listeners that the events have changed.
   localEventsPromise.then((result) => {
     if (E.isLeft(result)) {
       eventsPromise = undefined;
@@ -90,11 +91,11 @@ export const refreshEvent = (
 export const createEvent = (
   name: string,
   description: string,
-  fromDateString: string,
-  toDateString: string
+  fromDate: Date,
+  toDate: Date
 ): TE.TaskEither<Error | "forbidden", Event> => {
   return pipe(
-    apiCreateEvent(name, description, fromDateString, toDateString),
+    apiCreateEvent(name, description, fromDate, toDate),
     TE.tapIO((event: EventWithMotions) =>
       IO.of(
         eventDetailsPromises.set(
@@ -104,6 +105,16 @@ export const createEvent = (
       )
     ),
     TE.tap(() => refreshEvents())
+  );
+};
+
+export const updateEvent = (
+  eventId: number | string,
+  eventUpdates: EventUpdates
+): TE.TaskEither<Error | "forbidden", EventWithMotions> => {
+  return pipe(
+    apiUpdateEvent(eventId, eventUpdates),
+    TE.chain(() => refreshEvent(eventId.toString()))
   );
 };
 

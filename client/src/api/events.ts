@@ -1,25 +1,53 @@
 import { pipe } from "fp-ts/lib/function";
 import * as TE from "fp-ts/lib/TaskEither";
+import * as A from "fp-ts/lib/Array";
 
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-import { Event, EventWithMotions } from "interfaces/event";
+import { Event, EventUpdates, EventWithMotions } from "interfaces/event";
 import { BuildableMotion, Motion, MotionUpdates } from "interfaces/motion";
 
+export type MotionStatusResponse =
+  | "draft"
+  | "proxy"
+  | "open"
+  | "closed"
+  | "cancelled"
+  | "abandoned";
+
+interface MotionResponse {
+  id: number;
+  status: MotionStatusResponse;
+  title: string;
+  description: string;
+}
+
+interface EventResponse {
+  id: number;
+  name: string;
+  description: string;
+  fromDate: string;
+  toDate: string;
+}
+
+interface EventWithMotionsResponse extends EventResponse {
+  motions: MotionResponse[];
+}
+
 interface GetEventsResponse {
-  events: Event[];
+  events: EventResponse[];
 }
 
 interface GetEventResponse {
-  event: EventWithMotions;
+  event: EventWithMotionsResponse;
 }
 
 interface GetEventMotionsResponse {
-  motions: Motion[];
+  motions: MotionResponse[];
 }
 
 interface GetEventMotionResponse {
-  motion: Motion;
+  motion: MotionResponse;
 }
 
 interface CreateEventRequest {
@@ -33,12 +61,20 @@ interface CreateEventResponse {
   event: EventWithMotions;
 }
 
+interface UpdateEventRequest {
+  eventUpdates: EventUpdates;
+}
+
+interface UpdateEventResponse {
+  event: Event;
+}
+
 interface CreateEventMotionRequest {
   motion: BuildableMotion;
 }
 
 interface CreateEventMotionResponse {
-  motion: Motion;
+  motion: MotionResponse;
 }
 
 interface UpdateEventMotionRequest {
@@ -46,7 +82,7 @@ interface UpdateEventMotionRequest {
 }
 
 interface UpdateEventMotionResponse {
-  motion: Motion;
+  motion: MotionResponse;
 }
 
 const retrieveEvents = (): TE.TaskEither<
@@ -67,7 +103,14 @@ const retrieveEvents = (): TE.TaskEither<
       }
     ),
     TE.map((response) => response.data),
-    TE.map((data) => data.events)
+    TE.map((data) => data.events),
+    TE.map(
+      A.map((event) => ({
+        ...event,
+        fromDate: new Date(event.fromDate),
+        toDate: new Date(event.toDate),
+      }))
+    )
   );
 
 export const getEvents = () => pipe(retrieveEvents());
@@ -91,7 +134,12 @@ const retrieveEvent = (
       }
     ),
     TE.map((response) => response.data),
-    TE.map((data) => data.event)
+    TE.map((data) => data.event),
+    TE.map((event) => ({
+      ...event,
+      fromDate: new Date(event.fromDate),
+      toDate: new Date(event.toDate),
+    }))
   );
 
 export const getEvent = (id: number | string) => pipe(retrieveEvent(id));
@@ -99,8 +147,8 @@ export const getEvent = (id: number | string) => pipe(retrieveEvent(id));
 export const createEvent = (
   name: string,
   description: string,
-  fromDateString: string,
-  toDateString: string
+  fromDate: Date,
+  toDate: Date
 ): TE.TaskEither<Error | "forbidden", EventWithMotions> => {
   return pipe(
     TE.tryCatch(
@@ -113,8 +161,8 @@ export const createEvent = (
           event: {
             name,
             description,
-            fromDate: fromDateString,
-            toDate: toDateString,
+            fromDate: fromDate.toISOString(),
+            toDate: toDate.toISOString(),
           },
         }),
       (reason) => {
@@ -122,6 +170,37 @@ export const createEvent = (
         if (error.response) {
           if (error.response.status === 403) {
             return "forbidden";
+          }
+        }
+        return new Error(`${reason}`);
+      }
+    ),
+    TE.map((response) => response.data),
+    TE.map((data) => data.event)
+  );
+};
+
+export const updateEvent = (
+  eventId: number | string,
+  eventUpdates: EventUpdates
+): TE.TaskEither<Error | "forbidden", Event> => {
+  return pipe(
+    TE.tryCatch(
+      () =>
+        axios.patch<
+          UpdateEventResponse,
+          AxiosResponse<UpdateEventResponse>,
+          UpdateEventRequest
+        >(`/api/events/${eventId}`, {
+          eventUpdates,
+        }),
+      (reason) => {
+        const error = reason as AxiosError;
+        if (error.response) {
+          if (error.response.status === 403) {
+            return "forbidden";
+          } else if (error.response.status === 404) {
+            return new Error("Event not found");
           }
         }
         return new Error(`${reason}`);

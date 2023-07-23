@@ -15,7 +15,6 @@ import UploadAccounts, {
 } from "routes/UploadAccounts";
 import AdminIndexRoute from "routes/AdminIndexRoute";
 import Events, { EventsCrumb } from "routes/EventsRoute";
-import NewEvent, { createEventAction } from "routes/NewEvent";
 import { EventCrumb, eventLoader } from "routes/EventRoute";
 import EditEventMotion, {
   createEventMotionAction,
@@ -34,6 +33,14 @@ import EventIndexRoute, {
 import { EventMotionCrumb, eventMotionLoader } from "routes/EventMotionRoute";
 import EventMotionIndexRoute from "routes/EventMotionIndexRoute";
 import { useUserProfile } from "../components/UserProfileContext";
+import EditEventRoute, {
+  editEventAction,
+  EditEventCrumb,
+  editEventLoader,
+  newEventAction,
+  NewEventCrumb,
+  newEventLoader,
+} from "./EditEventRoute";
 
 const AuthenticatedRouter: React.FC = () => {
   const profile = useUserProfile();
@@ -58,6 +65,15 @@ const AuthenticatedRouter: React.FC = () => {
             handle={{ crumb: EventsCrumb }}
           >
             <Route index element={<EventsIndexRoute />} loader={eventsLoader} />
+
+            <Route
+              path="new"
+              element={<EditEventRoute />}
+              loader={newEventLoader}
+              action={newEventAction}
+              handle={{ crumb: NewEventCrumb }}
+            />
+
             <Route
               path=":eventId"
               loader={eventLoader}
@@ -69,6 +85,14 @@ const AuthenticatedRouter: React.FC = () => {
                 loader={(args) => eventIndexLoader(profile, args)}
                 action={(args) => createEventUserAction(profile, args)}
               />
+
+              <Route
+                path="edit"
+                element={<EditEventRoute />}
+                loader={editEventLoader}
+                action={editEventAction}
+                handle={{ crumb: EditEventCrumb }}
+              ></Route>
 
               <Route path="motions">
                 <Route
@@ -99,12 +123,6 @@ const AuthenticatedRouter: React.FC = () => {
               </Route>
             </Route>
           </Route>
-
-          <Route
-            path="events/newevent"
-            element={<NewEvent />}
-            action={createEventAction}
-          />
 
           <Route
             path="admin"

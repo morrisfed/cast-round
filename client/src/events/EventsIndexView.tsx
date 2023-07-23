@@ -47,9 +47,7 @@ const EventsIndexView: React.FC<EventsIndexViewProps> = ({
       </div>
       <React.Suspense fallback={<div>Loading...</div>}>
         <Await resolve={eventsPromise} errorElement={<LoadingError />}>
-          {(events: readonly Event[]) => (
-            <EventList events={events} showEventDescription={false} />
-          )}
+          {(events: readonly Event[]) => <EventList events={events} />}
         </Await>
       </React.Suspense>
     </div>
