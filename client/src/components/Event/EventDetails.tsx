@@ -10,7 +10,6 @@ const ReactMarkdown = React.lazy(
 
 export interface EventItemProps {
   event: Event;
-  showEventDescription: boolean;
 }
 
 const datetimeFormatter = Intl.DateTimeFormat(undefined, {
@@ -22,10 +21,7 @@ const datetimeFormatter = Intl.DateTimeFormat(undefined, {
   minute: "2-digit",
 });
 
-const EventDetails: React.FC<EventItemProps> = ({
-  event,
-  showEventDescription,
-}) => {
+const EventDetails: React.FC<EventItemProps> = ({ event }) => {
   const profile = useUserProfile();
 
   return (
@@ -37,13 +33,11 @@ const EventDetails: React.FC<EventItemProps> = ({
               <h2 className="card-title">{event.name}</h2>
               <p>Open: {datetimeFormatter.format(event.fromDate)}</p>
               <p>Close: {datetimeFormatter.format(event.toDate)}</p>
-              {showEventDescription ? (
-                <article className="prose">
-                  <React.Suspense fallback={<div>Loading...</div>}>
-                    <ReactMarkdown>{event.description}</ReactMarkdown>
-                  </React.Suspense>
-                </article>
-              ) : null}
+              <article className="prose">
+                <React.Suspense fallback={<div>Loading...</div>}>
+                  <ReactMarkdown>{event.description}</ReactMarkdown>
+                </React.Suspense>
+              </article>
             </div>
           </div>
         </div>

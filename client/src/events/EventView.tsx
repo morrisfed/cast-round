@@ -31,7 +31,7 @@ const EventView: React.FC<EventViewProps> = ({
   return (
     <div className="flex flex-col gap-2">
       <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-        <EventDetails event={event} showEventDescription={true} />
+        <EventDetails event={event} />
         {showEventGroupDelegate ? (
           <EventGroupDelegateView eventGroupDelegateO={eventGroupDelegateO} />
         ) : null}
