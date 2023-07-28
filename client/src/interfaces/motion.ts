@@ -4,7 +4,7 @@ export type MotionStatus =
   | "open"
   | "closed"
   | "cancelled"
-  | "abandoned";
+  | "discarded";
 
 export interface Motion {
   id: number;

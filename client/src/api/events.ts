@@ -5,7 +5,12 @@ import * as A from "fp-ts/lib/Array";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
 import { Event, EventUpdates, EventWithMotions } from "interfaces/event";
-import { BuildableMotion, Motion, MotionUpdates } from "interfaces/motion";
+import {
+  BuildableMotion,
+  Motion,
+  MotionStatus,
+  MotionUpdates,
+} from "interfaces/motion";
 
 export type MotionStatusResponse =
   | "draft"
@@ -13,7 +18,7 @@ export type MotionStatusResponse =
   | "open"
   | "closed"
   | "cancelled"
-  | "abandoned";
+  | "discarded";
 
 interface MotionResponse {
   id: number;
@@ -83,6 +88,14 @@ interface UpdateEventMotionRequest {
 
 interface UpdateEventMotionResponse {
   motion: MotionResponse;
+}
+
+interface SetMotionStatusRequest {
+  status: MotionStatus;
+}
+
+interface SetMotionStatusResponse {
+  status: MotionStatus;
 }
 
 const retrieveEvents = (): TE.TaskEither<
@@ -324,5 +337,35 @@ export const updateEventMotion = (
     ),
     TE.map((response) => response.data),
     TE.map((data) => data.motion)
+  );
+};
+
+export const setEventMotionStatus = (
+  eventId: number | string,
+  motionId: number | string,
+  status: MotionStatus
+): TE.TaskEither<Error | "forbidden", MotionStatus> => {
+  return pipe(
+    TE.tryCatch(
+      () =>
+        axios.post<
+          SetMotionStatusResponse,
+          AxiosResponse<SetMotionStatusResponse>,
+          SetMotionStatusRequest
+        >(`/api/events/${eventId}/motions/${motionId}/status`, {
+          status,
+        }),
+      (reason) => {
+        const error = reason as AxiosError;
+        if (error.response) {
+          if (error.response.status === 403) {
+            return "forbidden";
+          }
+        }
+        return new Error(`${reason}`);
+      }
+    ),
+    TE.map((response) => response.data),
+    TE.map((data) => data.status)
   );
 };

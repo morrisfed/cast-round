@@ -31,7 +31,9 @@ import EventIndexRoute, {
   eventIndexLoader,
 } from "routes/EventIndexRoute";
 import { EventMotionCrumb, eventMotionLoader } from "routes/EventMotionRoute";
-import EventMotionIndexRoute from "routes/EventMotionIndexRoute";
+import EventMotionIndexRoute, {
+  eventMotionAction,
+} from "routes/EventMotionIndexRoute";
 import { useUserProfile } from "../components/UserProfileContext";
 import EditEventRoute, {
   editEventAction,
@@ -111,6 +113,7 @@ const AuthenticatedRouter: React.FC = () => {
                   index
                   element={<EventMotionIndexRoute />}
                   loader={eventMotionLoader}
+                  action={eventMotionAction}
                 />
                 <Route
                   path="edit"

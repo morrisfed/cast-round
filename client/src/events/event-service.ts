@@ -10,9 +10,15 @@ import {
   updateEvent as apiUpdateEvent,
   createEventMotion as apiCreateEventMotion,
   updateEventMotion as apiUpdateEventMotion,
+  setEventMotionStatus as apiSetEventMotionStatus,
 } from "api/events";
 import { Event, EventUpdates, EventWithMotions } from "interfaces/event";
-import { BuildableMotion, Motion, MotionUpdates } from "interfaces/motion";
+import {
+  BuildableMotion,
+  Motion,
+  MotionStatus,
+  MotionUpdates,
+} from "interfaces/motion";
 
 export type EventsChangedListener = (events: readonly Event[]) => void;
 
@@ -138,6 +144,17 @@ export const updateEventMotion = (
 ): TE.TaskEither<Error | "forbidden", Motion> => {
   return pipe(
     apiUpdateEventMotion(eventId, motionId, updates),
+    TE.tap(() => refreshEvent(eventId.toString()))
+  );
+};
+
+export const setEventMotionStatus = (
+  eventId: number | string,
+  motionId: number | string,
+  status: MotionStatus
+): TE.TaskEither<Error | "forbidden", MotionStatus> => {
+  return pipe(
+    apiSetEventMotionStatus(eventId, motionId, status),
     TE.tap(() => refreshEvent(eventId.toString()))
   );
 };
