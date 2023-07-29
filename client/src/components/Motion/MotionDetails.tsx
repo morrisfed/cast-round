@@ -33,7 +33,11 @@ const MotionDetails: React.FC<MotionDetailsProps> = ({ motion }) => {
   );
   const toProxyStatus = useMemo(
     () => (
-      <button key="proxy" className="btn-primary btn">
+      <button
+        key="proxy"
+        className="btn-primary btn"
+        onClick={() => setChangingStatus(O.of("proxy"))}
+      >
         Proxy-Open
       </button>
     ),
@@ -41,7 +45,11 @@ const MotionDetails: React.FC<MotionDetailsProps> = ({ motion }) => {
   );
   const toOpenStatus = useMemo(
     () => (
-      <button key="open" className="btn-primary btn">
+      <button
+        key="open"
+        className="btn-primary btn"
+        onClick={() => setChangingStatus(O.of("open"))}
+      >
         Open
       </button>
     ),
@@ -49,7 +57,11 @@ const MotionDetails: React.FC<MotionDetailsProps> = ({ motion }) => {
   );
   const toClosedStatus = useMemo(
     () => (
-      <button key="close" className="btn-primary btn">
+      <button
+        key="close"
+        className="btn-primary btn"
+        onClick={() => setChangingStatus(O.of("closed"))}
+      >
         Close
       </button>
     ),
@@ -57,7 +69,11 @@ const MotionDetails: React.FC<MotionDetailsProps> = ({ motion }) => {
   );
   const toCancelledStatus = useMemo(
     () => (
-      <button key="cancel" className="btn-primary btn">
+      <button
+        key="cancel"
+        className="btn-primary btn"
+        onClick={() => setChangingStatus(O.of("cancelled"))}
+      >
         Cancel
       </button>
     ),

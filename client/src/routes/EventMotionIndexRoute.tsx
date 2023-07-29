@@ -32,6 +32,10 @@ export async function eventMotionAction({
       | undefined;
     switch (motionStatus) {
       case "discarded":
+      case "proxy":
+      case "open":
+      case "closed":
+      case "cancelled":
         setMotionStatusTask = setEventMotionStatus(
           eventId,
           motionId,
