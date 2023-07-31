@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
   ActionFunctionArgs,
   Await,
   LoaderFunctionArgs,
   useLoaderData,
+  useLocation,
+  useNavigate,
 } from "react-router-dom";
 import * as E from "fp-ts/lib/Either";
 import * as O from "fp-ts/lib/Option";
@@ -24,6 +26,7 @@ import {
   deleteEventTellor,
   getEventTellors,
 } from "tellors/tellor-services";
+import { refreshEvent } from "events/event-service";
 
 function LoadingError() {
   return (
@@ -151,6 +154,17 @@ const EventIndexRoute: React.FC = () => {
     typeof eventIndexLoader
   >;
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const refreshHandler = useCallback(
+    (eventId: number) => {
+      refreshEvent("" + eventId);
+      navigate(location.pathname, { replace: true });
+    },
+    [navigate, location]
+  );
+
   return (
     <React.Suspense fallback={<div>Loading...</div>}>
       <Await resolve={eventDetailsPromise} errorElement={<LoadingError />}>
@@ -167,6 +181,7 @@ const EventIndexRoute: React.FC = () => {
             eventGroupDelegateO={eventGroupDelegate}
             showEventTellors={showEventTellors}
             eventTellors={eventTellors}
+            refreshHandler={refreshHandler}
           />
         )}
       </Await>
