@@ -11,6 +11,7 @@ import {
   MotionStatus,
   MotionUpdates,
 } from "interfaces/motion";
+import { Role } from "interfaces/user";
 
 export type MotionStatusResponse =
   | "draft"
@@ -20,11 +21,29 @@ export type MotionStatusResponse =
   | "cancelled"
   | "discarded";
 
+interface RoleVotesDefinitionResponse {
+  role: Role;
+  votes: number;
+}
+
+interface ResponseDefinitionResponse {
+  sequence: number;
+  label: string;
+}
+
+interface VoteDefinitionResponseSchema1 {
+  definitionSchemaVersion: 1;
+  roleVotes: RoleVotesDefinitionResponse[];
+  responses: ResponseDefinitionResponse[];
+}
+type VoteDefinitionResponse = VoteDefinitionResponseSchema1;
+
 interface MotionResponse {
   id: number;
   status: MotionStatusResponse;
   title: string;
   description: string;
+  voteDefinition: VoteDefinitionResponse;
 }
 
 interface EventResponse {

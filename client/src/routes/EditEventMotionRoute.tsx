@@ -26,6 +26,11 @@ export async function newEventMotionLoader({ params }: LoaderFunctionArgs) {
   const newMotion: BuildableMotion = {
     title: "",
     description: "",
+    voteDefinition: {
+      definitionSchemaVersion: 1,
+      roleVotes: [],
+      responses: [],
+    },
   };
 
   return json(newMotion);
@@ -49,6 +54,29 @@ export async function createEventMotionAction({
   const buildableMotion: BuildableMotion = {
     title: formData.get("title") as string,
     description: formData.get("description") as string,
+    voteDefinition: {
+      definitionSchemaVersion: 1,
+      roleVotes: [
+        {
+          role: "GROUP_DELEGATE",
+          votes: 9,
+        },
+        {
+          role: "INDIVIDUAL_VOTER",
+          votes: 2,
+        },
+      ],
+      responses: [
+        {
+          sequence: 1,
+          label: "Yes",
+        },
+        {
+          sequence: 2,
+          label: "No",
+        },
+      ],
+    },
   };
 
   const createEventMotionTask = createEventMotion(eventId, buildableMotion);
@@ -81,6 +109,11 @@ export async function updateEventMotionAction({
   const motionUpdates: MotionUpdates = {
     title: formData.get("title") as string,
     description: formData.get("description") as string,
+    voteDefinition: {
+      definitionSchemaVersion: 1,
+      roleVotes: [],
+      responses: [],
+    },
   };
 
   const updateEventMotionTask = updateEventMotion(
