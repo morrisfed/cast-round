@@ -15,6 +15,7 @@ interface ModelRoleVotesDefinition {
 
 interface ModelResponseDefinition {
   sequence: number;
+  code: string;
   label: string;
 }
 

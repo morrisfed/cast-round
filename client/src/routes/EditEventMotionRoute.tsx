@@ -69,10 +69,12 @@ export async function createEventMotionAction({
       responses: [
         {
           sequence: 1,
+          code: "YES",
           label: "Yes",
         },
         {
           sequence: 2,
+          code: "NO",
           label: "No",
         },
       ],

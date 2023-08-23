@@ -28,6 +28,7 @@ interface RoleVotesDefinitionResponse {
 
 interface ResponseDefinitionResponse {
   sequence: number;
+  code: string;
   label: string;
 }
 
