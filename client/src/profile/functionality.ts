@@ -6,7 +6,7 @@ const hasRole = (profile: UserProfile, role: Role) =>
 export const showAccounts = (profile: UserProfile) =>
   hasRole(profile, "COMMITTEE") ||
   hasRole(profile, "ADMINISTRATOR") ||
-  hasRole(profile, "TELLOR_DELEGATE");
+  hasRole(profile, "TELLOR");
 
 export const showEvents = (profile: UserProfile) =>
   hasRole(profile, "COMMITTEE") || hasRole(profile, "MEMBER");

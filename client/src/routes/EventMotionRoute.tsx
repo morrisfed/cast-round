@@ -18,13 +18,13 @@ export async function eventMotionLoader({ params }: LoaderFunctionArgs) {
 
   const getEventMotionTask = pipe(getEventMotion(eventId, motionId));
 
-  const eventEither = await getEventMotionTask();
+  const motionEither = await getEventMotionTask();
 
-  if (E.isLeft(eventEither)) {
-    throw eventEither.left;
+  if (E.isLeft(motionEither)) {
+    throw motionEither.left;
   }
 
-  return eventEither.right;
+  return motionEither.right;
 }
 
 export const EventMotionCrumb: CrumbDataFn = (match) => {

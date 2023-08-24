@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import * as E from "fp-ts/lib/Either";
 
 const MDEditor = React.lazy(() => import("@uiw/react-md-editor"));
 
-import { BuildableMotion, MotionUpdates } from "interfaces/motion";
+import {
+  BuildableMotion,
+  ModelVoteDefinition,
+  MotionUpdates,
+} from "interfaces/motion";
 import {
   ActionFunctionArgs,
   Form,
@@ -16,6 +20,7 @@ import {
 import { eventMotionLoader } from "./EventMotionRoute";
 import { CrumbDataFn } from "components/Crumb";
 import { createEventMotion, updateEventMotion } from "events/event-service";
+import MotionVoteDefinition from "components/Motion/MotionVoteDefinition";
 
 export async function newEventMotionLoader({ params }: LoaderFunctionArgs) {
   const eventId = params.eventId;
@@ -54,31 +59,7 @@ export async function createEventMotionAction({
   const buildableMotion: BuildableMotion = {
     title: formData.get("title") as string,
     description: formData.get("description") as string,
-    voteDefinition: {
-      definitionSchemaVersion: 1,
-      roleVotes: [
-        {
-          role: "GROUP_DELEGATE",
-          votes: 9,
-        },
-        {
-          role: "INDIVIDUAL_VOTER",
-          votes: 2,
-        },
-      ],
-      responses: [
-        {
-          sequence: 1,
-          code: "YES",
-          label: "Yes",
-        },
-        {
-          sequence: 2,
-          code: "NO",
-          label: "No",
-        },
-      ],
-    },
+    voteDefinition: JSON.parse(formData.get("voteDefinition") as string),
   };
 
   const createEventMotionTask = createEventMotion(eventId, buildableMotion);
@@ -111,11 +92,7 @@ export async function updateEventMotionAction({
   const motionUpdates: MotionUpdates = {
     title: formData.get("title") as string,
     description: formData.get("description") as string,
-    voteDefinition: {
-      definitionSchemaVersion: 1,
-      roleVotes: [],
-      responses: [],
-    },
+    voteDefinition: JSON.parse(formData.get("voteDefinition") as string),
   };
 
   const updateEventMotionTask = updateEventMotion(
@@ -150,6 +127,17 @@ const EditEventMotionRoute: React.FC = () => {
     motion.description
   );
 
+  const [voteDefinition, setVoteDefinition] = useState<ModelVoteDefinition>(
+    motion.voteDefinition
+  );
+
+  const voteDefinitionChangedHandler = useCallback(
+    (updatedVoteDefinition: ModelVoteDefinition) => {
+      setVoteDefinition(updatedVoteDefinition);
+    },
+    [setVoteDefinition]
+  );
+
   return (
     <Form method="POST" className="flex flex-col gap-2">
       <div className="form-control w-full max-w-xs">
@@ -177,6 +165,16 @@ const EditEventMotionRoute: React.FC = () => {
         </React.Suspense>
         <input name="description" type="hidden" value={descriptionValue} />
       </div>
+
+      <MotionVoteDefinition
+        voteDefinition={voteDefinition}
+        onDefinitionChanged={voteDefinitionChangedHandler}
+      />
+      <input
+        type="hidden"
+        name="voteDefinition"
+        value={JSON.stringify(voteDefinition)}
+      />
 
       <div className="flex flex-row gap-4">
         <button type="submit" className="btn-accent btn max-w-xs">

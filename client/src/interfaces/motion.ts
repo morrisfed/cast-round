@@ -8,12 +8,12 @@ export type MotionStatus =
   | "cancelled"
   | "discarded";
 
-interface ModelRoleVotesDefinition {
+export interface ModelRoleVotesDefinition {
   role: Role;
   votes: number;
 }
 
-interface ModelResponseDefinition {
+export interface ModelResponseDefinition {
   sequence: number;
   code: string;
   label: string;
@@ -25,7 +25,7 @@ interface ModelVoteDefinitionSchema1 {
   responses: ModelResponseDefinition[];
 }
 
-type ModelVoteDefinition = ModelVoteDefinitionSchema1;
+export type ModelVoteDefinition = ModelVoteDefinitionSchema1;
 
 export interface Motion {
   id: number;
