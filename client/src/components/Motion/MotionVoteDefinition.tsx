@@ -6,6 +6,7 @@ import {
   ModelVoteDefinition,
 } from "interfaces/motion";
 import MotionRoleVotesDefinition from "./MotionRoleVotesDefinition";
+import MotionResponseDefinitions from "./MotionResponseDefinitions";
 
 export interface MotionVoteDefinitionProps {
   voteDefinition: ModelVoteDefinition;
@@ -41,6 +42,10 @@ const MotionVoteDefinition: React.FC<MotionVoteDefinitionProps> = ({
       <MotionRoleVotesDefinition
         roleVotes={voteDefinition.roleVotes}
         onRoleVotesChanged={roleVotesChangedHandler}
+      />
+      <MotionResponseDefinitions
+        responseDefinitions={voteDefinition.responses}
+        onResponseDefinitionsChanged={responsesChangedHandler}
       />
     </>
   );
