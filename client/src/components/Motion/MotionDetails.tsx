@@ -3,13 +3,18 @@ import React, { useMemo, useState } from "react";
 import * as O from "fp-ts/lib/Option";
 
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import { Motion, MotionStatus } from "interfaces/motion";
+import { MotionStatus, MotionWithOptionalVotes } from "interfaces/motion";
 import { Form, Link } from "react-router-dom";
 import { useUserProfile } from "components/UserProfileContext";
-import { showMotionActionButtons } from "profile/functionality";
+import {
+  showMotionActionButtons,
+  showMotionVoting,
+} from "profile/functionality";
+import MotionCastVote from "./MotionCastVote";
+import { MotionVote } from "interfaces/motion-vote";
 
 export interface MotionDetailsProps {
-  motion: Motion;
+  motion: MotionWithOptionalVotes;
 }
 
 const MotionDetails: React.FC<MotionDetailsProps> = ({ motion }) => {
@@ -18,6 +23,8 @@ const MotionDetails: React.FC<MotionDetailsProps> = ({ motion }) => {
   const [changingStatus, setChangingStatus] = useState<O.Option<MotionStatus>>(
     O.none
   );
+
+  const [votes, setVotes] = useState<MotionVote[]>(motion.votes || []);
 
   const toDiscardedStatus = useMemo(
     () => (
@@ -162,6 +169,28 @@ const MotionDetails: React.FC<MotionDetailsProps> = ({ motion }) => {
         ) : null}
       </div>
       {changeStatusDialog}
+      {showMotionVoting(profile) ? (
+        <div>
+          <MotionCastVote
+            voteDefinition={motion.voteDefinition}
+            votes={votes}
+            onVotesChanged={setVotes}
+          />
+          <Form method="POST">
+            <input name="intent" type="hidden" value="cast-votes" />
+
+            <input
+              type="hidden"
+              name="votesJson"
+              value={JSON.stringify(votes)}
+            />
+
+            <button type="submit" className="btn-outline btn-accent btn">
+              Cast votes
+            </button>
+          </Form>
+        </div>
+      ) : null}
     </>
   );
 };

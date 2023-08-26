@@ -10,6 +10,7 @@ import {
   Motion,
   MotionStatus,
   MotionUpdates,
+  MotionWithOptionalVotes,
 } from "interfaces/motion";
 import { Role } from "interfaces/user";
 
@@ -39,12 +40,18 @@ interface VoteDefinitionResponseSchema1 {
 }
 type VoteDefinitionResponse = VoteDefinitionResponseSchema1;
 
+interface MotionVote {
+  responseCode: string;
+  votes: number;
+}
+
 interface MotionResponse {
   id: number;
   status: MotionStatusResponse;
   title: string;
   description: string;
   voteDefinition: VoteDefinitionResponse;
+  votes?: MotionVote[];
 }
 
 interface EventResponse {
@@ -273,7 +280,7 @@ export const getEventMotions = (id: number | string) =>
 const retrieveEventMotion = (
   eventId: number | string,
   motionId: number | string
-): TE.TaskEither<Error | "forbidden", Motion> =>
+): TE.TaskEither<Error | "forbidden", MotionWithOptionalVotes> =>
   pipe(
     TE.tryCatch(
       () =>

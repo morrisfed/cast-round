@@ -2,10 +2,12 @@ import * as TE from "fp-ts/lib/TaskEither";
 import * as E from "fp-ts/lib/Either";
 
 import { ActionFunctionArgs, redirect, useLoaderData } from "react-router-dom";
-import { Motion, MotionStatus } from "interfaces/motion";
+import { MotionStatus, MotionWithOptionalVotes } from "interfaces/motion";
 import MotionDetails from "components/Motion/MotionDetails";
 import { eventMotionLoader } from "./EventMotionRoute";
 import { setEventMotionStatus } from "events/event-service";
+import { MotionVote } from "interfaces/motion-vote";
+import { setMotionVotes } from "events/motion-votes-service";
 
 export async function eventMotionAction({
   params,
@@ -50,6 +52,16 @@ export async function eventMotionAction({
         throw motionEither.left;
       }
     }
+  } else if (intent === "cast-votes") {
+    const votes = JSON.parse(
+      formData.get("votesJson") as string
+    ) as MotionVote[];
+
+    const castVotesTask = setMotionVotes(motionId, votes);
+    const castVotesEither = await castVotesTask();
+    if (E.isLeft(castVotesEither)) {
+      throw castVotesEither.left;
+    }
   } else {
     throw new Error("Invalid intent");
   }
@@ -58,7 +70,7 @@ export async function eventMotionAction({
 }
 
 const EventMotionIndexRoute: React.FC = () => {
-  const motion: Motion = useLoaderData() as Awaited<
+  const motion: MotionWithOptionalVotes = useLoaderData() as Awaited<
     ReturnType<typeof eventMotionLoader>
   >;
 

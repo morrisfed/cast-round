@@ -1,3 +1,4 @@
+import { MotionVote } from "./motion-vote";
 import { Role } from "./user";
 
 export type MotionStatus =
@@ -33,6 +34,10 @@ export interface Motion {
   title: string;
   description: string;
   voteDefinition: ModelVoteDefinition;
+}
+
+export interface MotionWithOptionalVotes extends Motion {
+  votes?: MotionVote[];
 }
 
 export type BuildableMotion = Omit<Motion, "id" | "status">;
