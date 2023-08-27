@@ -20,4 +20,12 @@ export type UserProfile = {
   id: string;
   name: string;
   roles: Role[];
+  groupDelegateInfo?: {
+    delegateForGroupId: string;
+    delegateForGroupName: string;
+    delegateForEventId: string;
+  };
+  tellorInfo?: {
+    tellorForEventId: string;
+  };
 };

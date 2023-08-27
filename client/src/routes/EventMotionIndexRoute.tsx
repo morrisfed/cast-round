@@ -8,11 +8,12 @@ import { eventMotionLoader } from "./EventMotionRoute";
 import { setEventMotionStatus } from "events/event-service";
 import { MotionVote } from "interfaces/motion-vote";
 import { setMotionVotes } from "events/motion-votes-service";
+import { UserProfile } from "interfaces/user";
 
-export async function eventMotionAction({
-  params,
-  request,
-}: ActionFunctionArgs) {
+export async function eventMotionAction(
+  profile: UserProfile,
+  { params, request }: ActionFunctionArgs
+) {
   const eventId = params.eventId;
   if (!eventId) {
     throw new Error("No event ID provided");
@@ -57,7 +58,10 @@ export async function eventMotionAction({
       formData.get("votesJson") as string
     ) as MotionVote[];
 
-    const castVotesTask = setMotionVotes(motionId, votes);
+    const onBehalfUserId =
+      profile.groupDelegateInfo?.delegateForGroupId ?? profile.id;
+
+    const castVotesTask = setMotionVotes(motionId, onBehalfUserId, votes);
     const castVotesEither = await castVotesTask();
     if (E.isLeft(castVotesEither)) {
       throw castVotesEither.left;

@@ -6,7 +6,8 @@ import { setMotionVotes as apiSetMotionVotes } from "api/motion-votes";
 
 export const setMotionVotes = (
   motionId: number | string,
+  onBehalfOfUserId: string,
   votes: MotionVote[]
 ): TE.TaskEither<Error | "forbidden", MotionVote[]> => {
-  return pipe(apiSetMotionVotes(motionId, votes));
+  return pipe(apiSetMotionVotes(motionId, onBehalfOfUserId, votes));
 };

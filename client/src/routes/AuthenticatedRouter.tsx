@@ -113,8 +113,9 @@ const AuthenticatedRouter: React.FC = () => {
                   index
                   element={<EventMotionIndexRoute />}
                   loader={eventMotionLoader}
-                  action={eventMotionAction}
+                  action={(args) => eventMotionAction(profile, args)}
                 />
+                1
                 <Route
                   path="edit"
                   element={<EditEventMotion />}

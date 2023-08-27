@@ -23,7 +23,8 @@ interface SubmitMotionVotesResponse {
 }
 
 export const getMotionVotes = (
-  motionId: number | string
+  motionId: number | string,
+  onBehalfOfUserId: string
 ): TE.TaskEither<Error | "forbidden", MotionVote[]> => {
   return pipe(
     TE.tryCatch(
@@ -31,7 +32,7 @@ export const getMotionVotes = (
         axios.get<
           GetMotionVotesResponse,
           AxiosResponse<GetMotionVotesResponse>
-        >(`/api/motionvote/${motionId}`),
+        >(`/api/motionvote/${motionId}/${onBehalfOfUserId}`),
       (reason) => {
         const error = reason as AxiosError;
         if (error.response) {
@@ -49,6 +50,7 @@ export const getMotionVotes = (
 
 export const setMotionVotes = (
   motionId: number | string,
+  onBehalfOfUserId: string,
   votes: MotionVote[]
 ): TE.TaskEither<Error | "forbidden", MotionVote[]> => {
   return pipe(
@@ -58,7 +60,7 @@ export const setMotionVotes = (
           SubmitMotionVotesResponse,
           AxiosResponse<SubmitMotionVotesResponse>,
           SubmitMotionVotesRequest
-        >(`/api/motionvote/${motionId}`, {
+        >(`/api/motionvote/${motionId}/${onBehalfOfUserId}`, {
           votes: votes.map((vote) => ({
             code: vote.responseCode,
             count: vote.votes,
