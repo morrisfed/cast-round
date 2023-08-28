@@ -43,6 +43,7 @@ type VoteDefinitionResponse = VoteDefinitionResponseSchema1;
 interface MotionVote {
   responseCode: string;
   votes: number;
+  proxy: boolean;
 }
 
 interface MotionResponse {
