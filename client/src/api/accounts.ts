@@ -4,6 +4,7 @@ import * as ROA from "fp-ts/lib/ReadonlyArray";
 
 import axios, { AxiosError } from "axios";
 import { DelegateUserType } from "./delegates";
+import { Role } from "interfaces/user";
 
 export type AccountUserType =
   | "associate-membership"
@@ -34,6 +35,7 @@ export interface AccountUserInfo {
   type: AccountUserType;
   isGroup: boolean;
   isIndividual: boolean;
+  roles: Role[];
 }
 
 export interface GetAccountsResponse {
@@ -42,6 +44,7 @@ export interface GetAccountsResponse {
     name: string;
     contactName: string | null;
     type: AccountUserType;
+    roles: Role[];
   }[];
 }
 
@@ -51,6 +54,7 @@ export interface GetAccountResponse {
     name: string;
     contactName: string | null;
     type: AccountUserType;
+    roles: Role[];
   };
 }
 

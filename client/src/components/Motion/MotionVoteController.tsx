@@ -8,19 +8,19 @@ import { getMotionVotes, setMotionVotes } from "events/motion-votes-service";
 import Spinner from "components/Spinner";
 import MotionVoteReadView from "./MotionVoteReadView";
 import MotionVoteEditView from "./MotionVoteEditView";
-import { useUserProfile } from "components/UserProfileContext";
 import { Role } from "interfaces/user";
 
 export interface MotionVoteControllerProps {
   memberId: string;
   motion: Motion;
+  roles: Role[];
 }
 
 const MotionVoteController: React.FC<MotionVoteControllerProps> = ({
   memberId,
   motion,
+  roles,
 }) => {
-  const userProfile = useUserProfile();
   const [votes, setVotes] = useState<MotionVote[]>([]);
   const [clientVotes, setClientVotes] = useState<MotionVote[]>([]);
   const [clientVotesDirty, setClientVotesDirty] = useState<boolean>(false);
@@ -81,10 +81,10 @@ const MotionVoteController: React.FC<MotionVoteControllerProps> = ({
   );
 
   const maxVotesForRoles = useMemo(() => {
-    return userProfile.roles
+    return roles
       .map((role) => maxVotesForRole(role))
       .reduce((a, b) => Math.max(a, b), 0);
-  }, [maxVotesForRole, userProfile]);
+  }, [maxVotesForRole, roles]);
 
   const showMotionControllerView = useMemo(() => {
     return motion.status !== "draft" && motion.status !== "discarded";

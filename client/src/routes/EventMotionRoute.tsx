@@ -1,7 +1,7 @@
+import { pipe } from "fp-ts/lib/function";
 import * as E from "fp-ts/lib/Either";
 
 import { LoaderFunctionArgs } from "react-router-dom";
-import { pipe } from "fp-ts/lib/function";
 import { getEventMotion } from "api/events";
 import { CrumbDataFn } from "components/Crumb";
 

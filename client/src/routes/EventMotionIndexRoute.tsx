@@ -95,7 +95,11 @@ const EventMotionIndexRoute: React.FC = () => {
     <div className="flex flex-col gap-2">
       <MotionDetailsView motion={motion} />
       {showMotionVoting(profile) ? (
-        <MotionVoteController motion={motion} memberId={onBehalfUserId} />
+        <MotionVoteController
+          motion={motion}
+          memberId={onBehalfUserId}
+          roles={profile.roles}
+        />
       ) : null}
 
       <MotionTotalsViewController motion={motion} />
