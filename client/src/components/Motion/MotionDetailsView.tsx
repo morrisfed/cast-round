@@ -6,19 +6,14 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { MotionStatus, MotionWithOptionalVotes } from "interfaces/motion";
 import { Form, Link } from "react-router-dom";
 import { useUserProfile } from "components/UserProfileContext";
-import {
-  showMotionActionButtons,
-  showMotionVoting,
-} from "profile/functionality";
-import MotionTotalsViewController from "./MotionTotalsViewController";
-import MotionVoteController from "./MotionVoteController";
+import { showMotionActionButtons } from "profile/functionality";
 
-export interface MotionDetailsProps {
+export interface MotionDetailsViewProps {
   motion: MotionWithOptionalVotes;
   memberId: string;
 }
 
-const MotionDetails: React.FC<MotionDetailsProps> = ({ motion, memberId }) => {
+const MotionDetailsView: React.FC<MotionDetailsViewProps> = ({ motion }) => {
   const profile = useUserProfile();
 
   const [changingStatus, setChangingStatus] = useState<O.Option<MotionStatus>>(
@@ -145,7 +140,7 @@ const MotionDetails: React.FC<MotionDetailsProps> = ({ motion, memberId }) => {
   );
 
   return (
-    <div className="flex flex-col gap-2">
+    <>
       <div className="card-bordered card bg-base-100 shadow-xl">
         <div className="card-body">
           <h2 className="card-title">{motion.title}</h2>
@@ -164,14 +159,8 @@ const MotionDetails: React.FC<MotionDetailsProps> = ({ motion, memberId }) => {
         ) : null}
       </div>
       {changeStatusDialog}
-
-      {showMotionVoting(profile) ? (
-        <MotionVoteController motion={motion} memberId={memberId} />
-      ) : null}
-
-      <MotionTotalsViewController motion={motion} />
-    </div>
+    </>
   );
 };
 
-export default MotionDetails;
+export default MotionDetailsView;

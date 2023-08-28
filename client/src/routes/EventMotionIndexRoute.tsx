@@ -1,15 +1,23 @@
 import * as TE from "fp-ts/lib/TaskEither";
 import * as E from "fp-ts/lib/Either";
 
-import { ActionFunctionArgs, redirect, useLoaderData } from "react-router-dom";
+import {
+  ActionFunctionArgs,
+  Link,
+  redirect,
+  useLoaderData,
+} from "react-router-dom";
 import { MotionStatus, MotionWithOptionalVotes } from "interfaces/motion";
-import MotionDetails from "components/Motion/MotionDetails";
+import MotionDetailsView from "components/Motion/MotionDetailsView";
 import { eventMotionLoader } from "./EventMotionRoute";
 import { setEventMotionStatus } from "events/event-service";
 import { MotionVote } from "interfaces/motion-vote";
 import { setMotionVotes } from "events/motion-votes-service";
 import { UserProfile } from "interfaces/user";
 import { useUserProfile } from "components/UserProfileContext";
+import { showMotionVoting, showTellorActions } from "profile/functionality";
+import MotionVoteController from "components/Motion/MotionVoteController";
+import MotionTotalsViewController from "components/Motion/MotionTotalsViewController";
 
 export async function eventMotionAction(
   profile: UserProfile,
@@ -83,7 +91,30 @@ const EventMotionIndexRoute: React.FC = () => {
     ReturnType<typeof eventMotionLoader>
   >;
 
-  return <MotionDetails motion={motion} memberId={onBehalfUserId} />;
+  return (
+    <div className="flex flex-col gap-2">
+      <MotionDetailsView motion={motion} memberId={onBehalfUserId} />
+      {showMotionVoting(profile) ? (
+        <MotionVoteController motion={motion} memberId={onBehalfUserId} />
+      ) : null}
+
+      <MotionTotalsViewController motion={motion} />
+
+      {showTellorActions(profile) ? (
+        <div className="card-bordered card bg-base-100 shadow-xl">
+          <div className="card-body">
+            <h2 className="card-title">Tellor actions</h2>
+          </div>
+
+          <div className="card-actions p-4">
+            <Link className="btn-primary btn" to="members">
+              Members&apos; votes
+            </Link>
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
 };
 
 export default EventMotionIndexRoute;
