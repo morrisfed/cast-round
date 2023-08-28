@@ -10,22 +10,20 @@ import {
   showMotionActionButtons,
   showMotionVoting,
 } from "profile/functionality";
-import MotionCastVote from "./MotionCastVote";
-import { MotionVote } from "interfaces/motion-vote";
 import MotionTotalsViewController from "./MotionTotalsViewController";
+import MotionVoteController from "./MotionVoteController";
 
 export interface MotionDetailsProps {
   motion: MotionWithOptionalVotes;
+  memberId: string;
 }
 
-const MotionDetails: React.FC<MotionDetailsProps> = ({ motion }) => {
+const MotionDetails: React.FC<MotionDetailsProps> = ({ motion, memberId }) => {
   const profile = useUserProfile();
 
   const [changingStatus, setChangingStatus] = useState<O.Option<MotionStatus>>(
     O.none
   );
-
-  const [votes, setVotes] = useState<MotionVote[]>(motion.votes || []);
 
   const toDiscardedStatus = useMemo(
     () => (
@@ -147,18 +145,14 @@ const MotionDetails: React.FC<MotionDetailsProps> = ({ motion }) => {
   );
 
   return (
-    <>
+    <div className="flex flex-col gap-2">
       <div className="card-bordered card bg-base-100 shadow-xl">
         <div className="card-body">
-          <div className="flex flex-row gap-4">
-            <div className="truncate">
-              <h2 className="card-title">{motion.title}</h2>
-              <p>Status: {motion.status}</p>
-              <article className="prose">
-                <ReactMarkdown>{motion.description}</ReactMarkdown>
-              </article>
-            </div>
-          </div>
+          <h2 className="card-title">{motion.title}</h2>
+          <p>Status: {motion.status}</p>
+          <article className="prose">
+            <ReactMarkdown>{motion.description}</ReactMarkdown>
+          </article>
         </div>
         {showMotionActionButtons(profile) ? (
           <div className="card-actions p-4">
@@ -170,31 +164,13 @@ const MotionDetails: React.FC<MotionDetailsProps> = ({ motion }) => {
         ) : null}
       </div>
       {changeStatusDialog}
+
       {showMotionVoting(profile) ? (
-        <div>
-          <MotionCastVote
-            voteDefinition={motion.voteDefinition}
-            votes={votes}
-            onVotesChanged={setVotes}
-          />
-          <Form method="POST">
-            <input name="intent" type="hidden" value="cast-votes" />
-
-            <input
-              type="hidden"
-              name="votesJson"
-              value={JSON.stringify(votes)}
-            />
-
-            <button type="submit" className="btn-outline btn-accent btn">
-              Cast votes
-            </button>
-          </Form>
-        </div>
+        <MotionVoteController motion={motion} memberId={memberId} />
       ) : null}
 
       <MotionTotalsViewController motion={motion} />
-    </>
+    </div>
   );
 };
 

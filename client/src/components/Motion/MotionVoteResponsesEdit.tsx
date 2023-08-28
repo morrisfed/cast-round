@@ -5,14 +5,14 @@ import MotionVoteResponseEdit from "./MotionVoteResponseEdit";
 
 export interface MotionVoteResponsesEditProps {
   responses: ModelResponseDefinition[];
-  maxVotes: number;
+  availableVotes: number;
   votes: MotionVote[];
   onVotesChanged: (votes: MotionVote[]) => void;
 }
 
 const MotionVoteResponsesEdit: React.FC<MotionVoteResponsesEditProps> = ({
   responses,
-  maxVotes,
+  availableVotes,
   votes,
   onVotesChanged,
 }) => {
@@ -29,6 +29,7 @@ const MotionVoteResponsesEdit: React.FC<MotionVoteResponsesEditProps> = ({
         newVotes.push({
           responseCode: code,
           votes: assignedVotes,
+          proxy: false,
         });
       }
       onVotesChanged(newVotes);
@@ -36,14 +37,14 @@ const MotionVoteResponsesEdit: React.FC<MotionVoteResponsesEditProps> = ({
     [onVotesChanged, votes]
   );
 
-  const totalAssignedVotes = useMemo(
+  const allocatedVotes = useMemo(
     () => votes.map((vote) => vote.votes).reduce((a, b) => a + b, 0),
     [votes]
   );
 
-  const availableVotes = useMemo(
-    () => maxVotes - totalAssignedVotes,
-    [maxVotes, totalAssignedVotes]
+  const unallocatedVotes = useMemo(
+    () => availableVotes - allocatedVotes,
+    [allocatedVotes, availableVotes]
   );
 
   const responseElements = useMemo(() => {
@@ -54,7 +55,7 @@ const MotionVoteResponsesEdit: React.FC<MotionVoteResponsesEditProps> = ({
           key={response.code}
           code={response.code}
           label={response.label}
-          availableVotes={availableVotes}
+          availableVotes={unallocatedVotes}
           assignedVotes={assignedVotes}
           onAssignedVotesChanged={assignedVotesChangedHandler}
         />
@@ -63,11 +64,25 @@ const MotionVoteResponsesEdit: React.FC<MotionVoteResponsesEditProps> = ({
   }, [
     assignedVotesChangedHandler,
     assignedVotesForCode,
-    availableVotes,
     responses,
+    unallocatedVotes,
   ]);
 
-  return <>{responseElements}</>;
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="grid grid-cols-2 gap-1">
+        <span className="">Available votes</span>
+        <span>{availableVotes}</span>
+        <span className="">Allocated votes</span>
+        <span>{allocatedVotes}</span>
+        <span className="">Unallocated votes</span>
+        <span>{unallocatedVotes}</span>
+      </div>
+      <div className="grid grid-cols-[30px_50px_30px_minmax(100px,_1fr)] gap-1">
+        {responseElements}
+      </div>
+    </div>
+  );
 };
 
 export default MotionVoteResponsesEdit;

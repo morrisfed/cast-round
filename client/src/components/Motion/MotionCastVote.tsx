@@ -41,7 +41,7 @@ const MotionCastVote: React.FC<MotionCastVoteProps> = ({
   return (
     <>
       <MotionVoteResponsesEdit
-        maxVotes={maxVotesForRoles}
+        availableVotes={maxVotesForRoles}
         responses={voteDefinition.responses}
         votes={votes}
         onVotesChanged={votesChangedHandler}

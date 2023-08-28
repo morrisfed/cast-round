@@ -13,26 +13,29 @@ const MotionVoteResponseEdit: React.FC<MotionVoteResponseEditProps> = ({
   assignedVotes,
   onAssignedVotesChanged,
 }) => {
-  const assignedVotesChangedHandler = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    onAssignedVotesChanged(parseInt(event.target.value), code);
-  };
-
   return (
-    <div className="form-control">
-      <label className="label">
-        <span className="label-text">{label}</span>
-      </label>
-      <input
-        type="number"
-        min="0"
-        max={assignedVotes + availableVotes}
-        value={assignedVotes}
-        onChange={assignedVotesChangedHandler}
-        className="input-bordered input"
-      />
-    </div>
+    <>
+      <button
+        type="button"
+        className={
+          "btn-primary btn " + (assignedVotes > 0 ? "" : "btn-disabled")
+        }
+        onClick={() => onAssignedVotesChanged(assignedVotes - 1, code)}
+      >
+        -
+      </button>
+      <span className="text-center">{assignedVotes}</span>
+      <button
+        type="button"
+        className={
+          "btn-primary btn " + (availableVotes > 0 ? "" : "btn-disabled")
+        }
+        onClick={() => onAssignedVotesChanged(assignedVotes + 1, code)}
+      >
+        +
+      </button>
+      <span className="px-2">{label}</span>
+    </>
   );
 };
 

@@ -9,6 +9,7 @@ import { setEventMotionStatus } from "events/event-service";
 import { MotionVote } from "interfaces/motion-vote";
 import { setMotionVotes } from "events/motion-votes-service";
 import { UserProfile } from "interfaces/user";
+import { useUserProfile } from "components/UserProfileContext";
 
 export async function eventMotionAction(
   profile: UserProfile,
@@ -74,11 +75,15 @@ export async function eventMotionAction(
 }
 
 const EventMotionIndexRoute: React.FC = () => {
+  const profile = useUserProfile();
+  const onBehalfUserId =
+    profile.groupDelegateInfo?.delegateForGroupId ?? profile.id;
+
   const motion: MotionWithOptionalVotes = useLoaderData() as Awaited<
     ReturnType<typeof eventMotionLoader>
   >;
 
-  return <MotionDetails motion={motion} />;
+  return <MotionDetails motion={motion} memberId={onBehalfUserId} />;
 };
 
 export default EventMotionIndexRoute;
