@@ -3,7 +3,11 @@ import * as TE from "fp-ts/lib/TaskEither";
 
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-import { MotionVote } from "interfaces/motion-vote";
+import { MotionVote, MotionVoteSubtotal } from "interfaces/motion-vote";
+
+interface GetMotionVoteTotalsResponse {
+  subtotals: MotionVoteSubtotal[];
+}
 
 interface GetMotionVotesResponse {
   votes: MotionVote[];
@@ -21,6 +25,31 @@ interface SubmitMotionVotesRequest {
 interface SubmitMotionVotesResponse {
   votes: MotionVote[];
 }
+
+export const getMotionVoteTotals = (motionId: number | string) => {
+  return pipe(
+    TE.tryCatch(
+      () =>
+        axios.get<
+          GetMotionVoteTotalsResponse,
+          AxiosResponse<GetMotionVoteTotalsResponse>
+        >(`/api/motionvote/${motionId}/totals`),
+      (reason) => {
+        const error = reason as AxiosError;
+        if (error.response) {
+          if (error.response.status === 403) {
+            return "forbidden";
+          } else if (error.response.status === 404) {
+            return "not-found";
+          }
+        }
+        return new Error(`${reason}`);
+      }
+    ),
+    TE.map((response) => response.data),
+    TE.map((data) => data.subtotals)
+  );
+};
 
 export const getMotionVotes = (
   motionId: number | string,

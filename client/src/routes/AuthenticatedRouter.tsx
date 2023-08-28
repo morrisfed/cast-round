@@ -115,7 +115,7 @@ const AuthenticatedRouter: React.FC = () => {
                   loader={eventMotionLoader}
                   action={(args) => eventMotionAction(profile, args)}
                 />
-                1
+
                 <Route
                   path="edit"
                   element={<EditEventMotion />}

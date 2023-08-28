@@ -12,6 +12,7 @@ import {
 } from "profile/functionality";
 import MotionCastVote from "./MotionCastVote";
 import { MotionVote } from "interfaces/motion-vote";
+import MotionTotalsViewController from "./MotionTotalsViewController";
 
 export interface MotionDetailsProps {
   motion: MotionWithOptionalVotes;
@@ -191,6 +192,8 @@ const MotionDetails: React.FC<MotionDetailsProps> = ({ motion }) => {
           </Form>
         </div>
       ) : null}
+
+      <MotionTotalsViewController motion={motion} />
     </>
   );
 };
