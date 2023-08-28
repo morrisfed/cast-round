@@ -5,11 +5,15 @@ import { Link } from "react-router-dom";
 
 export interface AccountListItemProps {
   account: AccountUserInfo;
+  linkPathPrefix: string;
 }
 
-const AccountItem: React.FC<AccountListItemProps> = ({ account }) => {
+const AccountItem: React.FC<AccountListItemProps> = ({
+  account,
+  linkPathPrefix,
+}) => {
   return (
-    <Link to={`/accounts/${account.id}`}>
+    <Link to={`${linkPathPrefix}${account.id}`}>
       <div className="card-bordered card bg-base-100 shadow-xl">
         <div className="card-body">
           <div className="flex flex-row gap-4">

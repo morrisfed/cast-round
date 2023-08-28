@@ -43,6 +43,8 @@ import EditEventRoute, {
   NewEventCrumb,
   newEventLoader,
 } from "./EditEventRoute";
+import { EventMotionVotersCrumb } from "./EventMotionVotersRoute";
+import EventMotionVotersIndexRoute from "./EventMotionVotersIndexRoute copy";
 
 const AuthenticatedRouter: React.FC = () => {
   const profile = useUserProfile();
@@ -115,6 +117,10 @@ const AuthenticatedRouter: React.FC = () => {
                   loader={eventMotionLoader}
                   action={(args) => eventMotionAction(profile, args)}
                 />
+
+                <Route path="voters" handle={{ crumb: EventMotionVotersCrumb }}>
+                  <Route index element={<EventMotionVotersIndexRoute />} />
+                </Route>
 
                 <Route
                   path="edit"

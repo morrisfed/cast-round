@@ -10,7 +10,6 @@ import { showMotionActionButtons } from "profile/functionality";
 
 export interface MotionDetailsViewProps {
   motion: MotionWithOptionalVotes;
-  memberId: string;
 }
 
 const MotionDetailsView: React.FC<MotionDetailsViewProps> = ({ motion }) => {
