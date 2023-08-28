@@ -31,14 +31,14 @@ const SideBar: React.FC<SideBarProps> = ({ itemSelected }) => {
           {events.length > 0 ? (
             <li className="my-1 ml-8">
               <NavLink to={`/events/${events[0].id}`} onClick={itemSelected}>
-                Ev 1
+                {events[0].name}
               </NavLink>
             </li>
           ) : null}
           {events.length > 1 ? (
             <li className="my-1 ml-8">
               <NavLink to={`/events/${events[1].id}`} onClick={itemSelected}>
-                Ev 2
+                {events[1].name}
               </NavLink>
             </li>
           ) : null}
