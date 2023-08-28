@@ -35,20 +35,26 @@ const MotionRoleVotesDefinition: React.FC<MotionRoleVotesDefinitionProps> = ({
   }, [roleVoteChangedHandler, roleVotes]);
 
   return (
-    <>
-      {roleVoteElements}
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          onRoleVotesChanged([
-            ...roleVotes,
-            { role: "ADMINISTRATOR", votes: 0 },
-          ]);
-        }}
-      >
-        Add role votes
-      </button>
-    </>
+    <div className="card-bordered card bg-base-100 shadow-xl">
+      <div className="card-body">
+        <h2 className="card-title">Assign permitted votes to roles</h2>
+        {roleVoteElements}
+      </div>
+      <div className="card-actions p-4">
+        <button
+          className="btn-primary btn"
+          onClick={(e) => {
+            e.preventDefault();
+            onRoleVotesChanged([
+              ...roleVotes,
+              { role: "ADMINISTRATOR", votes: 0 },
+            ]);
+          }}
+        >
+          Add role votes
+        </button>
+      </div>
+    </div>
   );
 };
 

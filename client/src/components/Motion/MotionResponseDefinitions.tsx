@@ -37,20 +37,26 @@ const MotionResponseDefinitions: React.FC<MotionResponseDefinitionsProps> = ({
   }, [responseDefinitionChangedHandler, responseDefinitions]);
 
   return (
-    <>
-      {responseDefinitionElements}
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          onResponseDefinitionsChanged([
-            ...responseDefinitions,
-            { sequence: 0, code: "AAA", label: "" },
-          ]);
-        }}
-      >
-        Add role votes
-      </button>
-    </>
+    <div className="card-bordered card bg-base-100 shadow-xl">
+      <div className="card-body">
+        <h2 className="card-title">Configure responses</h2>
+        {responseDefinitionElements}
+      </div>
+      <div className="card-actions p-4">
+        <button
+          className="btn-primary btn"
+          onClick={(e) => {
+            e.preventDefault();
+            onResponseDefinitionsChanged([
+              ...responseDefinitions,
+              { sequence: 0, code: "AAA", label: "" },
+            ]);
+          }}
+        >
+          Add role votes
+        </button>
+      </div>
+    </div>
   );
 };
 
