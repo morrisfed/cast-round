@@ -13,7 +13,7 @@ const MotionTotalsTable: React.FC<MotionTotalsTableProps> = ({
   subtotals,
 }) => {
   const buildSubtotalRow = useCallback(
-    (responseCode: string, label: string) => {
+    (responseCode: string, label: string, key: React.Key) => {
       const nonProxySubtotal = subtotals
         .filter(
           (subtotal) =>
@@ -30,7 +30,7 @@ const MotionTotalsTable: React.FC<MotionTotalsTableProps> = ({
         .reduce((a, b) => a + b, 0);
 
       return (
-        <tr>
+        <tr key={key}>
           <td>{responseCode}</td>
           <td>{nonProxySubtotal}</td>
           <td>{proxySubtotal}</td>
@@ -47,7 +47,7 @@ const MotionTotalsTable: React.FC<MotionTotalsTableProps> = ({
       (a, b) => a.sequence - b.sequence
     );
     return sortedDefinitions.map((definition) =>
-      buildSubtotalRow(definition.code, definition.label)
+      buildSubtotalRow(definition.code, definition.label, definition.code)
     );
   }, [voteDefinition, buildSubtotalRow]);
 
