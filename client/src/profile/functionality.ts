@@ -32,6 +32,9 @@ export const showNewMotionButton = (profile: UserProfile) =>
 export const showMotionActionButtons = (profile: UserProfile) =>
   hasRole(profile, "COMMITTEE");
 
+export const showMotionTotals = (profile: UserProfile) =>
+  hasRole(profile, "COMMITTEE") || hasRole(profile, "TELLOR");
+
 export const showMotionVoting = (profile: UserProfile) =>
   hasRole(profile, "VOTER");
 

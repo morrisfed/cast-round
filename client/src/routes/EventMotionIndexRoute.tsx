@@ -15,7 +15,11 @@ import { MotionVote } from "interfaces/motion-vote";
 import { setMotionVotes } from "events/motion-votes-service";
 import { UserProfile } from "interfaces/user";
 import { useUserProfile } from "components/UserProfileContext";
-import { showMotionVoting, showTellorActions } from "profile/functionality";
+import {
+  showMotionTotals,
+  showMotionVoting,
+  showTellorActions,
+} from "profile/functionality";
 import MotionVoteController from "components/Motion/MotionVoteController";
 import MotionTotalsViewController from "components/Motion/MotionTotalsViewController";
 
@@ -103,7 +107,9 @@ const EventMotionIndexRoute: React.FC = () => {
         />
       ) : null}
 
-      <MotionTotalsViewController motion={motion} />
+      {showMotionTotals(profile) ? (
+        <MotionTotalsViewController motion={motion} />
+      ) : null}
 
       {showTellorActions(profile) ? (
         <div className="card-bordered card bg-base-100 shadow-xl">
