@@ -14,17 +14,18 @@ const MotionTotalsTable: React.FC<MotionTotalsTableProps> = ({
 }) => {
   const buildSubtotalRow = useCallback(
     (responseCode: string, label: string, key: React.Key) => {
-      const nonProxySubtotal = subtotals
+      const nonAdvancedSubtotals = subtotals
         .filter(
           (subtotal) =>
-            subtotal.responseCode === responseCode && subtotal.proxy === false
+            subtotal.responseCode === responseCode &&
+            subtotal.advanced === false
         )
         .map((subtotal) => subtotal.subtotal)
         .reduce((a, b) => a + b, 0);
-      const proxySubtotal = subtotals
+      const advancedSubtotal = subtotals
         .filter(
           (subtotal) =>
-            subtotal.responseCode === responseCode && subtotal.proxy === true
+            subtotal.responseCode === responseCode && subtotal.advanced === true
         )
         .map((subtotal) => subtotal.subtotal)
         .reduce((a, b) => a + b, 0);
@@ -32,9 +33,9 @@ const MotionTotalsTable: React.FC<MotionTotalsTableProps> = ({
       return (
         <tr key={key}>
           <td>{responseCode}</td>
-          <td>{nonProxySubtotal}</td>
-          <td>{proxySubtotal}</td>
-          <td>{nonProxySubtotal + proxySubtotal}</td>
+          <td>{nonAdvancedSubtotals}</td>
+          <td>{advancedSubtotal}</td>
+          <td>{nonAdvancedSubtotals + advancedSubtotal}</td>
           <td>{label}</td>
         </tr>
       );
@@ -58,7 +59,7 @@ const MotionTotalsTable: React.FC<MotionTotalsTableProps> = ({
           <tr>
             <th>Code</th>
             <th>Open</th>
-            <th>Proxy</th>
+            <th>Advanced</th>
             <th>Total</th>
             <th>Label</th>
           </tr>

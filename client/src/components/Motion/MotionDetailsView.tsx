@@ -31,14 +31,14 @@ const MotionDetailsView: React.FC<MotionDetailsViewProps> = ({ motion }) => {
     ),
     []
   );
-  const toProxyStatus = useMemo(
+  const toAdvancedStatus = useMemo(
     () => (
       <button
-        key="proxy"
+        key="advanced"
         className="btn-primary btn"
-        onClick={() => setChangingStatus(O.of("proxy"))}
+        onClick={() => setChangingStatus(O.of("advanced"))}
       >
-        Proxy-Open
+        Advanced-Open
       </button>
     ),
     []
@@ -83,8 +83,8 @@ const MotionDetailsView: React.FC<MotionDetailsViewProps> = ({ motion }) => {
   const statusActions = useMemo(() => {
     switch (motion.status) {
       case "draft":
-        return [toOpenStatus, toProxyStatus, toDiscardedStatus];
-      case "proxy":
+        return [toOpenStatus, toAdvancedStatus, toDiscardedStatus];
+      case "advanced":
         return [toOpenStatus, toCancelledStatus];
       case "open":
         return [toClosedStatus, toCancelledStatus];
@@ -96,7 +96,7 @@ const MotionDetailsView: React.FC<MotionDetailsViewProps> = ({ motion }) => {
     toCancelledStatus,
     toClosedStatus,
     toOpenStatus,
-    toProxyStatus,
+    toAdvancedStatus,
     motion.status,
   ]);
 

@@ -17,11 +17,11 @@ const MotionVoteReadView: React.FC<MotionVoteReadViewProps> = ({
   onEditVotes,
 }) => {
   const votesSubmitted = votes.length > 0;
-  const proxyVoteSubmitted = votesSubmitted && votes[0].proxy;
+  const advancedVoteSubmitted = votesSubmitted && votes[0].advanced;
 
   const title = votesSubmitted
-    ? proxyVoteSubmitted
-      ? "Your proxy vote has been cast"
+    ? advancedVoteSubmitted
+      ? "Your advanced vote has been cast"
       : "Your vote has been cast"
     : "Vote not yet cast";
   const editButtonText = votesSubmitted ? "Change" : "Vote";

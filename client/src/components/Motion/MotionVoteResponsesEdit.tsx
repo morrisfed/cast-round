@@ -29,7 +29,7 @@ const MotionVoteResponsesEdit: React.FC<MotionVoteResponsesEditProps> = ({
         newVotes.push({
           responseCode: code,
           votes: assignedVotes,
-          proxy: false,
+          advanced: false,
         });
       }
       onVotesChanged(newVotes);

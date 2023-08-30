@@ -3,7 +3,7 @@ import { Role } from "./user";
 
 export type MotionStatus =
   | "draft"
-  | "proxy"
+  | "advanced"
   | "open"
   | "closed"
   | "cancelled"

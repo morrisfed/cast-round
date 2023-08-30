@@ -44,7 +44,7 @@ export async function eventMotionAction(
       | undefined;
     switch (motionStatus) {
       case "discarded":
-      case "proxy":
+      case "advanced":
       case "open":
       case "closed":
       case "cancelled":

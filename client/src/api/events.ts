@@ -16,7 +16,7 @@ import { Role } from "interfaces/user";
 
 export type MotionStatusResponse =
   | "draft"
-  | "proxy"
+  | "advanced"
   | "open"
   | "closed"
   | "cancelled"
@@ -43,7 +43,7 @@ type VoteDefinitionResponse = VoteDefinitionResponseSchema1;
 interface MotionVote {
   responseCode: string;
   votes: number;
-  proxy: boolean;
+  advanced: boolean;
 }
 
 interface MotionResponse {
