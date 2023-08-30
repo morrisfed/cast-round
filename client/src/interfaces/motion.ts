@@ -4,6 +4,7 @@ import { Role } from "./user";
 export type MotionStatus =
   | "draft"
   | "advanced"
+  | "hold"
   | "open"
   | "closed"
   | "cancelled"

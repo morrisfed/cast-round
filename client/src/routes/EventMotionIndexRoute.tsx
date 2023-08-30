@@ -45,6 +45,7 @@ export async function eventMotionAction(
     switch (motionStatus) {
       case "discarded":
       case "advanced":
+      case "hold":
       case "open":
       case "closed":
       case "cancelled":

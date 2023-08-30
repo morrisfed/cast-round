@@ -19,6 +19,18 @@ const MotionDetailsView: React.FC<MotionDetailsViewProps> = ({ motion }) => {
     O.none
   );
 
+  const toDraftStatus = useMemo(
+    () => (
+      <button
+        key="discarded"
+        className="btn-primary btn"
+        onClick={() => setChangingStatus(O.of("draft"))}
+      >
+        Draft
+      </button>
+    ),
+    []
+  );
   const toDiscardedStatus = useMemo(
     () => (
       <button
@@ -39,6 +51,18 @@ const MotionDetailsView: React.FC<MotionDetailsViewProps> = ({ motion }) => {
         onClick={() => setChangingStatus(O.of("advanced"))}
       >
         Advanced-Open
+      </button>
+    ),
+    []
+  );
+  const toHoldStatus = useMemo(
+    () => (
+      <button
+        key="hold"
+        className="btn-primary btn"
+        onClick={() => setChangingStatus(O.of("hold"))}
+      >
+        Hold
       </button>
     ),
     []
@@ -85,19 +109,35 @@ const MotionDetailsView: React.FC<MotionDetailsViewProps> = ({ motion }) => {
       case "draft":
         return [toOpenStatus, toAdvancedStatus, toDiscardedStatus];
       case "advanced":
-        return [toOpenStatus, toCancelledStatus];
+        return [toDraftStatus, toHoldStatus, toOpenStatus, toCancelledStatus];
+      case "hold":
+        return [toAdvancedStatus, toOpenStatus, toCancelledStatus];
       case "open":
-        return [toClosedStatus, toCancelledStatus];
+        return [
+          toDraftStatus,
+          toHoldStatus,
+          toAdvancedStatus,
+          toClosedStatus,
+          toCancelledStatus,
+        ];
+      case "cancelled":
+        return [toAdvancedStatus, toHoldStatus, toOpenStatus];
+      case "closed":
+        return [toOpenStatus];
+      case "discarded":
+        return [toDraftStatus];
       default:
         return [];
     }
   }, [
-    toDiscardedStatus,
-    toCancelledStatus,
-    toClosedStatus,
+    motion.status,
     toOpenStatus,
     toAdvancedStatus,
-    motion.status,
+    toDiscardedStatus,
+    toDraftStatus,
+    toHoldStatus,
+    toCancelledStatus,
+    toClosedStatus,
   ]);
 
   const changeStatusDialog = useMemo(
