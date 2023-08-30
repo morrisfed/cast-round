@@ -40,14 +40,14 @@ export interface CreateEventGroupDelegateRequest {
 
 export interface CreateEventGroupDelegateResponse {
   delegateUserId: string;
-  delegateUserLoginUrl: string;
+  delegateUserLoginPath: string;
   eventId: number;
   label: string;
   delegateForAccountUserId: string;
 }
 
 export const getEventGroupDelegate = (
-  eventId: string
+  eventId: string | number
 ): TE.TaskEither<Error | "not-found", EventGroupDelegate> =>
   pipe(
     TE.tryCatch(
@@ -92,6 +92,37 @@ export const createEventGroupDelegate = (
           eventId,
           delegateForAccountUserId,
         }),
+      (reason) => {
+        const error = reason as AxiosError;
+        if (error.response) {
+          if (error.response.status === 403) {
+            return "forbidden";
+          }
+        }
+        return new Error(`${reason}`);
+      }
+    ),
+    TE.map((response) => response.data),
+    TE.map((data) => ({
+      delegateUserId: data.delegateUserId,
+      eventId: data.eventId,
+      label: data.label,
+      delegateForAccountUserId: data.delegateForAccountUserId,
+      delegateUserLoginUrl: `${window.location.origin}${data.delegateUserLoginPath}`,
+    }))
+  );
+};
+
+export const deleteEventGroupDelegate = (
+  eventId: number,
+  delegateForAccountUserId: string
+): TE.TaskEither<Error | "forbidden", undefined> => {
+  return pipe(
+    TE.tryCatch(
+      () =>
+        axios.delete(
+          `/api/delegates/eventgroupdelegates/${eventId}/${delegateForAccountUserId}`
+        ),
       (reason) => {
         const error = reason as AxiosError;
         if (error.response) {

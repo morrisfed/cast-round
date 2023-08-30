@@ -18,10 +18,6 @@ import {
   showEventTellors,
 } from "profile/functionality";
 import {
-  createEventGroupDelegate,
-  getEventGroupDelegate,
-} from "delegates/delegates-service";
-import {
   createEventTellor,
   deleteEventTellor,
   getEventTellors,
@@ -50,28 +46,12 @@ export function eventIndexLoader(
       throw new Error("No event ID provided");
     }
 
-    const delegatePromise = getEventGroupDelegate(eventId)().then(
-      (delegateEither) => {
-        if (E.isLeft(delegateEither)) {
-          if (delegateEither.left === "not-found") {
-            return O.none;
-          } else {
-            throw delegateEither.left;
-          }
-        }
-        return O.of(delegateEither.right);
-      }
-    );
-
-    const combinedPromise = Promise.all([eventPromise, delegatePromise]).then(
-      ([event, eventGroupDelegate]) => ({
-        event,
-        eventGroupDelegate: eventGroupDelegate,
-        showEventGroupDelegate: true,
-        eventTellors: [],
-        showEventTellors: false,
-      })
-    );
+    const combinedPromise = eventPromise.then((event) => ({
+      event,
+      showEventGroupDelegate: true,
+      eventTellors: [],
+      showEventTellors: false,
+    }));
 
     return { eventDetailsPromise: combinedPromise };
   }
@@ -97,7 +77,6 @@ export function eventIndexLoader(
         event,
         eventTellors: tellors,
         showEventTellors: true,
-        eventGroupDelegate: O.none,
         showEventGroupDelegate: false,
       })
     );
@@ -135,9 +114,7 @@ export async function createEventUserAction(
 
   let eventTask;
 
-  if (intent === "create-event-group-delegate") {
-    eventTask = createEventGroupDelegate(eventId, label, profile.id);
-  } else if (intent === "create-event-tellor") {
+  if (intent === "create-event-tellor") {
     eventTask = createEventTellor(eventId, label);
   } else if (intent === "delete-event-tellor") {
     const tellorUserIdStr = formData.get("tellorUserId") as string;
@@ -170,7 +147,6 @@ const EventIndexRoute: React.FC = () => {
       <Await resolve={eventDetailsPromise} errorElement={<LoadingError />}>
         {({
           event,
-          eventGroupDelegate,
           showEventGroupDelegate,
           eventTellors,
           showEventTellors,
@@ -178,7 +154,6 @@ const EventIndexRoute: React.FC = () => {
           <EventView
             event={event}
             showEventGroupDelegate={showEventGroupDelegate}
-            eventGroupDelegateO={eventGroupDelegate}
             showEventTellors={showEventTellors}
             eventTellors={eventTellors}
             refreshHandler={refreshHandler}

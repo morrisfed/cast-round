@@ -4,11 +4,12 @@ import * as TE from "fp-ts/lib/TaskEither";
 import {
   getEventGroupDelegate as apiGetEventGroupDelegate,
   createEventGroupDelegate as apiCreateEventGroupDelegate,
+  deleteEventGroupDelegate as apiDeleteEventGroupDelegate,
 } from "api/delegates";
 import { EventGroupDelegate } from "interfaces/delegates";
 
 export const getEventGroupDelegate = (
-  eventId: string
+  eventId: string | number
 ): TE.TaskEither<Error | "not-found", EventGroupDelegate> => {
   return apiGetEventGroupDelegate(eventId);
 };
@@ -21,4 +22,11 @@ export const createEventGroupDelegate = (
   return pipe(
     apiCreateEventGroupDelegate(eventId, label, delegateForAccountUserId)
   );
+};
+
+export const deleteEventGroupDelegate = (
+  eventId: number,
+  delegateForAccountUserId: string
+) => {
+  return pipe(apiDeleteEventGroupDelegate(eventId, delegateForAccountUserId));
 };
