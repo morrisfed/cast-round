@@ -33,8 +33,8 @@ const MotionTotalsTable: React.FC<MotionTotalsTableProps> = ({
       return (
         <tr key={key}>
           <td>{responseCode}</td>
-          <td>{nonAdvancedSubtotals}</td>
           <td>{advancedSubtotal}</td>
+          <td>{nonAdvancedSubtotals}</td>
           <td>{nonAdvancedSubtotals + advancedSubtotal}</td>
           <td>{label}</td>
         </tr>
@@ -58,8 +58,8 @@ const MotionTotalsTable: React.FC<MotionTotalsTableProps> = ({
         <thead>
           <tr>
             <th>Code</th>
-            <th>Open</th>
             <th>Advanced</th>
+            <th>Live</th>
             <th>Total</th>
             <th>Label</th>
           </tr>
