@@ -39,23 +39,24 @@ const MotionResponseDefinitions: React.FC<MotionResponseDefinitionsProps> = ({
   return (
     <div className="card-bordered card bg-base-100 shadow-xl">
       <div className="card-body">
-        <h2 className="card-title">Configure responses</h2>
+        <div className="card-title flex justify-between">
+          <h1>Configure responses</h1>
+          <button
+            className="btn-primary btn"
+            onClick={(e) => {
+              e.preventDefault();
+              onResponseDefinitionsChanged([
+                ...responseDefinitions,
+                { sequence: 0, code: "AAA", label: "" },
+              ]);
+            }}
+          >
+            Add
+          </button>
+        </div>
         {responseDefinitionElements}
       </div>
-      <div className="card-actions p-4">
-        <button
-          className="btn-primary btn"
-          onClick={(e) => {
-            e.preventDefault();
-            onResponseDefinitionsChanged([
-              ...responseDefinitions,
-              { sequence: 0, code: "AAA", label: "" },
-            ]);
-          }}
-        >
-          Add role votes
-        </button>
-      </div>
+      <div className="card-actions p-4"></div>
     </div>
   );
 };
