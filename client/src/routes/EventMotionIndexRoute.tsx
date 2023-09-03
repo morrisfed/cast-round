@@ -92,6 +92,8 @@ const EventMotionIndexRoute: React.FC = () => {
   const onBehalfUserId =
     profile.groupDelegateInfo?.delegateForGroupId ?? profile.id;
 
+  const roles = profile.groupDelegateInfo?.delegateForRoles ?? profile.roles;
+
   const motion: MotionWithOptionalVotes = useLoaderData() as Awaited<
     ReturnType<typeof eventMotionLoader>
   >;
@@ -103,7 +105,7 @@ const EventMotionIndexRoute: React.FC = () => {
         <MotionVoteController
           motion={motion}
           memberId={onBehalfUserId}
-          roles={profile.roles}
+          roles={roles}
         />
       ) : null}
 

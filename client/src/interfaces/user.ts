@@ -24,6 +24,7 @@ export type UserProfile = {
   groupDelegateInfo?: {
     delegateForGroupId: string;
     delegateForGroupName: string;
+    delegateForRoles: Role[];
     delegateForEventId: string;
   };
   tellorInfo?: {
