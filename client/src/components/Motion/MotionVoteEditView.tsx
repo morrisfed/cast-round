@@ -33,16 +33,14 @@ const MotionVoteEditView: React.FC<MotionVoteEditViewProps> = ({
     <>
       <div className="card-bordered card bg-base-100 shadow-xl">
         <div className="card-body">
-          <div className="flex flex-row gap-4">
-            <div className="truncate">
-              <h2 className="card-title">Cast votes</h2>
-              <MotionVoteResponsesEdit
-                availableVotes={maxPermittedVotes}
-                responses={voteDefinition.responses}
-                votes={votes}
-                onVotesChanged={votesChangedHandler}
-              />
-            </div>
+          <div className="flex flex-col gap-4">
+            <h2 className="card-title">Cast votes</h2>
+            <MotionVoteResponsesEdit
+              availableVotes={maxPermittedVotes}
+              responses={voteDefinition.responses}
+              votes={votes}
+              onVotesChanged={votesChangedHandler}
+            />
           </div>
         </div>
         <div className="card-actions p-4">
