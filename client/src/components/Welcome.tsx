@@ -10,11 +10,11 @@ function Welcome() {
           </p>
           <p className="mb-5">
             To get started, please tap the button below to log in with your
-            Membership Works account.
+            Morris Federation account.
           </p>
           <form action="/api/auth/mw" method="get">
             <button className="btn-primary btn" type="submit">
-              Log in with Membership Works
+              Log in
             </button>
           </form>
         </div>
