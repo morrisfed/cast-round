@@ -22,6 +22,16 @@ const MotionRoleVotesDefinition: React.FC<MotionRoleVotesDefinitionProps> = ({
     [onRoleVotesChanged, roleVotes]
   );
 
+  const roleVoteRemovedHandler = useCallback(
+    (index: number) => {
+      const newRoleVotes = [...roleVotes];
+      newRoleVotes.splice(index, 1);
+
+      onRoleVotesChanged(newRoleVotes);
+    },
+    [onRoleVotesChanged, roleVotes]
+  );
+
   const roleVoteElements = useMemo(() => {
     return roleVotes.map((roleVote, index) => (
       <MotionRoleVoteDefinition
@@ -30,29 +40,30 @@ const MotionRoleVotesDefinition: React.FC<MotionRoleVotesDefinitionProps> = ({
         onRoleVoteChanged={(roleVote) =>
           roleVoteChangedHandler(roleVote, index)
         }
+        onRemoveRoleVote={() => roleVoteRemovedHandler(index)}
       />
     ));
-  }, [roleVoteChangedHandler, roleVotes]);
+  }, [roleVoteChangedHandler, roleVoteRemovedHandler, roleVotes]);
 
   return (
     <div className="card-bordered card bg-base-100 shadow-xl">
       <div className="card-body">
-        <h2 className="card-title">Assign permitted votes to roles</h2>
+        <div className="card-title flex justify-between">
+          <h1>Set votes per role</h1>
+          <button
+            className="btn-primary btn"
+            onClick={(e) => {
+              e.preventDefault();
+              onRoleVotesChanged([
+                ...roleVotes,
+                { role: "ADMINISTRATOR", votes: 0 },
+              ]);
+            }}
+          >
+            Add
+          </button>
+        </div>
         {roleVoteElements}
-      </div>
-      <div className="card-actions p-4">
-        <button
-          className="btn-primary btn"
-          onClick={(e) => {
-            e.preventDefault();
-            onRoleVotesChanged([
-              ...roleVotes,
-              { role: "ADMINISTRATOR", votes: 0 },
-            ]);
-          }}
-        >
-          Add role votes
-        </button>
       </div>
     </div>
   );
