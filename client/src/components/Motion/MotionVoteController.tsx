@@ -90,6 +90,11 @@ const MotionVoteController: React.FC<MotionVoteControllerProps> = ({
     return motion.status !== "draft" && motion.status !== "discarded";
   }, [motion]);
 
+  const canSubmitVotes = useMemo(
+    () => motion.status === "open" || motion.status === "advanced",
+    [motion]
+  );
+
   useEffect(() => {
     if (showMotionControllerView) {
       onRefreshHandler();
@@ -123,6 +128,7 @@ const MotionVoteController: React.FC<MotionVoteControllerProps> = ({
           responses={motion.voteDefinition.responses}
           votes={votes}
           maxPermittedVotes={maxVotesForRoles}
+          enableEdit={canSubmitVotes}
           onEditVotes={onEditHandler}
         />
       </>

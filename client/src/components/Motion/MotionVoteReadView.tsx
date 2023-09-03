@@ -7,6 +7,7 @@ export interface MotionVoteReadViewProps {
   responses: ModelResponseDefinition[];
   maxPermittedVotes: number;
   votes: MotionVote[];
+  enableEdit: boolean;
   onEditVotes: () => void;
 }
 
@@ -14,6 +15,7 @@ const MotionVoteReadView: React.FC<MotionVoteReadViewProps> = ({
   responses,
   maxPermittedVotes,
   votes,
+  enableEdit,
   onEditVotes,
 }) => {
   const votesSubmitted = votes.length > 0;
@@ -72,13 +74,17 @@ const MotionVoteReadView: React.FC<MotionVoteReadViewProps> = ({
           </div>
         </div>
         <div className="card-actions p-4">
-          <button
-            type="button"
-            className="btn-primary btn"
-            onClick={onEditVotes}
-          >
-            {editButtonText}
-          </button>
+          {enableEdit ? (
+            <button
+              type="button"
+              className="btn-primary btn"
+              onClick={onEditVotes}
+            >
+              {editButtonText}
+            </button>
+          ) : (
+            <p>This motion cannot be voted on at this time</p>
+          )}
         </div>
       </div>
     </>
