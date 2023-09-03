@@ -33,7 +33,9 @@ const EventDetails: React.FC<EventItemProps> = ({ event }) => {
           <p>Close: {datetimeFormatter.format(event.toDate)}</p>
           <article className="prose">
             <React.Suspense fallback={<div>Loading...</div>}>
-              <ReactMarkdown>{event.description}</ReactMarkdown>
+              <ReactMarkdown linkTarget="_blank">
+                {event.description}
+              </ReactMarkdown>
             </React.Suspense>
           </article>
         </div>

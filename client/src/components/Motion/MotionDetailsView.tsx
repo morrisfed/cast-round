@@ -185,7 +185,9 @@ const MotionDetailsView: React.FC<MotionDetailsViewProps> = ({ motion }) => {
           <h2 className="card-title">{motion.title}</h2>
           <p>Status: {motion.status}</p>
           <article className="prose">
-            <ReactMarkdown>{motion.description}</ReactMarkdown>
+            <ReactMarkdown linkTarget="_blank">
+              {motion.description}
+            </ReactMarkdown>
           </article>
         </div>
         {showMotionActionButtons(profile) ? (
