@@ -31,6 +31,7 @@ export type ModelVoteDefinition = ModelVoteDefinitionSchema1;
 
 export interface Motion {
   id: number;
+  sequence: number;
   status: MotionStatus;
   title: string;
   description: string;

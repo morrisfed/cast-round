@@ -30,6 +30,7 @@ export async function newEventMotionLoader({ params }: LoaderFunctionArgs) {
 
   const newMotion: BuildableMotion = {
     title: "",
+    sequence: 0,
     description: "",
     voteDefinition: {
       definitionSchemaVersion: 1,
@@ -58,6 +59,7 @@ export async function createEventMotionAction({
 
   const buildableMotion: BuildableMotion = {
     title: formData.get("title") as string,
+    sequence: parseInt(formData.get("sequence") as string),
     description: formData.get("description") as string,
     voteDefinition: JSON.parse(formData.get("voteDefinition") as string),
   };
@@ -91,6 +93,7 @@ export async function updateEventMotionAction({
 
   const motionUpdates: MotionUpdates = {
     title: formData.get("title") as string,
+    sequence: parseInt(formData.get("sequence") as string),
     description: formData.get("description") as string,
     voteDefinition: JSON.parse(formData.get("voteDefinition") as string),
   };
@@ -150,6 +153,19 @@ const EditEventMotionRoute: React.FC = () => {
           placeholder="Title"
           className="input-bordered input"
           defaultValue={motion.title}
+        />
+      </div>
+
+      <div className="form-control w-full">
+        <label className="label">
+          <span className="label-text">Sequence</span>
+        </label>
+        <input
+          name="sequence"
+          type="number"
+          placeholder="Sequence"
+          className="input-bordered input"
+          defaultValue={motion.sequence}
         />
       </div>
 

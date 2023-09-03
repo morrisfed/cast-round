@@ -48,6 +48,7 @@ interface MotionVote {
 
 interface MotionResponse {
   id: number;
+  sequence: number;
   status: MotionStatusResponse;
   title: string;
   description: string;

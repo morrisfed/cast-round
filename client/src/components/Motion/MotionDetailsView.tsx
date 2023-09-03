@@ -184,6 +184,7 @@ const MotionDetailsView: React.FC<MotionDetailsViewProps> = ({ motion }) => {
         <div className="card-body">
           <h2 className="card-title">{motion.title}</h2>
           <p>Status: {motion.status}</p>
+          <p>Sequence: {motion.sequence}</p>
           <article className="prose">
             <ReactMarkdown linkTarget="_blank">
               {motion.description}
