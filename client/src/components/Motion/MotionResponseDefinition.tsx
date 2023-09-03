@@ -7,11 +7,13 @@ export interface MotionResponseDefinitionProps {
   onResponseDefinitionChanged: (
     responseDefinition: ModelResponseDefinition
   ) => void;
+  onRemoveResponseDefinition: () => void;
 }
 
 const MotionResponseDefinition: React.FC<MotionResponseDefinitionProps> = ({
   responseDefinition,
   onResponseDefinitionChanged,
+  onRemoveResponseDefinition,
 }) => {
   return (
     <div className="card-bordered card bg-base-100 shadow-xl">
@@ -59,6 +61,17 @@ const MotionResponseDefinition: React.FC<MotionResponseDefinitionProps> = ({
             }
           />
         </div>
+      </div>
+      <div className="card-actions p-4">
+        <button
+          className="btn"
+          onClick={(e) => {
+            e.preventDefault();
+            onRemoveResponseDefinition();
+          }}
+        >
+          Remove
+        </button>
       </div>
     </div>
   );

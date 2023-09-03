@@ -24,6 +24,16 @@ const MotionResponseDefinitions: React.FC<MotionResponseDefinitionsProps> = ({
     [onResponseDefinitionsChanged, responseDefinitions]
   );
 
+  const removeResponseDefinitionHandler = useCallback(
+    (index: number) => {
+      const newResponseDefinitions = [...responseDefinitions];
+      newResponseDefinitions.splice(index, 1);
+
+      onResponseDefinitionsChanged(newResponseDefinitions);
+    },
+    [onResponseDefinitionsChanged, responseDefinitions]
+  );
+
   const responseDefinitionElements = useMemo(() => {
     return responseDefinitions.map((responseDefinition, index) => (
       <MotionResponseDefinition
@@ -32,9 +42,16 @@ const MotionResponseDefinitions: React.FC<MotionResponseDefinitionsProps> = ({
         onResponseDefinitionChanged={(rd) =>
           responseDefinitionChangedHandler(rd, index)
         }
+        onRemoveResponseDefinition={() =>
+          removeResponseDefinitionHandler(index)
+        }
       />
     ));
-  }, [responseDefinitionChangedHandler, responseDefinitions]);
+  }, [
+    removeResponseDefinitionHandler,
+    responseDefinitionChangedHandler,
+    responseDefinitions,
+  ]);
 
   return (
     <div className="card-bordered card bg-base-100 shadow-xl">
