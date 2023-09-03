@@ -28,16 +28,14 @@ const EventDetails: React.FC<EventItemProps> = ({ event }) => {
     <div className="card-bordered card bg-base-100 shadow-xl">
       <div className="card-body">
         <div className="flex flex-row gap-4">
-          <div className="truncate">
-            <h2 className="card-title">{event.name}</h2>
-            <p>Open: {datetimeFormatter.format(event.fromDate)}</p>
-            <p>Close: {datetimeFormatter.format(event.toDate)}</p>
-            <article className="prose">
-              <React.Suspense fallback={<div>Loading...</div>}>
-                <ReactMarkdown>{event.description}</ReactMarkdown>
-              </React.Suspense>
-            </article>
-          </div>
+          <h2 className="card-title">{event.name}</h2>
+          <p>Open: {datetimeFormatter.format(event.fromDate)}</p>
+          <p>Close: {datetimeFormatter.format(event.toDate)}</p>
+          <article className="prose">
+            <React.Suspense fallback={<div>Loading...</div>}>
+              <ReactMarkdown>{event.description}</ReactMarkdown>
+            </React.Suspense>
+          </article>
         </div>
       </div>
       <div className="card-actions p-4">
