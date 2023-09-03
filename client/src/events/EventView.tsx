@@ -63,11 +63,7 @@ const EventView: React.FC<EventViewProps> = ({
             ) : null}
           </div>
 
-          <MotionList
-            eventId={event.id}
-            motions={event.motions}
-            showMotionDescription={false}
-          />
+          <MotionList motions={event.motions} showMotionDescription={false} />
         </div>
       </div>
     </>

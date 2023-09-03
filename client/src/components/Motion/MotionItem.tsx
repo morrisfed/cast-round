@@ -4,13 +4,11 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { Motion } from "interfaces/motion";
 
 export interface MotionItemProps {
-  eventId: string | number;
   motion: Motion;
   showMotionDescription: boolean;
 }
 
 const MotionItem: React.FC<MotionItemProps> = ({
-  eventId,
   motion,
   showMotionDescription,
 }) => {
