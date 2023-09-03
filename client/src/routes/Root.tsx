@@ -16,10 +16,11 @@ const Root: React.FC = () => {
   }, [checkboxRef]);
 
   const useSideBar = useMemo(() => {
-    // Do not display the sidebar for group delegates or tellors.
+    // Do not display the sidebar for group delegates, tellors or clerks.
     return !(
       profile.roles.includes("GROUP_DELEGATE") ||
-      profile.roles.includes("TELLOR")
+      profile.roles.includes("TELLOR") ||
+      profile.roles.includes("VOTING_CLERK")
     );
   }, [profile]);
 
