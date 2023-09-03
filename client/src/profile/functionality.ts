@@ -46,3 +46,6 @@ export const showEventGroupDelegate = (profile: UserProfile) =>
 
 export const showEventTellors = (profile: UserProfile) =>
   hasRole(profile, "COMMITTEE");
+
+export const showEventClerks = (profile: UserProfile) =>
+  hasRole(profile, "COMMITTEE");

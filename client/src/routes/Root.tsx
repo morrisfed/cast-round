@@ -43,6 +43,15 @@ const Root: React.FC = () => {
       ) {
         navigate(`/events/${profile.tellorInfo?.tellorForEventId}`);
       }
+    } else if (profile.roles.includes("VOTING_CLERK")) {
+      // Ensure the route is related to the clerk's assigned event.
+      if (
+        !location.pathname.startsWith(
+          `/events/${profile.clerkInfo?.clerkForEventId}`
+        )
+      ) {
+        navigate(`/events/${profile.clerkInfo?.clerkForEventId}`);
+      }
     } else if (profile.roles.includes("VOTER")) {
       // Voters can only access the /events route.
       if (!location.pathname.startsWith(`/events`)) {

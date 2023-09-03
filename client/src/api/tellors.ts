@@ -23,7 +23,7 @@ export interface CreateEventTellorRequest {
 
 export interface CreateEventTellorResponse {
   tellorUserId: string;
-  tellorUserLoginUrl: string;
+  tellorUserLoginPath: string;
   eventId: number;
   label: string;
 }
@@ -83,7 +83,13 @@ export const createEventTellor = (
         return new Error(`${reason}`);
       }
     ),
-    TE.map((response) => response.data)
+    TE.map((response) => response.data),
+    TE.map((tellorResponse) => ({
+      tellorUserId: tellorResponse.tellorUserId,
+      tellorUserLoginUrl: `${window.location.origin}${tellorResponse.tellorUserLoginPath}`,
+      eventId: tellorResponse.eventId,
+      label: tellorResponse.label,
+    }))
   );
 };
 

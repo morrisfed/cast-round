@@ -7,12 +7,17 @@ import { Link } from "react-router-dom";
 import { EventTellor } from "interfaces/tellors";
 import EventTellorsView from "tellors/TellorView";
 import EventGroupDelegateController from "delegates/EventGroupDelegateController";
+import EventClerksController, {
+  EventClerksControllerProps,
+} from "components/Clerk/EventClerkController";
 
 interface EventViewProps {
   event: EventWithMotions;
   showEventGroupDelegate: boolean;
   eventTellors: readonly EventTellor[];
   showEventTellors: boolean;
+  showEventClerks: boolean;
+  clerksControllerProps: EventClerksControllerProps;
   refreshHandler: (eventId: number) => void;
 }
 
@@ -21,6 +26,8 @@ const EventView: React.FC<EventViewProps> = ({
   showEventGroupDelegate,
   eventTellors,
   showEventTellors,
+  showEventClerks,
+  clerksControllerProps,
   refreshHandler,
 }) => {
   const profile = useUserProfile();
@@ -38,6 +45,9 @@ const EventView: React.FC<EventViewProps> = ({
           ) : null}
           {showEventTellors ? (
             <EventTellorsView eventTellors={eventTellors} />
+          ) : null}
+          {showEventClerks ? (
+            <EventClerksController {...clerksControllerProps} />
           ) : null}
         </div>
 

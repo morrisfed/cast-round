@@ -11,6 +11,7 @@ export const Role = t.union([
   t.literal("INDIVIDUAL_VOTER"),
   t.literal("VOTER"),
   t.literal("TELLOR"),
+  t.literal("VOTING_CLERK"),
   t.literal("COMMITTEE"),
 ]);
 
@@ -27,5 +28,8 @@ export type UserProfile = {
   };
   tellorInfo?: {
     tellorForEventId: string;
+  };
+  clerkInfo?: {
+    clerkForEventId: string;
   };
 };

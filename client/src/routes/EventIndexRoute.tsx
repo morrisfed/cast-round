@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import {
   ActionFunctionArgs,
   Await,
@@ -16,6 +16,7 @@ import { UserProfile } from "interfaces/user";
 import {
   showEventGroupDelegate,
   showEventTellors,
+  showEventClerks,
 } from "profile/functionality";
 import {
   createEventTellor,
@@ -23,6 +24,12 @@ import {
   getEventTellors,
 } from "tellors/tellor-services";
 import { refreshEvent } from "events/event-service";
+import { useUserProfile } from "components/UserProfileContext";
+import {
+  createEventClerk,
+  deleteEventClerk,
+  getEventClerks,
+} from "clerks/clerks-services";
 
 function LoadingError() {
   return (
@@ -133,6 +140,7 @@ const EventIndexRoute: React.FC = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const profile = useUserProfile();
 
   const refreshHandler = useCallback(
     (eventId: number) => {
@@ -141,6 +149,8 @@ const EventIndexRoute: React.FC = () => {
     },
     [navigate, location]
   );
+
+  const showClerks = useMemo(() => showEventClerks(profile), [profile]);
 
   return (
     <React.Suspense fallback={<div>Loading...</div>}>
@@ -156,6 +166,12 @@ const EventIndexRoute: React.FC = () => {
             showEventGroupDelegate={showEventGroupDelegate}
             showEventTellors={showEventTellors}
             eventTellors={eventTellors}
+            showEventClerks={showClerks}
+            clerksControllerProps={{
+              getClerks: () => getEventClerks(event.id),
+              createClerk: (label) => createEventClerk(event.id, label),
+              deleteClerk: (clerkId) => deleteEventClerk(event.id, clerkId),
+            }}
             refreshHandler={refreshHandler}
           />
         )}
