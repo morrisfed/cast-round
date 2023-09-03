@@ -41,6 +41,9 @@ export const showMotionVoting = (profile: UserProfile) =>
 export const showTellorActions = (profile: UserProfile) =>
   hasRole(profile, "TELLOR");
 
+export const showVotingClerkActions = (profile: UserProfile) =>
+  hasRole(profile, "VOTING_CLERK");
+
 export const showEventGroupDelegate = (profile: UserProfile) =>
   hasRole(profile, "GROUP_MEMBER");
 

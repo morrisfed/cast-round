@@ -18,7 +18,7 @@ import { useUserProfile } from "components/UserProfileContext";
 import {
   showMotionTotals,
   showMotionVoting,
-  showTellorActions,
+  showVotingClerkActions,
 } from "profile/functionality";
 import MotionVoteController from "components/Motion/MotionVoteController";
 import MotionTotalsViewController from "components/Motion/MotionTotalsViewController";
@@ -111,10 +111,10 @@ const EventMotionIndexRoute: React.FC = () => {
         <MotionTotalsViewController motion={motion} />
       ) : null}
 
-      {showTellorActions(profile) ? (
+      {showVotingClerkActions(profile) ? (
         <div className="card-bordered card bg-base-100 shadow-xl">
           <div className="card-body">
-            <h2 className="card-title">Tellor actions</h2>
+            <h2 className="card-title">Voting clerk actions</h2>
           </div>
 
           <div className="card-actions p-4">
