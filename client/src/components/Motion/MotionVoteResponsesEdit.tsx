@@ -25,7 +25,7 @@ const MotionVoteResponsesEdit: React.FC<MotionVoteResponsesEditProps> = ({
   const assignedVotesChangedHandler = useCallback(
     (assignedVotes: number, code: string) => {
       const newVotes = votes.filter((vote) => vote.responseCode !== code);
-      if (assignedVotes > 0) {
+      if (assignedVotes >= 0) {
         newVotes.push({
           responseCode: code,
           votes: assignedVotes,
