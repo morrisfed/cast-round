@@ -34,6 +34,24 @@ const MotionResponseDefinitions: React.FC<MotionResponseDefinitionsProps> = ({
     [onResponseDefinitionsChanged, responseDefinitions]
   );
 
+  const templateSelectChangedHandler = useCallback(
+    (value: string) => {
+      if (value === "For Against Abstain") {
+        onResponseDefinitionsChanged([
+          { sequence: 0, code: "FOR", label: "Votes for" },
+          { sequence: 1, code: "AGAINST", label: "Votes against" },
+          { sequence: 2, code: "ABSTAIN", label: "Abstentions" },
+        ]);
+      }
+    },
+    [onResponseDefinitionsChanged]
+  );
+
+  const showTemplateSelect = useMemo(
+    () => responseDefinitions.length === 0,
+    [responseDefinitions.length]
+  );
+
   const responseDefinitionElements = useMemo(() => {
     return responseDefinitions.map((responseDefinition, index) => (
       <MotionResponseDefinition
@@ -73,7 +91,19 @@ const MotionResponseDefinitions: React.FC<MotionResponseDefinitionsProps> = ({
         </div>
         {responseDefinitionElements}
       </div>
-      <div className="card-actions p-4"></div>
+      <div className="card-actions">
+        {showTemplateSelect ? (
+          <select
+            className="select m-4"
+            onChange={(e) => templateSelectChangedHandler(e.target.value)}
+          >
+            <option disabled selected>
+              Apply template
+            </option>
+            <option>For Against Abstain</option>
+          </select>
+        ) : null}
+      </div>
     </div>
   );
 };
