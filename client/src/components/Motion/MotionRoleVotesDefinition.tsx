@@ -32,6 +32,20 @@ const MotionRoleVotesDefinition: React.FC<MotionRoleVotesDefinitionProps> = ({
     [onRoleVotesChanged, roleVotes]
   );
 
+  const templateSelectChangedHandler = useCallback(
+    (value: string) => {
+      if (value === "Split") {
+        onRoleVotesChanged([
+          { role: "GROUP_MEMBER", votes: 10 },
+          { role: "INDIVIDUAL_MEMBER", votes: 1 },
+        ]);
+      }
+    },
+    [onRoleVotesChanged]
+  );
+
+  const showTemplateSelect = useMemo(() => roleVotes.length === 0, [roleVotes]);
+
   const roleVoteElements = useMemo(() => {
     return roleVotes.map((roleVote, index) => (
       <MotionRoleVoteDefinition
@@ -64,6 +78,19 @@ const MotionRoleVotesDefinition: React.FC<MotionRoleVotesDefinitionProps> = ({
           </button>
         </div>
         {roleVoteElements}
+      </div>
+      <div className="card-actions">
+        {showTemplateSelect ? (
+          <select
+            className="select m-4"
+            onChange={(e) => templateSelectChangedHandler(e.target.value)}
+          >
+            <option disabled selected>
+              Apply template
+            </option>
+            <option>Split</option>
+          </select>
+        ) : null}
       </div>
     </div>
   );
