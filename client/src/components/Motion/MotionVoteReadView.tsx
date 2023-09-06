@@ -18,7 +18,8 @@ const MotionVoteReadView: React.FC<MotionVoteReadViewProps> = ({
   enableEdit,
   onEditVotes,
 }) => {
-  const votesSubmitted = votes.length > 0;
+  const votesSubmitted =
+    votes.map((vote) => vote.votes).reduce((a, b) => a + b, 0) > 0;
   const advancedVoteSubmitted = votesSubmitted && votes[0].advanced;
 
   const title = votesSubmitted
