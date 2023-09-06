@@ -54,6 +54,7 @@ const MotionVoteController: React.FC<MotionVoteControllerProps> = ({
 
   const onCancelHandler = useCallback(() => {
     setClientVotes(votes);
+    setClientVotesDirty(false);
     setView("read");
   }, [votes]);
 
@@ -67,6 +68,7 @@ const MotionVoteController: React.FC<MotionVoteControllerProps> = ({
       setError(true);
     } else {
       setVotes(result.right);
+      setClientVotesDirty(false);
     }
     setLoading(false);
     setView("read");
