@@ -68,14 +68,17 @@ const Root: React.FC = () => {
       }
     } else if (profile.roles.includes("VOTER")) {
       // Voters can only access the /events route. If only one event is available, redirect to it.
-      if (events.length === 1) {
-        if (!location.pathname.startsWith(`/events/${events[0].id}`)) {
-          navigate(`/events/${events[0].id}`);
-        }
-      } else if (location.pathname === "/") {
-        // Redirect to the /events route if currently pointing to the root.
+      if (
+        events.length === 1 &&
+        !location.pathname.startsWith(`/events/${events[0].id}`)
+      ) {
+        navigate(`/events/${events[0].id}`);
+      } else if (!location.pathname.startsWith(`/events`)) {
         navigate("/events");
       }
+    } else if (location.pathname === "/") {
+      // Redirect to the /events route if currently pointing to the root.
+      navigate("/events");
     }
   }, [profile, location, events, navigate]);
 
