@@ -39,7 +39,9 @@ const EventView: React.FC<EventViewProps> = ({
       </button>
       <div className="flex flex-col gap-2">
         <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-          <EventDetails event={event} />
+          <div className="md:col-span-2">
+            <EventDetails event={event} />
+          </div>
           {showEventGroupDelegate ? (
             <EventGroupDelegateController eventId={event.id} />
           ) : null}
