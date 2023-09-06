@@ -37,6 +37,18 @@ const MotionVoteResponsesEdit: React.FC<MotionVoteResponsesEditProps> = ({
     [onVotesChanged, votes]
   );
 
+  const singleVoteMotionResponseSelectedHandler = useCallback(
+    (code: string) => {
+      onVotesChanged([{ responseCode: code, votes: 1, advanced: false }]);
+    },
+    [onVotesChanged]
+  );
+
+  const singleVoteMotion = useMemo(
+    () => availableVotes === 1,
+    [availableVotes]
+  );
+
   const allocatedVotes = useMemo(
     () => votes.map((vote) => vote.votes).reduce((a, b) => a + b, 0),
     [votes]
@@ -48,6 +60,28 @@ const MotionVoteResponsesEdit: React.FC<MotionVoteResponsesEditProps> = ({
   );
 
   const responseElements = useMemo(() => {
+    if (singleVoteMotion) {
+      return responses.map((response) => {
+        const assignedVotes = assignedVotesForCode(response.code);
+        return (
+          <div className="form-control" key={response.code}>
+            <label className="label cursor-pointer justify-normal gap-4">
+              <input
+                type="radio"
+                name={response.code}
+                className="radio checked:bg-blue-500"
+                checked={assignedVotes > 0}
+                onChange={() => {
+                  singleVoteMotionResponseSelectedHandler(response.code);
+                }}
+              />
+              <span className="text-left">{response.label}</span>
+            </label>
+          </div>
+        );
+      });
+    }
+
     return responses.map((response) => {
       const assignedVotes = assignedVotesForCode(response.code);
       return (
@@ -65,24 +99,29 @@ const MotionVoteResponsesEdit: React.FC<MotionVoteResponsesEditProps> = ({
     assignedVotesChangedHandler,
     assignedVotesForCode,
     responses,
+    singleVoteMotion,
     unallocatedVotes,
   ]);
 
-  return (
-    <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-2 gap-1">
-        <span className="">Available votes</span>
-        <span>{availableVotes}</span>
-        <span className="">Allocated votes</span>
-        <span>{allocatedVotes}</span>
-        <span className="">Unallocated votes</span>
-        <span>{unallocatedVotes}</span>
+  if (singleVoteMotion) {
+    return <div className="flex flex-col gap-4">{responseElements}</div>;
+  } else {
+    return (
+      <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-2 gap-1">
+          <span className="">Available votes</span>
+          <span>{availableVotes}</span>
+          <span className="">Allocated votes</span>
+          <span>{allocatedVotes}</span>
+          <span className="">Unallocated votes</span>
+          <span>{unallocatedVotes}</span>
+        </div>
+        <div className="grid grid-cols-[30px_50px_30px_minmax(100px,_1fr)] gap-1">
+          {responseElements}
+        </div>
       </div>
-      <div className="grid grid-cols-[30px_50px_30px_minmax(100px,_1fr)] gap-1">
-        {responseElements}
-      </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default MotionVoteResponsesEdit;
