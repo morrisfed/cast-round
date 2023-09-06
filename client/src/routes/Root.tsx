@@ -2,6 +2,7 @@ import Breadcrumbs from "components/Breadcrumbs";
 import Navbar from "components/Navbar";
 import SideBar from "components/SideBar";
 import { useUserProfile } from "components/UserProfileContext";
+import { useEvents } from "events/EventsContext";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
@@ -9,6 +10,7 @@ const Root: React.FC = () => {
   const profile = useUserProfile();
   const location = useLocation();
   const navigate = useNavigate();
+  const events = useEvents();
   const checkboxRef = useRef<HTMLInputElement>(null);
 
   const onSideBarItemSelected = useCallback(() => {
@@ -17,12 +19,23 @@ const Root: React.FC = () => {
 
   const useSideBar = useMemo(() => {
     // Do not display the sidebar for group delegates, tellors or clerks.
-    return !(
+    // Always display the sidebar for committee members.
+    // In other cases, only show the sidebar if there is more than one event.
+
+    if (
       profile.roles.includes("GROUP_DELEGATE") ||
       profile.roles.includes("TELLOR") ||
       profile.roles.includes("VOTING_CLERK")
-    );
-  }, [profile]);
+    ) {
+      return false;
+    }
+
+    if (profile.roles.includes("COMMITTEE")) {
+      return true;
+    }
+
+    return events.length > 1;
+  }, [events.length, profile.roles]);
 
   // Apply any redirection if necessary according to the user's role.
   useEffect(() => {
