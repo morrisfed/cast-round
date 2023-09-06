@@ -47,6 +47,7 @@ export async function eventMotionAction(
       | TE.TaskEither<Error | "forbidden", MotionStatus>
       | undefined;
     switch (motionStatus) {
+      case "draft":
       case "discarded":
       case "advanced":
       case "hold":
