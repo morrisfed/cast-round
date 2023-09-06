@@ -58,21 +58,39 @@ const MotionVoteController: React.FC<MotionVoteControllerProps> = ({
     setView("read");
   }, [votes]);
 
-  const onSubmitHandler = useCallback(async () => {
-    setLoading(true);
-    setError(false);
-    const setMotionVotesTask = setMotionVotes(motion.id, memberId, clientVotes);
-    const result = await setMotionVotesTask();
+  const submitVotes = useCallback(
+    async (submitableVotes: MotionVote[]) => {
+      setLoading(true);
+      setError(false);
+      const setMotionVotesTask = setMotionVotes(
+        motion.id,
+        memberId,
+        submitableVotes
+      );
+      const result = await setMotionVotesTask();
 
-    if (E.isLeft(result)) {
-      setError(true);
-    } else {
-      setVotes(result.right);
-      setClientVotesDirty(false);
-    }
-    setLoading(false);
-    setView("read");
-  }, [clientVotes, memberId, motion.id]);
+      if (E.isLeft(result)) {
+        setError(true);
+      } else {
+        setVotes(result.right);
+        setClientVotes(result.right);
+        setClientVotesDirty(false);
+      }
+      setLoading(false);
+      setView("read");
+    },
+    [memberId, motion.id]
+  );
+
+  const onSubmitHandler = useCallback(
+    async () => submitVotes(clientVotes),
+    [clientVotes, submitVotes]
+  );
+
+  const onWithdrawHandler = useCallback(
+    () => submitVotes(votes.map((vote) => ({ ...vote, votes: 0 }))),
+    [submitVotes, votes]
+  );
 
   const maxVotesForRole = useCallback(
     (role: Role) =>
@@ -95,6 +113,11 @@ const MotionVoteController: React.FC<MotionVoteControllerProps> = ({
   const canSubmitVotes = useMemo(
     () => motion.status === "open" || motion.status === "advanced",
     [motion]
+  );
+
+  const votesExist = useMemo(
+    () => votes.map((vote) => vote.votes).reduce((a, b) => a + b, 0) > 0,
+    [votes]
   );
 
   useEffect(() => {
@@ -143,9 +166,11 @@ const MotionVoteController: React.FC<MotionVoteControllerProps> = ({
         votes={clientVotes}
         maxPermittedVotes={maxVotesForRoles}
         enableSubmitButton={clientVotesDirty}
+        enableWithdrawButton={votesExist}
         onVotesChanged={onVotesChangedHandler}
         onSubmit={onSubmitHandler}
         onCancel={onCancelHandler}
+        onWithdraw={onWithdrawHandler}
       />
     </>
   );
