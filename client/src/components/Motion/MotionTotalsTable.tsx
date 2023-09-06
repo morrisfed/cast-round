@@ -12,7 +12,7 @@ const MotionTotalsTable: React.FC<MotionTotalsTableProps> = ({
   voteDefinition,
   subtotals,
 }) => {
-  const buildSubtotalRow = useCallback(
+  const buildResponseRow = useCallback(
     (responseCode: string, label: string, key: React.Key) => {
       const nonAdvancedSubtotals = subtotals
         .filter(
@@ -43,14 +43,36 @@ const MotionTotalsTable: React.FC<MotionTotalsTableProps> = ({
     [subtotals]
   );
 
+  const subTotalRow = useMemo(() => {
+    const nonAdvancedSubtotals = subtotals
+      .filter((subtotal) => subtotal.advanced === false)
+      .map((subtotal) => subtotal.subtotal)
+      .reduce((a, b) => a + b, 0);
+    const advancedSubtotal = subtotals
+      .filter((subtotal) => subtotal.advanced === true)
+      .map((subtotal) => subtotal.subtotal)
+      .reduce((a, b) => a + b, 0);
+
+    return (
+      <tr key="totals">
+        <td>TOTAL</td>
+        <td>{advancedSubtotal}</td>
+        <td>{nonAdvancedSubtotals}</td>
+        <td>{nonAdvancedSubtotals + advancedSubtotal}</td>
+        <td>Total</td>
+      </tr>
+    );
+  }, [subtotals]);
+
   const rows = useMemo(() => {
     const sortedDefinitions = voteDefinition.responses.sort(
       (a, b) => a.sequence - b.sequence
     );
-    return sortedDefinitions.map((definition) =>
-      buildSubtotalRow(definition.code, definition.label, definition.code)
+    const responseRows = sortedDefinitions.map((definition) =>
+      buildResponseRow(definition.code, definition.label, definition.code)
     );
-  }, [voteDefinition, buildSubtotalRow]);
+    return [...responseRows, subTotalRow];
+  }, [voteDefinition.responses, subTotalRow, buildResponseRow]);
 
   const table = useMemo(() => {
     return (
