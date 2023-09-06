@@ -125,11 +125,11 @@ const EventTellorsView: React.FC<EventTellorsViewProps> = ({
         <div className="flex flex-col gap-4">
           {eventTellors.length === 0 ? null : (
             <>
-              <h2 className="card-title">Event tellors</h2>
+              <h2 className="card-title">Event tellers</h2>
               <EventTellorsGrid eventTellors={eventTellors} />
             </>
           )}
-          <h2 className="card-title">Create new event tellor</h2>
+          <h2 className="card-title">Create new event teller</h2>
           <NewEventTellorView />
         </div>
       </div>
