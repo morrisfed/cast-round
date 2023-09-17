@@ -26,14 +26,14 @@ const MotionList: React.FC<MotionListProps> = ({ motions }) => {
   const items = useMemo(() => {
     return sortedMotions.map((motion) => {
       return (
-        <div key={motion.id} className="grow sm:w-80">
+        <div key={motion.id} className="">
           <MotionItem motion={motion} />
         </div>
       );
     });
   }, [sortedMotions]);
 
-  return <div className="flex flex-row flex-wrap gap-2">{items}</div>;
+  return <div className="grid grid-cols-1 gap-2 md:grid-cols-2">{items}</div>;
 };
 
 export default MotionList;
