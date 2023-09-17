@@ -10,6 +10,9 @@ const MotionItem: React.FC<MotionItemProps> = ({ motion }) => {
   return (
     <Link to={`${motion.id}`}>
       <div className="card-bordered card bg-base-100 shadow-xl">
+        <div className="absolute right-0">
+          <div className="badge-ghost badge m-2">{motion.status}</div>
+        </div>
         <div className="card-body">
           <div className="flex flex-row gap-4">
             <div className="truncate">
