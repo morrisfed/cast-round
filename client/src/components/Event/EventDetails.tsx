@@ -12,15 +12,6 @@ export interface EventItemProps {
   event: Event;
 }
 
-const datetimeFormatter = Intl.DateTimeFormat(undefined, {
-  weekday: "short",
-  year: "numeric",
-  month: "short",
-  day: "2-digit",
-  hour: "2-digit",
-  minute: "2-digit",
-});
-
 const EventDetails: React.FC<EventItemProps> = ({ event }) => {
   const profile = useUserProfile();
 
@@ -29,8 +20,6 @@ const EventDetails: React.FC<EventItemProps> = ({ event }) => {
       <div className="card-body">
         <div className="flex flex-col gap-4">
           <h2 className="card-title">{event.name}</h2>
-          <p>Open: {datetimeFormatter.format(event.fromDate)}</p>
-          <p>Close: {datetimeFormatter.format(event.toDate)}</p>
           <article className="prose">
             <React.Suspense fallback={<div>Loading...</div>}>
               <ReactMarkdown linkTarget="_blank">
