@@ -135,7 +135,7 @@ const EditEventRoute: React.FC = () => {
         />
 
         <label className="label">
-          <span className="label-text">From date</span>
+          <span className="label-text">Visible from date</span>
         </label>
         <input
           name="fromDate"
@@ -145,7 +145,7 @@ const EditEventRoute: React.FC = () => {
         />
 
         <label className="label">
-          <span className="label-text">To date</span>
+          <span className="label-text">Visibile to date</span>
         </label>
         <input
           name="toDate"
