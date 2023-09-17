@@ -33,7 +33,7 @@ const EventMotions: React.FC = () => {
     throw new Error("No event ID provided");
   }
 
-  return <MotionList motions={motions} showMotionDescription={false} />;
+  return <MotionList motions={motions} />;
 };
 
 export default EventMotions;

@@ -10,7 +10,6 @@ import MotionItem from "./MotionItem";
 
 export interface MotionListProps {
   motions: readonly Motion[];
-  showMotionDescription: boolean;
 }
 
 const motionSequence = pipe(
@@ -18,10 +17,7 @@ const motionSequence = pipe(
   ORD.contramap((motion: Motion) => motion.sequence)
 );
 
-const MotionList: React.FC<MotionListProps> = ({
-  motions,
-  showMotionDescription,
-}) => {
+const MotionList: React.FC<MotionListProps> = ({ motions }) => {
   const sortedMotions = useMemo(
     () => ROA.sort(motionSequence)(motions),
     [motions]
@@ -31,14 +27,11 @@ const MotionList: React.FC<MotionListProps> = ({
     return sortedMotions.map((motion) => {
       return (
         <div key={motion.id} className="grow sm:w-80">
-          <MotionItem
-            motion={motion}
-            showMotionDescription={showMotionDescription}
-          />
+          <MotionItem motion={motion} />
         </div>
       );
     });
-  }, [showMotionDescription, sortedMotions]);
+  }, [sortedMotions]);
 
   return <div className="flex flex-row flex-wrap gap-2">{items}</div>;
 };
