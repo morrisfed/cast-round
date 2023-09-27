@@ -34,10 +34,12 @@ const EventView: React.FC<EventViewProps> = ({
 
   return (
     <>
-      <button className="btn" onClick={() => refreshHandler(event.id)}>
-        Refresh
-      </button>
       <div className="flex flex-col gap-2">
+        <div className="text-right">
+          <button className="btn" onClick={() => refreshHandler(event.id)}>
+            Refresh event
+          </button>
+        </div>
         <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
           <div className="md:col-span-2">
             <EventDetails event={event} />
@@ -66,6 +68,12 @@ const EventView: React.FC<EventViewProps> = ({
           </div>
 
           <MotionList motions={event.motions} />
+
+          <div className="text-right">
+            <button className="btn" onClick={() => refreshHandler(event.id)}>
+              Refresh event
+            </button>
+          </div>
         </div>
       </div>
     </>
