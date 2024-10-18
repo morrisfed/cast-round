@@ -8,7 +8,7 @@ on:
 
 jobs:
   build_and_deploy:
-    name: Build and Deploy the Cast Round Web and API servers.
+    name: Build and Deploy the TEST Cast Round Web and API servers.
     runs-on: ubuntu-latest
     env:
       HOSTING_APP_INSTALL_DIRECTORY: ${{ vars.TEST_HOSTING_APP_INSTALL_DIRECTORY }}
@@ -19,12 +19,12 @@ jobs:
       HOSTING_WEB_INSTALL_DIRECTORY: ${{ vars.TEST_HOSTING_WEB_INSTALL_DIRECTORY }}
       MYSQL_DATABASE: ${{ vars.TEST_MYSQL_DATABASE }}
       MYSQL_USER: ${{ vars.TEST_MYSQL_USER }}
-      MYSQL_PASSWORD: ${{ vars.TEST_MYSQL_PASSWORD }}
+      MYSQL_PASSWORD: ${{ secrets.TEST_MYSQL_PASSWORD }}
       MYSQL_HOST: ${{ vars.TEST_MYSQL_HOST }}
       MYSQL_PORT: ${{ vars.TEST_MYSQL_PORT }}
-      SESSION_SECRET: ${{ vars.TEST_SESSION_SECRET }}
+      SESSION_SECRET: ${{ secrets.TEST_SESSION_SECRET }}
       MW_OAUTH2_CLIENT_ID: ${{ vars.TEST_MW_OAUTH2_CLIENT_ID }}
-      MW_OAUTH2_CLIENT_SECRET: ${{ vars.TEST_MW_OAUTH2_CLIENT_SECRET }}
+      MW_OAUTH2_CLIENT_SECRET: ${{ secrets.TEST_MW_OAUTH2_CLIENT_SECRET }}
       MW_OAUTH2_CALLBACK_URL: ${{ vars.TEST_MW_OAUTH2_CALLBACK_URL }}
       ADMIN_MW_LABEL_ID: ${{ vars.TEST_ADMIN_MW_LABEL_ID }}
 
