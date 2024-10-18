@@ -172,6 +172,12 @@ jobs:
           END
           EOF
 
+      - name: Create log directory
+        run: |
+          ssh hosting <<EOF
+          mkdir "$HOSTING_APP_INSTALL_DIRECTORY/logs"
+          EOF
+
       - name: Install modules and start the node app
         run: |
           ssh hosting <<EOF
