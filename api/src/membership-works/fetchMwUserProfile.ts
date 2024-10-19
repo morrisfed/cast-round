@@ -30,11 +30,11 @@ export type MwProfileParseError = {
 export function isMwUnrecognisedMembershipType(
   err: any
 ): err is MwUnrecognisedMembershipType {
-  return err.tag === "mw-unrecognised-membership-type";
+  return err?.tag === "mw-unrecognised-membership-type";
 }
 
 export function isMwProfileParseError(err: any): err is MwProfileParseError {
-  return err.tag === "mw-profile-parse-error";
+  return err?.tag === "mw-profile-parse-error";
 }
 
 interface MembershipWorksMembershipType {
