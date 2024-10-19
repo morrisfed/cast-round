@@ -9,7 +9,7 @@
     "url": "https://github.com/morrisfed/cast-round-client"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "tsc && vite build",
     "serve": "vite preview",
     "test": "vitest",
