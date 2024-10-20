@@ -1,13 +1,20 @@
 {
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "prettier.prettierPath": "./node_modules/prettier",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
   "eslint.lintTask.enable": true,
-  "typescript.tsdk": "node_modules/typescript/lib",
   "jest.virtualFolders": [
     {
       "name": "api-unit-tests",
       "rootPath": "api",
       "jestCommandLine": "npm run test --"
     }
-  ]
+  ],
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
 }
