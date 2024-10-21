@@ -11,15 +11,15 @@ services:
     volumes:
       - db_data:/var/lib/mysql
     environment:
-      MARIADB_DATABASE: "${DB_NAME}"
-      MARIADB_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
+      MARIADB_DATABASE: "crdev"
+      MARIADB_ROOT_PASSWORD: "crdevpassword"
 
   pma:
     image: phpmyadmin/phpmyadmin
     environment:
       PMA_HOST: db
       PMA_PORT: 3306
-      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "crdevpassword"
     ports:
       - 8080:80
     links:
