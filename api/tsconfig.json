@@ -8,7 +8,13 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "allowJs": true
   },
-  "include": ["./*.js", "src/**/*.ts", "test/**/*.ts"]
+  "include": [
+    "./*.js",
+    "src/persistence/db/**/*.js",
+    "src/**/*.ts",
+    "test/**/*.ts"
+  ]
 }

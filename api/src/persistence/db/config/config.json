@@ -1,0 +1,10 @@
+{
+  "development": {
+    "username": "root",
+    "password": "crdevpassword",
+    "database": "crdev",
+    "host": "host.docker.internal",
+    "port": 3306,
+    "dialect": "mysql"
+  }
+}

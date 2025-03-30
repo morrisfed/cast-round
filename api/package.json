@@ -7,7 +7,8 @@
     "start": "ts-node src/index.ts",
     "dev": "env-cmd --file .env.dev nodemon --exec 'node --inspect -r ts-node/register src/index.ts'",
     "build": "tsc",
-    "lint": "eslint --fix src"
+    "lint": "eslint --fix src",
+    "dbMigrate": "node dist/persistence/db/migrate.js"
   },
   "keywords": [],
   "author": "Daniel Watford (https://watfordconsulting.com/)",
@@ -38,6 +39,7 @@
     "passport-oauth2": "^1.7.0",
     "passport-unique-token": "^3.0.0",
     "sequelize": "^6.31.0",
+    "umzug": "^3.8.2",
     "winston": "^3.8.2"
   },
   "devDependencies": {

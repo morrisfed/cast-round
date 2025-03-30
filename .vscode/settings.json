@@ -16,5 +16,6 @@
   ],
   "files.associations": {
     "*.css": "tailwindcss"
-  }
+  },
+  "eslint.workingDirectories": ["api", "frontend"]
 }

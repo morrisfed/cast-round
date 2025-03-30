@@ -178,9 +178,36 @@ jobs:
           mkdir "$HOSTING_APP_INSTALL_DIRECTORY/logs"
           EOF
 
-      - name: Install modules and start the node app
+      - name: Install modules, run the database migrations and start the node app
         run: |
           ssh hosting <<EOF
-          /usr/sbin/cloudlinux-selector install-modules --json --interpreter nodejs --app-root $HOSTING_APP_INSTALL_DIRECTORY
-          /usr/sbin/cloudlinux-selector start --json --interpreter nodejs --app-root $HOSTING_APP_INSTALL_DIRECTORY
+          set -e
+          
+          # Install the node modules
+          installModulesOutput=\$(/usr/sbin/cloudlinux-selector install-modules --json --interpreter nodejs --app-root $HOSTING_APP_INSTALL_DIRECTORY)
+          installModulesStatus=\$(echo "\$installModulesOutput" | jq --raw-output '.result')
+          if [ "\$installModulesStatus" != "success" ]; then
+            echo "Failed to install modules"
+            echo "\$installModulesOutput"
+            exit 1
+          fi
+
+          # Run the database migrations
+          dbMigrationsOutput=\$(/usr/sbin/cloudlinux-selector run-script --json --interpreter nodejs --app-root $HOSTING_APP_INSTALL_DIRECTORY --script-name dbMigrate)
+          dbMigrationsStatus=\$(echo "\$dbMigrationsOutput" | jq --raw-output '.result')
+          if [ "\$dbMigrationsStatus" != "success" ]; then
+            echo "Failed to run database migrations"
+            echo "\$dbMigrationsOutput"
+            exit 1
+          fi
+
+          # Start the node app
+          startAppOutput=\$(/usr/sbin/cloudlinux-selector start --json --interpreter nodejs --app-root $HOSTING_APP_INSTALL_DIRECTORY)
+          startAppStatus=\$(echo "\$startAppOutput" | jq --raw-output '.result')
+          if [ "\$startAppStatus" != "success" ]; then
+            echo "Failed to start the node app"
+            echo "\$startAppOutput"
+            exit 1
+          fi
+
           EOF
