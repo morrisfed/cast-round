@@ -16,6 +16,7 @@ import { PersistedEventTellor, initEventTellor } from "./event-tellors";
 import { PersistedMotionVote, initMotionVote } from "./motion-votes";
 import { PersistedEventClerk, initEventClerk } from "./event-clerks";
 import { initMotionVoteAudit } from "./motion-vote-audits";
+import { initDbPersistenceModel } from "../../persistence/db/models";
 
 const sequelize = new Sequelize(
   env.MYSQL_DATABASE,
@@ -30,6 +31,9 @@ const sequelize = new Sequelize(
 );
 
 export const initDb = async () => {
+
+  initDbPersistenceModel(sequelize);
+
   initUser(sequelize);
   initEvent(sequelize);
   initMotion(sequelize);
@@ -171,7 +175,6 @@ export const initDb = async () => {
     targetKey: "id",
   });
 
-  await sequelize.sync({ alter: true });
 };
 
 export const createDbTransaction = () => sequelize.transaction();

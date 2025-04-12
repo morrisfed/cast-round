@@ -1,8 +1,8 @@
-import * as path from "path";
 import { Sequelize } from "sequelize";
 import { Umzug, SequelizeStorage } from "umzug";
 import env from "../../utils/env";
 import logger from "../../utils/logging";
+import migrations from "./migrations";
 
 const sequelize = new Sequelize(
   env.MYSQL_DATABASE,
@@ -16,26 +16,11 @@ const sequelize = new Sequelize(
   }
 );
 
-const umzug = new Umzug({
-  migrations: {
-    glob: path.join(__dirname, "/migrations/*.js"),
-    resolve: ({ name, path: migrationJsFilePath, context }) => ({
-        name,
-        up: async () => {
-          const migration = await import(migrationJsFilePath!);
-          return migration.up(context, Sequelize);
-        } ,
-        down: async () => {
-          const migration = await import(migrationJsFilePath!);
-          return migration.down(context, Sequelize)
-        },
-      }),
-  },
+export const umzug = new Umzug({
+  migrations,
   context: sequelize.getQueryInterface(),
   storage: new SequelizeStorage({ sequelize }),
   logger: console,
 });
 
-logger.info("Running migrations...");
-umzug.up();
-logger.info("Migrations done");
+umzug.runAsCLI();
