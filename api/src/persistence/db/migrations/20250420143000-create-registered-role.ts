@@ -2,9 +2,9 @@ import { DataTypes, QueryInterface } from "sequelize";
 import { RunnableMigration } from "umzug";
 
 export default {
-  name: "20250405201727-create-registered-role",
+  name: "20250420143000-create-registered-role",
   up: async ({ context: queryInterface }) => {
-    await queryInterface.createTable("idrRegisteredRoles", {
+    await queryInterface.createTable("urRegisteredRoles", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,6 +12,9 @@ export default {
         type: DataTypes.INTEGER,
       },
       name: {
+        type: DataTypes.STRING,
+      },
+      appId: {
         type: DataTypes.STRING,
       },
       createdAt: {
@@ -25,6 +28,6 @@ export default {
     });
   },
   down: async ({ context: queryInterface }) => {
-    await queryInterface.dropTable("idrRegisteredRoles");
+    await queryInterface.dropTable("urRegisteredRoles");
   },
 } as RunnableMigration<QueryInterface>;

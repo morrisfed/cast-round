@@ -12,12 +12,13 @@ export const initRegisteredRole = (sequelize: Sequelize) =>
   RegisteredRole.init(
     {
       name: DataTypes.STRING,
+      appId: DataTypes.STRING,
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
     },
     {
       sequelize,
       modelName: "RegisteredRole",
-      tableName: "idrRegisteredRoles",
+      tableName: "urRegisteredRoles",
     }
   );

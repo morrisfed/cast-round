@@ -1,7 +1,7 @@
 {
-  "name": "demo-deploy-webapp-to-cpanel",
+  "name": "deploy-castround-to-cpanel",
   "version": "0.1.0",
-  "description": "Demonstration of deploying a webapp to cPanel, using GitHub Workflow",
+  "description": "Deployment of Cast Round to cPanel, using GitHub Workflow",
   "author": "",
   "license": "ISC",
   "devDependencies": {
