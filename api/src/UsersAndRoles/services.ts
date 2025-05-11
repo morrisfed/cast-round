@@ -6,16 +6,18 @@ import { User } from "./types";
 export const createUserService = (
   userType: "mwAccount" | "link",
   displayName: string,
-  roles: { name: string; appId: string }[]
+  rolesAppId: string,
+  roleNames: readonly string[]
 ) =>
   Effect.sync(() => randomUUID()).pipe(
     Effect.andThen((userId) =>
       createUser(
         userType,
         displayName,
-        roles
+        rolesAppId,
+        roleNames
       )(userId).pipe(
-        Effect.andThen(dbUser => Schema.decodeUnknown(User)(dbUser)),
+        Effect.andThen((dbUser) => Schema.decodeUnknown(User)(dbUser)),
         Effect.catchTag("ParseError", (err) =>
           Effect.fail(
             new Error(

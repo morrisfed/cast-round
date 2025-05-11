@@ -1,7 +1,6 @@
 import express from "express";
 import nocache from "nocache";
 
-import { getRoles } from "../user/permissions";
 import ProfileResponse from "./interfaces/ProfileResponse";
 import { getFrontEndFeatureFlags } from "../utils/feature-flags";
 
@@ -13,7 +12,7 @@ profileRouter.get<{}, ProfileResponse>("/", nocache(), (req, res) => {
       profile: {
         id: req.user.loggedInUser.userId,
         name: req.user.loggedInUser.displayName,
-        roles: [],
+        roles: []
       },
       frontEndFeatureFlags: getFrontEndFeatureFlags(),
     });

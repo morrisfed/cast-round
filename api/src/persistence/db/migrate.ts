@@ -1,7 +1,6 @@
 import { Sequelize } from "sequelize";
 import { Umzug, SequelizeStorage } from "umzug";
 import env from "../../utils/env";
-import logger from "../../utils/logging";
 import migrations from "./migrations";
 
 const sequelize = new Sequelize(

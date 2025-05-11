@@ -11,15 +11,7 @@ import nocache from "nocache";
 import { URLSearchParams } from "url";
 import { Effect } from "effect";
 import env from "../utils/env";
-import { fetchUserInfoForMwAccessToken } from "../membership-works/mwUserInfo";
-import { importUsers } from "../user/importUsers";
-import { User as AppUser, LoggedInUser } from "../interfaces/users";
 import { User as URUser } from "../UsersAndRoles/types";
-import {
-  isMwProfileParseError,
-  isMwUnrecognisedMembershipType,
-} from "../membership-works/fetchMwUserProfile";
-import { getLinkUser, getUser } from "../user/userInfo";
 import { wrapWithTransaction } from "../persistence/db/transaction";
 import { loginMwUser } from "../membership-works-users/application";
 import { getUserService } from "../UsersAndRoles/services";
@@ -122,7 +114,9 @@ passport.deserializeUser<SessionUser>(({ userId, authVia }, done) => {
     Effect.andThen(userInfoToExpressUser(authVia)),
     Effect.andThen((expressUser) => done(null, expressUser)),
     Effect.catchTag("NoSuchElementException", () =>
-      Effect.sync(() => done(new Error(`User not found for User ID: ${userId}`)))
+      Effect.sync(() =>
+        done(new Error(`User not found for User ID: ${userId}`))
+      )
     )
   );
 
@@ -151,17 +145,8 @@ authRoute.get(
   },
   (err: any, req: Request, res: Response, next: NextFunction) => {
     const cause = err?.cause;
-    if (isMwProfileParseError(cause)) {
-      const parseErrorCause = cause.cause;
-      if (isMwUnrecognisedMembershipType(parseErrorCause)) {
-        const msg = `Unrecognised membership type ID ${parseErrorCause.deckId} for member ${cause.name} with account ID ${cause.accountId}.`;
-        const searchParams = new URLSearchParams();
-        searchParams.append("error", "login-failed");
-        searchParams.append("errorMessage", msg);
-        res.redirect(`/?${searchParams.toString()}`);
-      } else {
-        res.redirect("/?error=login-failed");
-      }
+    if (cause) {
+      res.redirect("/?error=login-failed");
     } else {
       next(err);
     }

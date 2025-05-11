@@ -1,15 +1,15 @@
 import { Effect } from "effect";
 import app from "./app";
-import { initDb } from "./model/db";
 import { registerRolesForApplication } from "./UsersAndRoles/api";
 import logger from "./utils/logging";
 import { domainEventsBackendDaemon } from "./services/domain-events/backend";
 import { initUsersAndRoles } from "./UsersAndRoles/init";
 import { initDomainEventsService } from "./services/domain-events/init";
+import { initDbPersistenceModel } from "./persistence/db/models";
 
 const main = async () => {
-  logger.info("Initialising database. Running database migrations...");
-  await initDb();
+  logger.info("Initialising database...");
+  await initDbPersistenceModel();
 
   const program = Effect.gen(function* programGenerator() {
     yield* initDomainEventsService();

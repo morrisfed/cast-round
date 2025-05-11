@@ -1,6 +1,6 @@
 import { Effect, Exit, Scope } from "effect";
 import { SequelizeTransaction } from "./SequelizeTransaction";
-import sequelize from "../../model/db";
+import { sequelize } from "./models";
 
 export const wrapWithTransaction = <A, E = never, R = never>(
   effect: Effect.Effect<A, E, R | SequelizeTransaction>

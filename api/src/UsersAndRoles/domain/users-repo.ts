@@ -1,16 +1,57 @@
-import { Effect, Option } from "effect";
+import { Array, Effect, Equivalence, Option, Order, Data, Equal } from "effect";
 import { User } from "../../persistence/db/models/User";
 import { SequelizeTransaction } from "../../persistence/db/SequelizeTransaction";
+import { RoleDefinition, RolesCollection } from "../types";
+
+const appRolesToRolesCollection = (
+  rolesAppId: string,
+  roleNames: readonly string[]
+) =>
+  roleNames.map((roleName) =>
+    Data.struct({
+      appId: rolesAppId,
+      name: roleName,
+    })
+  );
+
+const roleByAppThenName = Order.mapInput(
+  Order.string,
+  (role: RoleDefinition) => role.appId + role.name
+);
+
+const sortRolesCollection = (input: RolesCollection): RolesCollection =>
+  Array.sort(roleByAppThenName)(input);
+
+const rolesEqual = (a: RolesCollection, b: RolesCollection) =>
+  Equal.equals(a, b);
+
+const appEquiv = Equivalence.mapInput(
+  Equivalence.string,
+  (role: RoleDefinition) => role.appId
+);
+const nameEquiv = Equivalence.mapInput(
+  Equivalence.string,
+  (role: RoleDefinition) => role.name
+);
+
+const combinedEquiv = Equivalence.combine(appEquiv, nameEquiv);
 
 export const createUser =
-  (userType: "mwAccount" | "link", displayName: string, roles: { name: string; appId: string }[]) =>
+  (
+    userType: "mwAccount" | "link",
+    displayName: string,
+    rolesAppId: string,
+    roleNames: readonly string[]
+  ) =>
   (userId: string) =>
     Effect.sync(() =>
       User.build({
         userId,
         userType,
         displayName,
-        roles,
+        roles: sortRolesCollection(
+          appRolesToRolesCollection(rolesAppId, roleNames)
+        ),
       })
     ).pipe(
       Effect.andThen((user) =>

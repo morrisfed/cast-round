@@ -10,14 +10,20 @@ import { createUserService, getUserService } from "../UsersAndRoles/services";
 import { MwAccount } from "../persistence/db/models/MwAccount";
 
 const createMwUser = (mwUserProfile: MembershipWorksUserInfo) =>
-  createUserService("mwAccount", mwUserProfile.accountName, []).pipe(
-    Effect.tap((user) => createAccount(mwUserProfile)(user.userId))
-  );
+  createUserService(
+    "mwAccount",
+    mwUserProfile.accountName,
+    "membership-works-users",
+    mwUserProfile.membershipAndLabels
+  ).pipe(Effect.tap((user) => createAccount(mwUserProfile)(user.userId)));
 
 const createUserAndUpdateMwAccount = (mwAccount: MwAccount) =>
-  createUserService("mwAccount", mwAccount.accountName, []).pipe(
-    Effect.tap((user) => updateAccount(mwAccount)(user.userId))
-  );
+  createUserService(
+    "mwAccount",
+    mwAccount.accountName,
+    "membership-works-users",
+    mwAccount.membershipAndLabels
+  ).pipe(Effect.tap((user) => updateAccount(mwAccount)(user.userId)));
 
 export const loginMwUser = (accessToken: string) =>
   getMwUserProfileForToken(accessToken).pipe(

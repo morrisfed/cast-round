@@ -1,8 +1,6 @@
-import { RequestHandler } from "express";
-import { isAdministratorRole, isMemberRole } from "../user/permissions";
 
 // export const adminOnly: RequestHandler = (req, res, next) => {
-//   if (isAdministratorRole(req.user)) {
+//   if (!!req.user && isAdministratorRole(req.user.loggedInUser)) {
 //     next();
 //   } else {
 //     res.sendStatus(403);

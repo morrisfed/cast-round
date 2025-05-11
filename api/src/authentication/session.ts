@@ -1,8 +1,8 @@
 import session, { SessionOptions } from "express-session";
 import connectSessionSequelize from "connect-session-sequelize";
-import sequelize from "../model/db";
 
 import env from "../utils/env";
+import { sequelize } from "../persistence/db/models";
 
 const SequelizeStore = connectSessionSequelize(session.Store);
 const sequelizeStore = new SequelizeStore({

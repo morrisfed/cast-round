@@ -1,16 +1,15 @@
-import { ModelRole } from "../../model/interfaces/model-roles";
 import { FrontEndFeatureFlags } from "../../utils/feature-flags";
 
 export default interface ProfileResponse {
   profile: {
     id: string;
     name: string;
-    roles: ModelRole[];
+    roles: any[];
     groupDelegateInfo?: {
       delegateForGroupId: string;
       delegateForGroupName: string;
       delegateForEventId: number;
-      delegateForRoles: ModelRole[];
+      delegateForRoles: any[];
     };
     tellorInfo?: {
       tellorForEventId: number;
