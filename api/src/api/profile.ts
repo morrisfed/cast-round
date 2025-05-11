@@ -11,36 +11,9 @@ profileRouter.get<{}, ProfileResponse>("/", nocache(), (req, res) => {
   if (req.isAuthenticated()) {
     res.json({
       profile: {
-        id: req.user.id,
-        name: req.user.account?.name || req.user.link?.label || "unknown",
-        roles: getRoles(req.user),
-        groupDelegateInfo:
-          req.user.loggedInUser.link?.type === "group-delegate"
-            ? {
-                delegateForGroupId:
-                  req.user.loggedInUser.link.info.delegateForGroupId,
-                delegateForGroupName:
-                  req.user.loggedInUser.link.info.delegateForGroupName,
-                delegateForEventId:
-                  req.user.loggedInUser.link.info.delegateForEventId,
-                delegateForRoles:
-                  req.user.loggedInUser.link.info.delegateForRoles,
-              }
-            : undefined,
-        tellorInfo:
-          req.user.loggedInUser.link?.type === "tellor"
-            ? {
-                tellorForEventId:
-                  req.user.loggedInUser.link.info.tellorForEventId,
-              }
-            : undefined,
-        clerkInfo:
-          req.user.loggedInUser.link?.type === "clerk"
-            ? {
-                clerkForEventId:
-                  req.user.loggedInUser.link.info.clerkForEventId,
-              }
-            : undefined,
+        id: req.user.loggedInUser.userId,
+        name: req.user.loggedInUser.displayName,
+        roles: [],
       },
       frontEndFeatureFlags: getFrontEndFeatureFlags(),
     });

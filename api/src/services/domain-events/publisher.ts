@@ -9,18 +9,23 @@ export const publishDomainEvent = (event: DomainEvent) =>
     SequelizeTransaction.pipe(
       Effect.tap(() => Effect.log(`Publishing event: ${event._tag}`)),
       Effect.andThen((transaction) =>
-        Effect.tryPromise(() =>
-          PublishedDomainEvent.create(
-            {
-              _tag: event._tag,
-              subscriberId: subscriber.subscriberId,
-              eventJson: JSON.stringify(event),
-            },
-            {
-              transaction,
-            }
-          )
-        )
+        Effect.tryPromise({
+          try: () =>
+            PublishedDomainEvent.create(
+              {
+                _tag: event._tag,
+                subscriberId: subscriber.subscriberId,
+                eventJson: JSON.stringify(event),
+              },
+              {
+                transaction,
+              }
+            ),
+          catch: (unknown) =>
+            new Error(`Error calling PublishedDomainEvent.create`, {
+              cause: unknown,
+            }),
+        })
       )
     )
   );

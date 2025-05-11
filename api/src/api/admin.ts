@@ -6,7 +6,7 @@ import * as E from "fp-ts/lib/Either";
 import * as TE from "fp-ts/lib/TaskEither";
 import { pipe } from "fp-ts/lib/function";
 
-import { adminOnly } from "../authorisation/roleMiddleware";
+// import { adminOnly } from "../authorisation/roleMiddleware";
 
 import { AccountUploadResponse } from "./interfaces/AdminResponses";
 import logger from "../utils/logging";
@@ -27,7 +27,7 @@ const requestFileAsBuffer = (
   );
 
 // Only users with the admin role can access this route.
-router.use(adminOnly);
+// router.use(adminOnly);
 
 // Handle uploading of member CSV files and synchronise with the database.
 // router.post<{}, MemberUploadResponse>(

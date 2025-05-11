@@ -10,15 +10,19 @@ import {
 const ensureRoleExists = (appId: string, roleName: string) =>
   SequelizeTransaction.pipe(
     Effect.andThen((transaction) =>
-      Effect.tryPromise(() =>
+      Effect.tryPromise({try:() =>
         RegisteredRole.findOrCreate({
           where: {
             appId,
             name: roleName,
           },
           transaction,
-        })
-      ).pipe(Effect.map(([registeredRole]) => registeredRole))
+        }),
+        catch: (unknown) =>
+          new Error(`Error calling RegisteredRole.findOrCreate`, {
+            cause: unknown,
+          }),
+      }).pipe(Effect.map(([registeredRole]) => registeredRole))
     )
   );
 

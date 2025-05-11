@@ -17,48 +17,48 @@ import { eventRouter } from "./event";
 
 export const eventsRouter = express.Router();
 
-eventsRouter.get<{}, GetEventsResponse>("/", async (req, res) => {
-  if (req.isAuthenticated()) {
-    const getEventsResponseTask = pipe(
-      getEvents(req.user),
-      TE.map((events) => ({ events })),
-      standardJsonResponseFold(res)
-    );
+// eventsRouter.get<{}, GetEventsResponse>("/", async (req, res) => {
+//   if (req.isAuthenticated()) {
+//     const getEventsResponseTask = pipe(
+//       getEvents(req.user),
+//       TE.map((events) => ({ events })),
+//       standardJsonResponseFold(res)
+//     );
 
-    await getEventsResponseTask();
-  } else {
-    throw new Error();
-  }
-});
+//     await getEventsResponseTask();
+//   } else {
+//     throw new Error();
+//   }
+// });
 
-eventsRouter.post<{}, CreateEventResponse, CreateEventRequest>(
-  "",
-  async (req, res) => {
-    if (req.isAuthenticated()) {
-      const createEventResponseTask = pipe(
-        createEvent(req.user)(req.body.event),
-        TE.fold(
-          (err) => {
-            if (err === "forbidden") {
-              res.sendStatus(403);
-            } else {
-              res.sendStatus(500);
-              logger.error(err);
-            }
-            return T.of(undefined);
-          },
-          (event) => {
-            res.json({ event });
-            return T.of(undefined);
-          }
-        )
-      );
+// eventsRouter.post<{}, CreateEventResponse, CreateEventRequest>(
+//   "",
+//   async (req, res) => {
+//     if (req.isAuthenticated()) {
+//       const createEventResponseTask = pipe(
+//         createEvent(req.user)(req.body.event),
+//         TE.fold(
+//           (err) => {
+//             if (err === "forbidden") {
+//               res.sendStatus(403);
+//             } else {
+//               res.sendStatus(500);
+//               logger.error(err);
+//             }
+//             return T.of(undefined);
+//           },
+//           (event) => {
+//             res.json({ event });
+//             return T.of(undefined);
+//           }
+//         )
+//       );
 
-      await createEventResponseTask();
-    } else {
-      throw new Error();
-    }
-  }
-);
+//       await createEventResponseTask();
+//     } else {
+//       throw new Error();
+//     }
+//   }
+// );
 
 eventsRouter.use("/:eventId", eventRouter);

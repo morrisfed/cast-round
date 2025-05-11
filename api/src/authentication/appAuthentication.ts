@@ -1,7 +1,3 @@
-import { pipe } from "fp-ts/lib/function";
-import * as TE from "fp-ts/lib/TaskEither";
-import * as T from "fp-ts/lib/Task";
-
 import express, { NextFunction, Request, Response } from "express";
 import passport from "passport";
 import OAuth2Strategy, {
@@ -13,32 +9,35 @@ import { VerifyFunction as UniqueTokenVerifyFunction } from "passport-unique-tok
 import nocache from "nocache";
 
 import { URLSearchParams } from "url";
-
+import { Effect } from "effect";
 import env from "../utils/env";
 import { fetchUserInfoForMwAccessToken } from "../membership-works/mwUserInfo";
 import { importUsers } from "../user/importUsers";
 import { User as AppUser, LoggedInUser } from "../interfaces/users";
+import { User as URUser } from "../UsersAndRoles/types";
 import {
   isMwProfileParseError,
   isMwUnrecognisedMembershipType,
 } from "../membership-works/fetchMwUserProfile";
 import { getLinkUser, getUser } from "../user/userInfo";
+import { wrapWithTransaction } from "../persistence/db/transaction";
+import { loginMwUser } from "../membership-works-users/application";
+import { getUserService } from "../UsersAndRoles/services";
 
 declare global {
   namespace Express {
-    interface User extends AppUser {
+    interface User {
       authVia: "membership-works" | "link";
-      loggedInUser: LoggedInUser;
+      loggedInUser: URUser;
     }
   }
 }
 
-type SessionUser = { id: string; authVia: Express.User["authVia"] };
+type SessionUser = { userId: string; authVia: Express.User["authVia"] };
 
 const userInfoToExpressUser =
   (authVia: Express.User["authVia"]) =>
-  (userInfo: LoggedInUser): Express.User => ({
-    ...userInfo,
+  (userInfo: URUser): Express.User => ({
     authVia,
     loggedInUser: userInfo,
   });
@@ -49,39 +48,48 @@ const mwVerifyFunction: Oauth2VerifyFunction = async (
   _profile: any,
   verified: Oauth2VerifyCallback
 ) => {
-  const getUserTask = pipe(
-    fetchUserInfoForMwAccessToken(accessToken),
-    TE.chainFirstW((userInfo) => importUsers([userInfo])),
-    TE.map(userInfoToExpressUser("membership-works")),
-    TE.mapLeft((e) =>
-      isMwProfileParseError(e)
-        ? new Error("mw-profile-parse-error", { cause: e })
-        : e
-    ),
-    TE.fold(
-      (e) => T.of(verified(e)),
-      (user) => T.of(verified(null, user))
+  const program = wrapWithTransaction(loginMwUser(accessToken))
+    .pipe(
+      Effect.andThen(userInfoToExpressUser("membership-works")),
+      Effect.andThen((expressUser) => verified(null, expressUser))
     )
-  );
+    .pipe(Effect.catchAll((err) => Effect.sync(() => verified(err))));
 
-  getUserTask();
+  await Effect.runPromise(program);
+
+  // const getUserTask = pipe(
+  //   fetchUserInfoForMwAccessToken(accessToken),
+  //   TE.chainFirstW((userInfo) => importUsers([userInfo])),
+  //   TE.map(userInfoToExpressUser("membership-works")),
+  //   TE.mapLeft((e) =>
+  //     isMwProfileParseError(e)
+  //       ? new Error("mw-profile-parse-error", { cause: e })
+  //       : e
+  //   ),
+  //   TE.fold(
+  //     (e) => T.of(verified(e)),
+  //     (user) => T.of(verified(null, user))
+  //   )
+  // );
+
+  // getUserTask();
 };
 
-const linkVerifyFunction: UniqueTokenVerifyFunction = async (token, done) => {
-  const getLinkUserTask = pipe(
-    getLinkUser(token),
-    TE.map(userInfoToExpressUser("link")),
-    TE.fold(
-      (err) =>
-        err === "not-found"
-          ? T.of(done(new Error("Unknown link user")))
-          : T.of(done(err)),
-      (results) => T.of(done(null, results))
-    )
-  );
+// const linkVerifyFunction: UniqueTokenVerifyFunction = async (token, done) => {
+//   const getLinkUserTask = pipe(
+//     getLinkUser(token),
+//     TE.map(userInfoToExpressUser("link")),
+//     TE.fold(
+//       (err) =>
+//         err === "not-found"
+//           ? T.of(done(new Error("Unknown link user")))
+//           : T.of(done(err)),
+//       (results) => T.of(done(null, results))
+//     )
+//   );
 
-  getLinkUserTask();
-};
+//   getLinkUserTask();
+// };
 
 passport.use(
   new OAuth2Strategy(
@@ -96,30 +104,40 @@ passport.use(
   )
 );
 
-passport.use(
-  new UniqueTokenStrategy(
-    {
-      tokenParams: "link",
-    },
-    linkVerifyFunction
-  )
-);
+// passport.use(
+//   new UniqueTokenStrategy(
+//     {
+//       tokenParams: "link",
+//     },
+//     linkVerifyFunction
+//   )
+// );
 
 passport.serializeUser<SessionUser>((user, done) =>
-  done(null, { id: user.id, authVia: user.authVia })
+  done(null, { userId: user.loggedInUser.userId, authVia: user.authVia })
 );
 
-passport.deserializeUser<SessionUser>(({ id, authVia }, done) => {
-  const deserializeUserTask = pipe(
-    getUser(id, authVia),
-    TE.map(userInfoToExpressUser(authVia)),
-    TE.fold(
-      (err) => T.of(done(err)),
-      (results) => T.of(done(null, results))
+passport.deserializeUser<SessionUser>(({ userId, authVia }, done) => {
+  const program = wrapWithTransaction(getUserService(userId)).pipe(
+    Effect.andThen(userInfoToExpressUser(authVia)),
+    Effect.andThen((expressUser) => done(null, expressUser)),
+    Effect.catchTag("NoSuchElementException", () =>
+      Effect.sync(() => done(new Error(`User not found for User ID: ${userId}`)))
     )
   );
 
-  deserializeUserTask();
+  Effect.runPromise(program);
+
+  // const deserializeUserTask = pipe(
+  //   getUser(id, authVia),
+  //   TE.map(userInfoToExpressUser(authVia)),
+  //   TE.fold(
+  //     (err) => T.of(done(err)),
+  //     (results) => T.of(done(null, results))
+  //   )
+  // );
+
+  // deserializeUserTask();
 });
 
 const authRoute = express.Router();

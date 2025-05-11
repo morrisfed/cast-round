@@ -1,5 +1,4 @@
 import { Effect, Exit, Scope } from "effect";
-import { UnknownException } from "effect/Cause";
 import { SequelizeTransaction } from "./SequelizeTransaction";
 import sequelize from "../../model/db";
 
@@ -7,7 +6,7 @@ export const wrapWithTransaction = <A, E = never, R = never>(
   effect: Effect.Effect<A, E, R | SequelizeTransaction>
 ): Effect.Effect<
   A,
-  E | UnknownException,
+  E | Error,
   Exclude<Exclude<R, SequelizeTransaction>, Scope.Scope>
 > => {
   const aquireRelease = Effect.acquireRelease(
@@ -22,7 +21,13 @@ export const wrapWithTransaction = <A, E = never, R = never>(
     Effect.tap(() =>
       SequelizeTransaction.pipe(
         Effect.andThen((transaction) =>
-          Effect.tryPromise(() => transaction.commit())
+          Effect.tryPromise({
+            try: () => transaction.commit(),
+            catch: (unknown) =>
+              new Error(`Error calling transaction.commit`, {
+                cause: unknown,
+              }),
+          })
         )
       )
     )

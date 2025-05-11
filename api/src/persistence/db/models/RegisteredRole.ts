@@ -3,6 +3,8 @@ import { CreationOptional, DataTypes, Model, Sequelize } from "sequelize";
 export class RegisteredRole extends Model {
   declare name: string;
 
+  declare appId: string;
+  
   declare createdAt: CreationOptional<Date>;
 
   declare updatedAt: CreationOptional<Date>;

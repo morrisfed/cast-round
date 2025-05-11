@@ -15,16 +15,26 @@ export const notifyDomainEventPublished = () =>
   );
 
 const getNextPublishedDomainEvents = (transaction: Transaction) =>
-  Effect.tryPromise(() => PublishedDomainEvent.findOne({ transaction })).pipe(
-    Effect.andThen(Option.fromNullable)
-  );
+  Effect.tryPromise({
+    try: () => PublishedDomainEvent.findOne({ transaction }),
+    catch: (unknown) =>
+      new Error(`Error calling PublishedDomainEvent.findOne()`, {
+        cause: unknown,
+      }),
+  }).pipe(Effect.andThen(Option.fromNullable));
 
 const processDomainEvent = (domainEvent: PublishedDomainEvent) =>
   offerEventToSubscriber(domainEvent);
 
 const removeProcessedPublishedDomainEvent =
   (transaction: Transaction) => (domainEvent: PublishedDomainEvent) =>
-    Effect.tryPromise(() => domainEvent.destroy({ transaction }));
+    Effect.tryPromise({
+      try: () => domainEvent.destroy({ transaction }),
+      catch: (unknown) =>
+        new Error(`Error calling PublishedDomainEvent.destroy()`, {
+          cause: unknown,
+        }),
+    });
 
 const getAndProcessNextDomainEvent = () =>
   SequelizeTransaction.pipe(
